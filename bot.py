@@ -14,7 +14,7 @@ lines = [
 "~'https://fars.isna.ir/rss',",
 "~'https://www.mehrnews.com/rss',",
 "~'https://www.irna.ir/rss',",
-"~'https://www.isna.ir/rss',",
+"~'https://www.irib-news.ir/fa/rss/27',",
 "~'https://snn.ir/fa/rss/allnews',",
 "~'https://www.varzesh3.com/rss/all',",
 "~'https://www.tasnimnews.com/fa/rss/feed/0/8/0/%D9%85%D9%87%D9%85%D8%AA%D8%B1%DB%8C%D9%86-%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1',",
