@@ -34,9 +34,10 @@
 },
 {
 "name": "Save state",
-"run": "git config --global user.name 'Bot' && git config --global user.email 'bot@noreply.github.com' && touch sent_links.txt daily_report.txt night_report_v8.txt today_titles.txt last_update.txt insta_log.txt && git add -f *.txt *.json || true && (git diff --staged --quiet || git commit -m 'Update bot memory') && (git push || true)"
+"run": "git config --global user.name 'Bot' && git config --global user.email 'bot@noreply.github.com' && touch sent_links.txt daily_report.txt poll_report.txt night_report_v8.txt today_titles.txt last_update.txt insta_log.txt && git add -f *.txt *.json || true && (git diff --staged --quiet || git commit -m 'Update bot memory') && (git pull --rebase || true) && (git push || true)"
 }
 ]
 }
 }
 }
+
