@@ -180,7 +180,7 @@ lines = [
 "~iran_now = datetime.utcnow() + timedelta(hours=3, minutes=30)",
 "~today_str = iran_now.strftime('%Y-%m-%d')",
 "~last_night = open(NIGHT_FILE).read().strip() if os.path.exists(NIGHT_FILE) else ''",
-"~if iran_now.hour >= 0 and last_night != today_str and os.path.exists(TITLES_FILE):",
+"~if iran_now.hour >= 21 and last_night != today_str and os.path.exists(TITLES_FILE):",
 "~~titles = [l.strip() for l in open(TITLES_FILE, encoding='utf-8') if l.strip()][-5:]",
 "~~if titles:",
 "~~~try:",
