@@ -26,15 +26,15 @@
 },
 {
 "name": "Install libraries",
-"run": "pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3"
+"run": "pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow"
 },
 {
 "name": "Run bot",
 "run": "python bot.py"
 },
 {
-"name": "Save sent links",
-"run": "git config --global user.name 'Bot' && git config --global user.email 'bot@noreply.github.com' && (git add sent_links.txt || true) && (git diff --staged --quiet || git commit -m 'Update sent news') && (git push || true)"
+"name": "Save state",
+"run": "git config --global user.name 'Bot' && git config --global user.email 'bot@noreply.github.com' && (git add sent_links.txt daily_report.txt || true) && (git diff --staged --quiet || git commit -m 'Update bot memory') && (git push || true)"
 }
 ]
 }
