@@ -26,7 +26,7 @@
 },
 {
 "name": "Install Persian Fonts and Libraries",
-"run": "sudo apt-get update && sudo apt-get install -y fonts-vazirmatn fonts-dejavu-core && pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts arabic-reshaper python-bidi"
+"run": "sudo apt-get update && sudo apt-get install -y fonts-vazirmatn fonts-dejavu-core libraqm0 && pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts"
 },
 {
 "name": "Run bot",
@@ -34,7 +34,7 @@
 },
 {
 "name": "Save state",
-"run": "git config --global user.name 'Bot' && git config --global user.email 'bot@noreply.github.com' && (git add sent_links.txt daily_report.txt night_report.txt today_titles.txt || true) && (git diff --staged --quiet || git commit -m 'Update bot memory') && (git push || true)"
+"run": "git config --global user.name 'Bot' && git config --global user.email 'bot@noreply.github.com' && (git add sent_links.txt daily_report.txt night_report_v3.txt today_titles.txt last_update.txt || true) && (git diff --staged --quiet || git commit -m 'Update bot memory') && (git push || true)"
 }
 ]
 }
