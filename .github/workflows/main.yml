@@ -1,42 +1,40 @@
-{
-  "name": "Run News Bot",
-  "on": {
-    "schedule": [
-      { "cron": "*/5 * * * *" }
-    ],
-    "workflow_dispatch": null
-  },
-  "permissions": {
-    "contents": "write"
-  },
-  "jobs": {
-    "build": {
-      "runs-on": "ubuntu-latest",
-      "steps": [
-        {
-          "name": "Checkout repo",
-          "uses": "actions/checkout@v4"
-        },
-        {
-          "name": "Set up Python",
-          "uses": "actions/setup-python@v5",
-          "with": {
-            "python-version": "3.11"
-          }
-        },
-        {
-          "name": "Install FFmpeg, Fonts and Libraries",
-          "run": "sudo apt-get update && sudo apt-get install -y ffmpeg fonts-vazirmatn fonts-dejavu-core libraqm0 && pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts instagrapi moviepy"
-        },
-        {
-          "name": "Run bot",
-          "run": "python bot.py"
-        },
-        {
-          "name": "Save state",
-          "run": "git config --global user.name 'Bot' && git config --global user.email 'bot@noreply.github.com' && touch sent_links.txt sent_titles_hash.txt daily_report.txt night_report_v8.txt today_titles.txt last_update.txt insta_log.txt && git add -f *.txt *.json || true && (git diff --staged --quiet || git commit -m 'Update bot memory') && (git pull --rebase || true) && (git push || true)"
-        }
-      ]
-    }
-  }
-}
+name: Run News Bot
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install FFmpeg, Fonts and Libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-vazirmatn fonts-dejavu-core libraqm0
+          pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts instagrapi moviepy
+
+      - name: Run bot
+        run: python bot.py
+
+      - name: Save state
+        run: |
+          git config --global user.name "Bot"
+          git config --global user.email "bot@noreply.github.com"
+          touch sent_links.txt sent_titles_hash.txt daily_report.txt night_report_v8.txt today_titles.txt insta_log.txt service_bot_data.json
+          git add -f *.txt *.json || true
+          git diff --staged --quiet || git commit -m "Update bot memory"
+          git pull --rebase || true
+          git push || true
