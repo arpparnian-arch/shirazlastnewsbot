@@ -33,7 +33,7 @@ jobs:
         run: |
           git config --global user.name "Bot"
           git config --global user.email "bot@noreply.github.com"
-          touch sent_links.txt sent_titles_hash.txt daily_report.txt night_report_v8.txt today_titles.txt insta_log.txt service_bot_data.json
+          touch sent_links.txt sent_titles_hash.txt daily_report.txt night_report_v8.txt matches_story_date.txt today_titles.txt insta_log.txt service_bot_data.json
           git add -f *.txt *.json || true
           git diff --staged --quiet || git commit -m "Update bot memory"
           git pull --rebase || true
