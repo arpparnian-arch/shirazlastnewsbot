@@ -2282,5 +2282,162 @@ lines = [
 "print(f'Session finished cleanly! Total drip-fed news items: {total_sent_session}')"
 ]
 
+import os, re, urllib.parse, requests
+
+os.makedirs("logos_cache", exist_ok=True)
+
+NEW_TEAM_LOGOS = {
+    # لیگ برتر خلیج فارس ایران و فجر سپاسی
+    'فجر سپاسی': 'https://api.sofascore.app/api/v1/team/36442/image',
+    'فجرسپاسی': 'https://api.sofascore.app/api/v1/team/36442/image',
+    'فجر': 'https://api.sofascore.app/api/v1/team/36442/image',
+    'پرسپولیس': 'https://api.sofascore.app/api/v1/team/36435/image',
+    'استقلال خوزستان': 'https://api.sofascore.app/api/v1/team/115249/image',
+    'استقلال': 'https://api.sofascore.app/api/v1/team/36433/image',
+    'سپاهان': 'https://api.sofascore.app/api/v1/team/36429/image',
+    'تراکتور': 'https://api.sofascore.app/api/v1/team/43898/image',
+    'فولاد': 'https://api.sofascore.app/api/v1/team/36431/image',
+    'ذوب آهن': 'https://api.sofascore.app/api/v1/team/36430/image',
+    'ذوب‌آهن': 'https://api.sofascore.app/api/v1/team/36430/image',
+    'ملوان': 'https://api.sofascore.app/api/v1/team/36440/image',
+    'گل گهر': 'https://api.sofascore.app/api/v1/team/169586/image',
+    'گل‌گهر': 'https://api.sofascore.app/api/v1/team/169586/image',
+    'آلومینیوم': 'https://api.sofascore.app/api/v1/team/212437/image',
+    'مس رفسنجان': 'https://api.sofascore.app/api/v1/team/169582/image',
+    'شمس آذر': 'https://api.sofascore.app/api/v1/team/399254/image',
+    'شمس‌آذر': 'https://api.sofascore.app/api/v1/team/399254/image',
+    'چادرملو': 'https://api.sofascore.app/api/v1/team/450473/image',
+    'خیبر': 'https://api.sofascore.app/api/v1/team/236888/image',
+    'نساجی': 'https://api.sofascore.app/api/v1/team/169578/image',
+    'هوادار': 'https://api.sofascore.app/api/v1/team/329446/image',
+    'پیکان': 'https://api.sofascore.app/api/v1/team/36436/image',
+    'صنعت نفت': 'https://api.sofascore.app/api/v1/team/43897/image',
+    'سایپا': 'https://api.sofascore.app/api/v1/team/36432/image',
+
+    # لیگ برتر انگلیس (تمامی ۲۰ تیم)
+    'لیورپول': 'https://a.espncdn.com/i/teamlogos/soccer/500/364.png',
+    'آرسنال': 'https://a.espncdn.com/i/teamlogos/soccer/500/359.png',
+    'منچسترسیتی': 'https://a.espncdn.com/i/teamlogos/soccer/500/382.png',
+    'منچستر سیتی': 'https://a.espncdn.com/i/teamlogos/soccer/500/382.png',
+    'منچستریونایتد': 'https://a.espncdn.com/i/teamlogos/soccer/500/360.png',
+    'منچستر یونایتد': 'https://a.espncdn.com/i/teamlogos/soccer/500/360.png',
+    'چلسی': 'https://a.espncdn.com/i/teamlogos/soccer/500/363.png',
+    'تاتنهام': 'https://a.espncdn.com/i/teamlogos/soccer/500/367.png',
+    'نیوکاسل': 'https://a.espncdn.com/i/teamlogos/soccer/500/361.png',
+    'نیوکسل': 'https://a.espncdn.com/i/teamlogos/soccer/500/361.png',
+    'استون ویلا': 'https://a.espncdn.com/i/teamlogos/soccer/500/362.png',
+    'آستون ویلا': 'https://a.espncdn.com/i/teamlogos/soccer/500/362.png',
+    'برایتون': 'https://a.espncdn.com/i/teamlogos/soccer/500/331.png',
+    'وستهم': 'https://a.espncdn.com/i/teamlogos/soccer/500/371.png',
+    'وستهام': 'https://a.espncdn.com/i/teamlogos/soccer/500/371.png',
+    'وست هم': 'https://a.espncdn.com/i/teamlogos/soccer/500/371.png',
+    'فولام': 'https://a.espncdn.com/i/teamlogos/soccer/500/370.png',
+    'برنتفورد': 'https://a.espncdn.com/i/teamlogos/soccer/500/337.png',
+    'کریستال پالاس': 'https://a.espncdn.com/i/teamlogos/soccer/500/384.png',
+    'اورتون': 'https://a.espncdn.com/i/teamlogos/soccer/500/368.png',
+    'ولورهمپتون': 'https://a.espncdn.com/i/teamlogos/soccer/500/380.png',
+    'ولوز': 'https://a.espncdn.com/i/teamlogos/soccer/500/380.png',
+    'بورنموث': 'https://a.espncdn.com/i/teamlogos/soccer/500/349.png',
+    'ناتینگهام فارست': 'https://a.espncdn.com/i/teamlogos/soccer/500/393.png',
+    'ناتینگهام': 'https://a.espncdn.com/i/teamlogos/soccer/500/393.png',
+    'لسترسیتی': 'https://a.espncdn.com/i/teamlogos/soccer/500/375.png',
+    'لستر سیتی': 'https://a.espncdn.com/i/teamlogos/soccer/500/375.png',
+    'ایپسویچ': 'https://a.espncdn.com/i/teamlogos/soccer/500/373.png',
+    'ساوتهمپتون': 'https://a.espncdn.com/i/teamlogos/soccer/500/376.png',
+
+    # لالیگا اسپانیا (تمامی ۲۰ تیم)
+    'رئال مادرید': 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png',
+    'بارسلونا': 'https://a.espncdn.com/i/teamlogos/soccer/500/83.png',
+    'اتلتیکو مادرید': 'https://a.espncdn.com/i/teamlogos/soccer/500/1068.png',
+    'اتلتیکومادرید': 'https://a.espncdn.com/i/teamlogos/soccer/500/1068.png',
+    'اتلتیکو': 'https://a.espncdn.com/i/teamlogos/soccer/500/1068.png',
+    'خیرونا': 'https://a.espncdn.com/i/teamlogos/soccer/500/9812.png',
+    'جیرونا': 'https://a.espncdn.com/i/teamlogos/soccer/500/9812.png',
+    'اتلتیک بیلبائو': 'https://a.espncdn.com/i/teamlogos/soccer/500/93.png',
+    'بیلبائو': 'https://a.espncdn.com/i/teamlogos/soccer/500/93.png',
+    'رئال سوسیداد': 'https://a.espncdn.com/i/teamlogos/soccer/500/89.png',
+    'سوسیداد': 'https://a.espncdn.com/i/teamlogos/soccer/500/89.png',
+    'رئال بتیس': 'https://a.espncdn.com/i/teamlogos/soccer/500/244.png',
+    'بتیس': 'https://a.espncdn.com/i/teamlogos/soccer/500/244.png',
+    'ویارئال': 'https://a.espncdn.com/i/teamlogos/soccer/500/102.png',
+    'والنسیا': 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png',
+    'سویا': 'https://a.espncdn.com/i/teamlogos/soccer/500/243.png',
+    'سلتاویگو': 'https://a.espncdn.com/i/teamlogos/soccer/500/85.png',
+    'سلتا ویگو': 'https://a.espncdn.com/i/teamlogos/soccer/500/85.png',
+    'اوساسونا': 'https://a.espncdn.com/i/teamlogos/soccer/500/97.png',
+    'ختافه': 'https://a.espncdn.com/i/teamlogos/soccer/500/2922.png',
+    'مایورکا': 'https://a.espncdn.com/i/teamlogos/soccer/500/84.png',
+    'لاس پالماس': 'https://a.espncdn.com/i/teamlogos/soccer/500/98.png',
+    'رایو وایکانو': 'https://a.espncdn.com/i/teamlogos/soccer/500/101.png',
+    'آلاوس': 'https://a.espncdn.com/i/teamlogos/soccer/500/96.png',
+    'اسپانیول': 'https://a.espncdn.com/i/teamlogos/soccer/500/88.png',
+    'وایادولید': 'https://a.espncdn.com/i/teamlogos/soccer/500/95.png',
+    'لگانس': 'https://a.espncdn.com/i/teamlogos/soccer/500/17534.png',
+
+    # بوندسلیگا آلمان و اروپا
+    'بایرن مونیخ': 'https://a.espncdn.com/i/teamlogos/soccer/500/132.png',
+    'دورتموند': 'https://a.espncdn.com/i/teamlogos/soccer/500/124.png',
+    'لورکوزن': 'https://a.espncdn.com/i/teamlogos/soccer/500/131.png',
+    'اینتر میلان': 'https://a.espncdn.com/i/teamlogos/soccer/500/110.png',
+    'آث میلان': 'https://a.espncdn.com/i/teamlogos/soccer/500/103.png',
+    'یوونتوس': 'https://a.espncdn.com/i/teamlogos/soccer/500/111.png',
+    'پاری‌سن‌ژرمن': 'https://a.espncdn.com/i/teamlogos/soccer/500/160.png',
+}
+
+IR_TEAM_EN_MAP = {
+    '36442': 'Fajr Sepasi', '36435': 'Persepolis', '115249': 'Esteghlal Khuzestan',
+    '36433': 'Esteghlal', '36429': 'Sepahan', '43898': 'Tractor', '36431': 'Foolad',
+    '36430': 'Zob Ahan', '36440': 'Malavan', '169586': 'Gol Gohar',
+    '212437': 'Aluminium Arak', '169582': 'Mes Rafsanjan', '399254': 'Shams Azar',
+    '450473': 'Chadormalu', '236888': 'Kheybar', '169578': 'Nassaji',
+    '329446': 'Havadar', '36436': 'Paykan', '43897': 'Sanat Naft', '36432': 'Saipa'
+}
+
+_orig_get = requests.get
+
+class _CachedResp:
+    def __init__(self, content):
+        self.status_code = 200
+        self.content = content
+        self.ok = True
+
+def _smart_logo_get(url, *args, **kwargs):
+    u_str = str(url)
+    if "espncdn.com/i/teamlogos/" in u_str or "api.sofascore.app/api/v1/team/" in u_str:
+        ckey = re.sub(r"[^a-zA-Z0-9_]", "_", u_str.split("//")[-1]) + ".png"
+        cpath = os.path.join("logos_cache", ckey)
+        if os.path.exists(cpath) and os.path.getsize(cpath) > 400:
+            with open(cpath, "rb") as f:
+                return _CachedResp(f.read())
+        try:
+            r = _orig_get(url, *args, **kwargs)
+            if r.status_code == 200 and len(r.content) > 400:
+                with open(cpath, "wb") as f:
+                    f.write(r.content)
+                return r
+        except Exception:
+            pass
+        for tid, en_name in IR_TEAM_EN_MAP.items():
+            if f"/{tid}/" in u_str:
+                try:
+                    q = urllib.parse.quote(en_name)
+                    r2 = _orig_get(f"https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t={q}", timeout=6)
+                    teams = (r2.json() or {}).get("teams") or []
+                    if teams and teams[0].get("strBadge"):
+                        r3 = _orig_get(teams[0]["strBadge"], timeout=8)
+                        if r3.status_code == 200 and len(r3.content) > 400:
+                            with open(cpath, "wb") as f:
+                                f.write(r3.content)
+                            return r3
+                except Exception:
+                    pass
+    return _orig_get(url, *args, **kwargs)
+
+requests.get = _smart_logo_get
+
 real_code = "\n".join(line.replace("~", "    ") for line in lines)
+real_code = real_code.replace(
+    "first_run = not os.path.exists(DB_FILE)",
+    "TEAM_LOGO_FALLBACKS.clear()\nTEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)\nfirst_run = not os.path.exists(DB_FILE)"
+)
 exec(real_code)
