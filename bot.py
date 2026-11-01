@@ -2442,8 +2442,44 @@ real_code = real_code.replace(
 )
 exec(real_code)
 
-# --- تزریق مستقیم کد ذخیره‌ساز به هسته ربات و دکمه‌های شیشه‌ای ---
-import shutil, json, time, subprocess
+# --- اتصال ۱۰۰٪ تمام بخش‌های ربات (خبر اختصاصی، فوتبال، پست و ریلز) به صف گیت‌هاب ---
+import os, shutil, json, time, subprocess
+
+def _master_queue_saver(task_type, paths, caption=""):
+    os.makedirs("drafts", exist_ok=True)
+    saved_paths = []
+    for i, p in enumerate(paths):
+        p_str = str(p)
+        if os.path.exists(p_str):
+            ext = os.path.splitext(p_str)[1] or ".jpg"
+            dest = f"drafts/ready_{task_type}_{int(time.time())}_{i}{ext}"
+            shutil.copy(p_str, dest)
+            saved_paths.append(dest)
+            
+    queue_file = "drafts/insta_queue.json"
+    q = []
+    if os.path.exists(queue_file):
+        try:
+            with open(queue_file, "r", encoding="utf-8") as f:
+                q = json.load(f)
+        except Exception:
+            pass
+            
+    q.append({"type": task_type, "files": saved_paths, "caption": caption, "time": time.time()})
+    with open(queue_file, "w", encoding="utf-8") as f:
+        json.dump(q, f, ensure_ascii=False, indent=2)
+        
+    # ارسال فوری فایل به گیت‌هاب در همان ثانیه
+    cmds = [
+        'git config --global user.name "Bot"',
+        'git config --global user.email "bot@noreply.github.com"',
+        'git add -f drafts/insta_queue.json drafts/* *.jpg || true',
+        'git commit -m "Add new task to insta queue" || true',
+        'git pull --rebase -X ours || true',
+        'git push || true'
+    ]
+    subprocess.run(" && ".join(cmds), shell=True)
+    return True
 
 class DummyMedia:
     pk = "123456789"
@@ -2456,43 +2492,24 @@ class DummyInstaClient:
     def __init__(self, *args, **kwargs):
         self.user_id = 123456789
     def __bool__(self): return True
-    def _queue_task(self, task_type, paths, caption=""):
-        os.makedirs("drafts", exist_ok=True)
-        saved_paths = []
-        for i, p in enumerate(paths):
-            p_str = str(p)
-            if os.path.exists(p_str):
-                ext = os.path.splitext(p_str)[1]
-                dest = f"drafts/ready_{task_type}_{int(time.time())}_{i}{ext}"
-                shutil.copy(p_str, dest)
-                saved_paths.append(dest)
-        queue_file = "drafts/insta_queue.json"
-        q = []
-        if os.path.exists(queue_file):
-            try:
-                with open(queue_file, "r", encoding="utf-8") as f: q = json.load(f)
-            except Exception: pass
-        q.append({"type": task_type, "files": saved_paths, "caption": caption, "time": time.time()})
-        with open(queue_file, "w", encoding="utf-8") as f:
-            json.dump(q, f, ensure_ascii=False, indent=2)
-        try:
-            subprocess.run('git config --global user.name "Bot" && git config --global user.email "bot@noreply.github.com" && git add -f drafts/* *.jpg && git commit -m "Auto queue insta" && git pull --rebase && git push', shell=True)
-        except Exception as e:
-            print("Git push error:", e)
-        return DummyMedia()
-
     def photo_upload(self, path, caption="", *args, **kwargs):
-        return self._queue_task("photo", [path], caption)
+        _master_queue_saver("photo", [path], caption)
+        return DummyMedia()
     def album_upload(self, paths, caption="", *args, **kwargs):
-        return self._queue_task("album", paths, caption)
+        _master_queue_saver("album", paths, caption)
+        return DummyMedia()
     def photo_upload_to_story(self, path, *args, **kwargs):
-        return self._queue_task("story_photo", [path], "")
+        _master_queue_saver("story_photo", [path], "")
+        return DummyMedia()
     def video_upload_to_story(self, path, *args, **kwargs):
-        return self._queue_task("story_video", [path], "")
+        _master_queue_saver("story_video", [path], "")
+        return DummyMedia()
     def clip_upload(self, path, caption="", *args, **kwargs):
-        return self._queue_task("reel", [path], caption)
+        _master_queue_saver("reel", [path], caption)
+        return DummyMedia()
     def video_upload(self, path, caption="", *args, **kwargs):
-        return self._queue_task("video", [path], caption)
+        _master_queue_saver("video", [path], caption)
+        return DummyMedia()
     def __getattr__(self, name):
         return lambda *args, **kwargs: DummyMedia()
 
@@ -2501,20 +2518,12 @@ instagrapi.Client = DummyInstaClient
 
 real_code = "\n".join(line.replace("~", "    ") for line in lines)
 
-# ۱. تبدیل کلاینت اصلی به کلاینت ذخیره‌ساز در ابتدای کد
+# جایگزینی کلاینت و فعال نگه داشتن دائمی insta_cl در کل کد
 real_code = real_code.replace("from instagrapi import Client", "Client = DummyInstaClient\ninsta_cl = DummyInstaClient()")
-
-# ۲. خنثی کردن تمام حالت‌های ممکن برای خالی بودن insta_cl در کل کد
 real_code = real_code.replace("insta_cl = None", "insta_cl = DummyInstaClient()")
-real_code = real_code.replace("insta_cl=None", "insta_cl=DummyInstaClient()")
 real_code = real_code.replace("if insta_cl and ", "if ")
+real_code = real_code.replace("if not insta_cl", "if False")
 real_code = real_code.replace("if not cl or not raw_img_bytes:", "cl = DummyInstaClient()\n    if not raw_img_bytes:")
-
-# ۳. تغییر متن خطا برای اطمینان ۱۰۰ درصدی از اینکه کد جدید در حال اجراست
-real_code = real_code.replace("لاگین اینستاگرام را بررسی کنید", "خطای داخلی در ساخت فایل گرافیکی")
-
-# ۴. فعال‌سازی اختصاصی دکمه استوری زنده فوتبال و سایر دکمه‌ها
-real_code = real_code.replace("if insta_cl and post_to_instagram(", "if post_to_instagram(DummyInstaClient(), ")
 real_code = real_code.replace("post_to_instagram(insta_cl,", "post_to_instagram(DummyInstaClient(),")
 real_code = real_code.replace("upload_story_with_native_poll(insta_cl,", "upload_story_with_native_poll(DummyInstaClient(),")
 
