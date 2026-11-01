@@ -2442,8 +2442,8 @@ real_code = real_code.replace(
 )
 exec(real_code)
 
-# --- جایگزینی هوشمند برای اکانت اول (ذخیره فایل‌های آماده بدون اتصال به اینستاگرام) ---
-import shutil, json, time
+# --- جایگزینی هوشمند در داخل کد فشرده + ذخیره خودکار آنی در گیت‌هاب ---
+import shutil, json, time, subprocess
 
 class DummyInstaClient:
     def __init__(self, *args, **kwargs): pass
@@ -2454,6 +2454,8 @@ class DummyInstaClient:
     def get_timeline_feed(self, *args, **kwargs): return {}
     def login(self, *args, **kwargs): return True
     def login_by_sessionid(self, *args, **kwargs): return True
+    def get_settings(self, *args, **kwargs): return {}
+    def set_settings(self, *args, **kwargs): pass
 
     def _queue_task(self, task_type, paths, caption=""):
         os.makedirs("drafts", exist_ok=True)
@@ -2475,6 +2477,12 @@ class DummyInstaClient:
         q.append({"type": task_type, "files": saved_paths, "caption": caption, "time": time.time()})
         with open(queue_file, "w", encoding="utf-8") as f:
             json.dump(q, f, ensure_ascii=False, indent=2)
+            
+        # ارسال فوری فایل آماده به حافظه گیت‌هاب بدون نیاز به Stop کردن ربات
+        try:
+            subprocess.run('git config --global user.name "Bot" && git config --global user.email "bot@noreply.github.com" && git add -f drafts/* *.jpg && git commit -m "Auto queue insta" && git pull --rebase && git push', shell=True)
+        except Exception as e:
+            print("Git push error:", e)
 
     def photo_upload(self, path, caption="", *args, **kwargs):
         self._queue_task("photo", [path], caption)
@@ -2500,10 +2508,8 @@ class DummyInstaClient:
         self._queue_task("video", [path], caption)
         return True
 
-import instagrapi
-instagrapi.Client = DummyInstaClient
-
 real_code = "\n".join(line.replace("~", "    ") for line in lines)
+real_code = real_code.replace("from instagrapi import Client", "Client = DummyInstaClient")
 real_code = real_code.replace(
     "first_run = not os.path.exists(DB_FILE)",
     "TEAM_LOGO_FALLBACKS.clear()\nTEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)\nfirst_run = not os.path.exists(DB_FILE)"
