@@ -45,7 +45,8 @@ jobs:
           git config --global user.email "bot@noreply.github.com"
           mkdir -p drafts
           touch sent_links.txt sent_titles_hash.txt insta_titles_hash.txt daily_report.txt night_report_v8.txt matches_story_date.txt tourism_post_state.txt today_titles.txt insta_log.txt insta_reel_log.txt service_bot_data.json live_iran_league_state.json
-          git add -f *.txt *.json *.jpg drafts/ || true
+          git rm --cached insta_session.json || true
+git add -f *.txt service_bot_data.json live_iran_league_state.json *.jpg drafts/ logos_cache/ || true
           git diff --staged --quiet || git commit -m "Update bot memory"
           git pull --rebase || true
           git push || true
