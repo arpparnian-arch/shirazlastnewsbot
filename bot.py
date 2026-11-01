@@ -2443,19 +2443,35 @@ real_code = real_code.replace(
 exec(real_code)
 
 def safe_insta_login(cl):
-    """ورود مستقیم و سریع به اینستاگرام با استفاده از Session Cookie"""
+    """لاگین پایدار با رمزگشایی کوکی و ذخیره فایل نشست موبایل"""
+    import os
+    import urllib.parse
+    session_file = "insta_session.json"
+    
+    # تنظیم مشخصات ثابت گوشی برای جلوگیری از حساسیت اینستاگرام
+    cl.set_locale("fa_IR")
+    cl.set_timezone_offset(3.5 * 3600)
+    
     try:
-        import os
-        session_id = os.environ.get("IG_SESSIONID")
-        
-        if not session_id:
-            print("خطا: کد کوکی (IG_SESSIONID) در گیت‌هاب یافت نشد.")
-            return False
-            
-        # ورود آنی بدون نیاز به یوزرنیم و ایمیل
-        cl.login_by_sessionid(session_id)
-        return True
-        
+        # ۱. اگر فایل نشست از قبل ذخیره شده، مستقیم از همان استفاده کن
+        if os.path.exists(session_file):
+            try:
+                cl.load_settings(session_file)
+                cl.get_timeline_feed() # تست باز بودن اتصال
+                return True
+            except Exception as e:
+                print("Session file expired, trying cookie...", e)
+
+        # ۲. دریافت کوکی از Secrets و تبدیل %3A به دونقطه (:)
+        raw_session = os.environ.get("IG_SESSIONID", "").strip()
+        if raw_session:
+            clean_session = urllib.parse.unquote(raw_session)
+            cl.login_by_sessionid(clean_session)
+            cl.dump_settings(session_file) # ذخیره نشست برای دفعات بعد
+            return True
+
+        print("خطا: کد IG_SESSIONID یافت نشد.")
+        return False
     except Exception as e:
         print("Instagram login error:", e)
         return False
