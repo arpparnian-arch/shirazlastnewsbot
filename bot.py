@@ -2442,7 +2442,7 @@ real_code = real_code.replace(
 )
 exec(real_code)
 
-# --- جایگزینی کامل برای عبور از شرط پسورد و ذخیره آنی در پوشه drafts ---
+# --- جایگزینی کامل برای فعال نگه داشتن insta_cl و ذخیره آنی در پوشه drafts ---
 import shutil, json, time, subprocess
 
 INSTA_USER = "shirazlastnews"
@@ -2458,6 +2458,7 @@ class DummyMedia:
 class DummyInstaClient:
     def __init__(self, *args, **kwargs):
         self.user_id = 123456789
+    def __bool__(self): return True
     def set_locale(self, *args, **kwargs): pass
     def set_timezone_offset(self, *args, **kwargs): pass
     def load_settings(self, *args, **kwargs): return {}
@@ -2524,9 +2525,10 @@ instagrapi.Client = DummyInstaClient
 
 real_code = "\n".join(line.replace("~", "    ") for line in lines)
 real_code = real_code.replace("from instagrapi import Client", "Client = DummyInstaClient")
+real_code = real_code.replace("insta_cl = None", "insta_cl = DummyInstaClient()")
+real_code = real_code.replace("if not cl or not raw_img_bytes:", "cl = DummyInstaClient()\n    if not raw_img_bytes:")
 real_code = real_code.replace(
     "first_run = not os.path.exists(DB_FILE)",
-    "TEAM_LOGO_FALLBACKS.clear()\nTEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)\nfirst_run = not os.path.exists(DB_FILE)"
+    "TEAM_LOGO_FALLBACKS.clear()\nTEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)\ninsta_cl = DummyInstaClient()\nfirst_run = not os.path.exists(DB_FILE)"
 )
-real_code += "\n\ndef safe_insta_login(cl=None):\n    return True\n"
 exec(real_code)
