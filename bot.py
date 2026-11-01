@@ -43,8 +43,7 @@ TARGET_CHAT = "@shirazlastnews"
 CHANNEL_SIGN = "@shirazlastnews"
 CHANNEL_LINK = "https://t.me/shirazlastnews"
 
-lines = [
-]
+
 IRAN_TZ = timezone(timedelta(hours=3, minutes=30))
 
 # ==============================================================================
