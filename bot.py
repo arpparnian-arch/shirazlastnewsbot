@@ -2442,8 +2442,8 @@ real_code = real_code.replace(
 )
 exec(real_code)
 
-# --- جایگزینی کامل برای فعال نگه داشتن insta_cl و ذخیره آنی در پوشه drafts ---
-import shutil, json, time, subprocess
+# --- جایگزینی قطعی توابع اینستاگرام و حذف شرط خطا در اکانت اول ---
+import shutil, json, time, subprocess, re
 
 INSTA_USER = "shirazlastnews"
 INSTA_PASS = "dummy_pass_for_bypass"
@@ -2459,17 +2459,6 @@ class DummyInstaClient:
     def __init__(self, *args, **kwargs):
         self.user_id = 123456789
     def __bool__(self): return True
-    def set_locale(self, *args, **kwargs): pass
-    def set_timezone_offset(self, *args, **kwargs): pass
-    def load_settings(self, *args, **kwargs): return {}
-    def dump_settings(self, *args, **kwargs): return True
-    def get_timeline_feed(self, *args, **kwargs): return {}
-    def login(self, *args, **kwargs): return True
-    def login_by_sessionid(self, *args, **kwargs): return True
-    def get_settings(self, *args, **kwargs): return {}
-    def set_settings(self, *args, **kwargs): pass
-    def account_info(self, *args, **kwargs): return DummyMedia()
-
     def _queue_task(self, task_type, paths, caption=""):
         os.makedirs("drafts", exist_ok=True)
         saved_paths = []
@@ -2524,9 +2513,18 @@ import instagrapi
 instagrapi.Client = DummyInstaClient
 
 real_code = "\n".join(line.replace("~", "    ") for line in lines)
+
+# ۱. تبدیل کلاینت اصلی به کلاینت ذخیره‌ساز
 real_code = real_code.replace("from instagrapi import Client", "Client = DummyInstaClient")
-real_code = real_code.replace("insta_cl = None", "insta_cl = DummyInstaClient()")
+
+# ۲. خنثی کردن شرط insta_cl در تمام بخش‌های کد
+real_code = real_code.replace("if insta_cl and ", "if True and ")
+real_code = real_code.replace("if not insta_cl", "if False")
 real_code = real_code.replace("if not cl or not raw_img_bytes:", "cl = DummyInstaClient()\n    if not raw_img_bytes:")
+
+# ۳. اطمینان از اینکه متغیر insta_cl همیشه مقدار فعال دارد
+real_code = re.sub(r"insta_cl\s*=\s*.*", "insta_cl = DummyInstaClient()", real_code)
+
 real_code = real_code.replace(
     "first_run = not os.path.exists(DB_FILE)",
     "TEAM_LOGO_FALLBACKS.clear()\nTEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)\ninsta_cl = DummyInstaClient()\nfirst_run = not os.path.exists(DB_FILE)"
