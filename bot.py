@@ -2443,24 +2443,19 @@ real_code = real_code.replace(
 exec(real_code)
 
 def safe_insta_login(cl):
-    """مدیریت امن و پایدار لاگین اینستاگرام برای جلوگیری از بلاک شدن در گیت‌هاب پابلیک"""
-    session_file = "insta_session.json"
+    """ورود مستقیم و سریع به اینستاگرام با استفاده از Session Cookie"""
     try:
-        if os.path.exists(session_file):
-            try:
-                cl.load_settings(session_file)
-                cl.login(INSTA_USER, INSTA_PASS)
-                return True
-            except Exception:
-                pass
+        import os
+        session_id = os.environ.get("IG_SESSIONID")
         
-        # لاگین اولیه و ذخیره تنظیمات سشن
-        cl.login(INSTA_USER, INSTA_PASS)
-        try:
-            cl.dump_settings(session_file)
-        except Exception:
-            pass
+        if not session_id:
+            print("خطا: کد کوکی (IG_SESSIONID) در گیت‌هاب یافت نشد.")
+            return False
+            
+        # ورود آنی بدون نیاز به یوزرنیم و ایمیل
+        cl.login_by_sessionid(session_id)
         return True
+        
     except Exception as e:
         print("Instagram login error:", e)
         return False
