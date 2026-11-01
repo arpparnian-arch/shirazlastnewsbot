@@ -9,7 +9,7 @@ import random
 import hashlib
 import datetime
 import urllib.parse
-from datetime import timezone, timedelta
+from datetime import datetime, timedelta
 
 import requests
 import urllib3
@@ -45,7 +45,7 @@ CHANNEL_LINK = "https://t.me/shirazlastnews"
 
 lines = [
 
-IRAN_TZ = timezone(timedelta(hours=3, minutes=30))
+IRAN_OFFSET = timedelta(hours=3, minutes=30)
 ]
 # ==============================================================================
 # ۲. مسیر فایل‌های حافظه و کش (کاملاً منطبق با main.yml)
