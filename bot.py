@@ -216,7 +216,7 @@ TEAM_EN_TO_FA = {
 }
 
 # لینک‌های مستقیم و بدون محدودیت از سرورهای جهانی SofaScore و ESPN CDN
-"TEAM_LOGO_FALLBACKS = {",
+"TEAM_LOGO_FALLBACKS = [",
 "~'فجر سپاسی': 'https://api.sofascore.app/api/v1/team/36442/image',",
 "~'فجرسپاسی': 'https://api.sofascore.app/api/v1/team/36442/image',",
 "~'فجر': 'https://api.sofascore.app/api/v1/team/36442/image',",
@@ -294,7 +294,7 @@ TEAM_EN_TO_FA = {
 "~'بایرن مونیخ': 'https://a.espncdn.com/i/teamlogos/soccer/500/132.png',",
 "~'دورتموند': 'https://a.espncdn.com/i/teamlogos/soccer/500/124.png',",
 "~'لورکوزن': 'https://a.espncdn.com/i/teamlogos/soccer/500/131.png'",
-"}",
+"]",
 # ==============================================================================
 # ۵. بارگذاری حافظه اولیه
 # ==============================================================================
