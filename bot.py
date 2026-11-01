@@ -2441,3 +2441,26 @@ real_code = real_code.replace(
     "TEAM_LOGO_FALLBACKS.clear()\nTEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)\nfirst_run = not os.path.exists(DB_FILE)"
 )
 exec(real_code)
+
+def safe_insta_login(cl):
+    """مدیریت امن و پایدار لاگین اینستاگرام برای جلوگیری از بلاک شدن در گیت‌هاب پابلیک"""
+    session_file = "insta_session.json"
+    try:
+        if os.path.exists(session_file):
+            try:
+                cl.load_settings(session_file)
+                cl.login(INSTA_USER, INSTA_PASS)
+                return True
+            except Exception:
+                pass
+        
+        # لاگین اولیه و ذخیره تنظیمات سشن
+        cl.login(INSTA_USER, INSTA_PASS)
+        try:
+            cl.dump_settings(session_file)
+        except Exception:
+            pass
+        return True
+    except Exception as e:
+        print("Instagram login error:", e)
+        return False
