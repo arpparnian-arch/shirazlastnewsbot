@@ -2513,4 +2513,9 @@ real_code = real_code.replace("if not cl or not raw_img_bytes:", "cl = DummyInst
 # ۳. تغییر متن خطا برای اطمینان ۱۰۰ درصدی از اینکه کد جدید در حال اجراست
 real_code = real_code.replace("لاگین اینستاگرام را بررسی کنید", "خطای داخلی در ساخت فایل گرافیکی")
 
+# ۴. فعال‌سازی اختصاصی دکمه استوری زنده فوتبال و سایر دکمه‌ها
+real_code = real_code.replace("if insta_cl and post_to_instagram(", "if post_to_instagram(DummyInstaClient(), ")
+real_code = real_code.replace("post_to_instagram(insta_cl,", "post_to_instagram(DummyInstaClient(),")
+real_code = real_code.replace("upload_story_with_native_poll(insta_cl,", "upload_story_with_native_poll(DummyInstaClient(),")
+
 exec(real_code)
