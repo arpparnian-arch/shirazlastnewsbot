@@ -1,11 +1,3 @@
-irna.ir/news/86307488/%d8%a7%d9%85%d8%a7%d9%85-%d8%ac%d9%85%d8%b9%d9%87-%da%a9%db%8c%d8%b4-%d8%a2%d9%85%d8%a7%d8%af%da%af%db%8c-%d8%a8%d8%b1%d8%a7%db%8c-%d9%85%d9%82%d8%a7%d8%a8%d9%84%d9%87-%d8%a8%d8%a7-%d8%aa%d9%87%d8%af%db%8c%d8%af%d8%a7%d8%aa-%d8%af%d8%b1-%d8%a7%d9%88%d9%84%d9%88%db%8c%d8%aa-%d9%82%d8%b1%d8%a7%d8%b1-%da%af%db%8c%d8%b1%d8%af
-https://www.isna.ir/news/1405080704740/%D8%B7%D8%B1%D8%AD-%D9%87%D8%A7%DB%8C-%D9%86%D9%88%DB%8C%D9%86-%D8%AF%D8%B1-%D8%B5%D9%86%D8%B9%D8%AA-%D8%AA%D9%88%D8%B1%DB%8C%D8%B3%D9%85-%D8%A7%D8%B2-%DA%A9%D8%B4%D8%AA%DB%8C-%DA%A9%D8%B1%D9%88%D8%B2-%D8%AA%D8%A7-%D8%AA%D9%88%D8%B3%D8%B9%D9%87-%DA%AF%D8%B1%D8%AF%D8%B4%DA%AF%D8%B1%DB%8C-%D8%AF%D8%B1
-irib-news.ir/fa/news/5953639/کاشت-بذر-گیاه-دارویی-آنغوزه-در-مراتع-شهر-ایزدخواست-شهرستان-آباده
-irna.ir/news/86308695/%d8%af%d8%b1-%d9%be%db%8c-%da%af%d9%81%d8%aa-%d9%88%da%af%d9%88-%d8%a8%d8%a7-%d9%86%d8%aa%d8%a7%d9%86%db%8c%d8%a7%d9%87%d9%88-%d8%aa%d8%b1%d8%a7%d9%85%d9%be-%d8%a8%d8%a7-%d8%aa%da%a9%d8%b1%d8%a7%d8%b1-%d8%aa%d9%87%d8%af%db%8c%d8%af%d8%a7%d8%aa-%d8%b6%d8%af-%d8%a7%db%8c%d8%b1%d8%a7%d9%86%db%8c
-irna.ir/news/86308258/%d8%af%d8%b3%d8%aa%d9%88%d8%b1-%d9%81%d8%b1%d9%85%d8%a7%d9%86%d8%af%d9%87-%da%a9%d9%84-%d9%82%d9%88%d8%a7-%d9%be%d8%a7%d8%b3%d8%ae-%d9%81%d9%88%d8%b1%db%8c-%d8%a7%d8%ab%d8%b1%da%af%d8%b0%d8%a7%d8%b1-%d9%88-%d8%a8%d8%af%d9%88%d9%86-%d9%85%d8%ad%d8%af%d9%88%d8%af%db%8c%d8%aa-%d8%ac%d8%ba%d8%b1%d8%a7%d9%81%db%8c%d8%a7%db%8c%db%8c
-snn.ir/fa/news/1480454/آمادگی-ایمیدرو-برای-سرمایه-گذاری-در-زیرساخت-های-معدنی-سیستان-و-بلوچستان
-https://www.irib-news.ir/fa/news/5952067/آغاز-سرشماری-زنبورستان-های-شهرستان-جویم-استان-فارس
-https://www.mehrnews.com/news/6993875/%D9%87%D9%81%D8%AA%D9%87-%D8%A7%DB%8C-%D8%A8%D9%87-%DA%A9%D8%A7%D9%85-%D9%85%D9%87%D9%85%D8%A7%D9%86%D8%A7%D9%86-%D8%A7%D8%B3%D8%AA%D9%82%D9%84%D8%A7%D9%84-%D8%AF%D9%88%D8%A8%D8%A7%D8%B1%D9%87-%D8%A8%D8%A7%D8%AE%D8%AA
 mehrnews.com/news/6994717/%d8%ae%d8%b7%d8%b1-%d9%88%d8%b1%d8%b4%da%a9%d8%b3%d8%aa%da%af%db%8c-%d9%88-%d8%aa%d8%b9%d8%b7%db%8c%d9%84%db%8c-%d8%af%d8%a7%d8%b1%d9%88%d8%ae%d8%a7%d9%86%d9%87-%d9%87%d8%a7-%d8%b9%d8%a7%d9%82%d8%a8%d8%aa-%d9%86%d8%b3%db%8c%d9%87-%d9%81%d8%b1%d9%88%d8%b4%db%8c-%d8%af%d8%a7%d8%b1%d9%88
 snn.ir/fa/news/1479936/جشنواره-فجر-همچنان-منتظر-انتخاب-دبیر-است-چرا-تکرار-شاهسواری-راه-حل-نیست
 irna.ir/news/86307928/%d8%ad%d9%84-%da%86%d8%a7%d9%84%d8%b4-%d9%87%d8%a7%db%8c-%d8%a7%d9%82%d8%aa%d8%b5%d8%a7%d8%af-%d8%af%db%8c%d8%ac%db%8c%d8%aa%d8%a7%d9%84-%d9%86%db%8c%d8%a7%d8%b2%d9%85%d9%86%d8%af-%da%af%d9%81%d8%aa-%d9%88%da%af%d9%88%db%8c-%d9%85%d8%b3%d8%aa%d9%82%db%8c%d9%85-%d8%a8%d8%ae%d8%b4-%d8%ae%d8%b5%d9%88%d8%b5%db%8c
@@ -175,6 +167,7 @@ irna.ir/news/86307712/%d8%a7%d9%86%da%af%d9%84%db%8c%d8%b3-%d9%85%d8%a7%d9%86%d8
 https://www.irna.ir/news/86306213/%D9%85%D8%B9%D8%A7%D9%88%D9%86-%D9%88%D8%B2%DB%8C%D8%B1-%D8%A7%D9%82%D8%AA%D8%B5%D8%A7%D8%AF-%D8%A8%D8%AE%D8%B4%DB%8C-%D8%A7%D8%B2-%D8%B2%DB%8C%D8%A7%D9%86-%D8%B4%D8%B1%DA%A9%D8%AA-%D9%87%D8%A7%DB%8C-%D8%AF%D9%88%D9%84%D8%AA%DB%8C-%D9%86%D8%A7%D8%B4%DB%8C-%D8%A7%D8%B2-%D8%AA%DA%A9%D8%A7%D9%84%DB%8C%D9%81
 irna.ir/news/86308593/%d9%85%d9%87%d8%a7%d8%b1%d8%aa-%d8%a2%d9%85%d9%88%d8%b2%db%8c-%d8%b5%d9%86%d8%b9%d8%aa-%d8%a7%d9%86%d8%b1%da%98%db%8c-%d8%ae%d9%88%d8%b1%d8%b4%db%8c%d8%af%db%8c-%da%86%d8%b4%d9%85-%d8%a7%d9%86%d8%af%d8%a7%d8%b2-%d9%85%d9%88%d9%81%d9%82-%d8%b9%d8%a8%d9%88%d8%b1-%d8%a7%d8%b2-%d9%86%d8%a7%d8%aa%d8%b1%d8%a7%d8%b2%db%8c
 id:86308728
+id:6996134
 https://snn.ir/fa/news/1479811/جوکار-هنوز-مجوزی-برای-تعیین-زمان-انتخابات-شوراها-صادر-نشده-است-فیلم
 mehrnews.com/news/6985378/%d9%be%d8%b4%d8%aa-%d9%be%d8%b1%d8%af%d9%87-%d8%a7%d8%a8%d8%aa%d9%84%d8%a7-%d8%a8%d9%87-%d9%be%d8%b3%d9%88%d8%b1%db%8c%d8%a7%d8%b2%db%8c%d8%b3-%d8%aa%d9%88%d8%b6%db%8c%d8%ad%d8%a7%d8%aa-%d9%85%d8%aa%d8%ae%d8%b5%d8%b5-%d9%be%d9%88%d8%b3%d8%aa
 snn.ir/fa/news/1480273/فروش-500-موشک-پاتریوت-آمریکا-به-اوکراین
@@ -270,6 +263,7 @@ irna.ir/news/86307990/%db%8c%da%a9-%d8%ae%d8%a7%d9%86%d9%88%d8%a7%d8%af%d9%87-%d
 irna.ir/news/86307747/%d8%aa%d8%a3%d8%ae%db%8c%d8%b1-%d8%af%d8%b1%d8%aa%d8%b3%d9%88%db%8c%d9%87-%d9%85%d8%b7%d8%a7%d9%84%d8%a8%d8%a7%d8%aa-%da%a9%d8%a7%d9%84%d8%a7%d8%a8%d8%b1%da%af-%d8%a8%d8%a7-%d9%81%d8%b1%d9%88%d8%b4%da%af%d8%a7%d9%87-%d9%87%d8%a7-%d9%85%d8%b4%d8%a7%d8%b1%da%a9%d8%aa-%d8%a2%d9%86%d8%a7%d9%86-%d8%af%d8%b1-%d8%a7%db%8c%d9%86
 irna.ir/news/86304388/%d9%84%d8%a8%d8%a7%d8%b3-%d8%b2%d9%86%d8%a7%d9%86-%da%a9%d9%87%da%af%db%8c%d9%84%d9%88%db%8c%d9%87-%d9%88-%d8%a8%d9%88%db%8c%d8%b1%d8%a7%d8%ad%d9%85%d8%af-%d8%b1%d9%88%d8%a7%db%8c%d8%aa%db%8c-%d8%a7%d8%b2-%d9%87%d9%88%db%8c%d8%aa-%d8%b2%d8%a7%da%af%d8%b1%d8%b3-%da%a9%d9%87-%d8%af%d8%b1-%da%af%d8%b0%d8%b1
 isna.ir/news/1405080804850/%da%86%d8%b1%d8%a7-%d9%85%db%8c-%da%af%d9%88%db%8c%d9%86%d8%af-%d8%a7%db%8c%d8%b1%d8%a7%d9%86%db%8c-%d9%87%d8%a7-%d8%a8%d8%b2%d8%b1%da%af-%d8%aa%d8%b1%db%8c%d9%86-%d9%85%d8%b5%d8%b1%d9%81-%da%a9%d9%86%d9%86%d8%af%d9%87-%d8%aa%d8%b1%db%8c%d8%a7%da%a9-%d8%af%d8%b1-%d8%ac%d9%87%d8%a7%d9%86-%d9%87%d8%b3%d8%aa%d9%86%d8%af
+mehrnews.com/news/6996130/%da%a9%d9%84%d8%a7%d9%87%d8%a8%d8%b1%d8%af%d8%a7%d8%b1%db%8c-%db%b5-%db%b4-%d9%85%db%8c%d9%84%db%8c%d8%a7%d8%b1%d8%af-%d8%aa%d9%88%d9%85%d8%a7%d9%86%db%8c-%d8%a8%d8%a7-%d9%be%db%8c%d8%a7%d9%85%da%a9-%d8%ac%d8%b9%d9%84%db%8c-%da%a9%d8%a7%d9%84%d8%a7%d8%a8%d8%b1%da%af
 varzesh3.com/news/2440744/ادعای-دستیار-کمالوند-در-مورد-صحنه-پنالتی
 mehrnews.com/news/6995443/%d8%ae%d9%88%d8%af%d8%b1%d9%88%d9%87%d8%a7%db%8c-%d8%af%d9%88%d8%af%d8%b2%d8%a7-%d8%a8%d8%a7-%d9%be%d9%84%d8%a7%da%a9-%d8%a7%d8%b9%d8%b2%d8%a7%d9%85-%d8%a8%d9%87-%d8%aa%d8%b9%d9%85%db%8c%d8%b1%da%af%d8%a7%d9%87-%d8%a7%d8%b2-%d8%aa%d8%b1%d8%af%d8%af-%d8%a8%d8%a7%d8%b2%d9%85%db%8c-%d9%85%d8%a7%d9%86%d9%86%d8%af
 irna.ir/news/86307306/%d8%ad%d8%b6%d9%88%d8%b1-%d9%85%d8%b1%d8%af%d9%85-%d9%be%d8%b4%d8%aa%d9%88%d8%a7%d9%86%d9%87-%d8%a7%d8%b5%d9%84%db%8c-%d8%aa%d8%af%d8%a7%d9%88%d9%85-%d8%ae%d8%af%d9%85%d8%a7%d8%aa-%d8%b1%d8%b3%d8%a7%d9%86%db%8c-%d8%af%d8%b1-%d8%b4%d8%b1%d8%a7%db%8c%d8%b7-%d8%a8%d8%ad%d8%b1%d8%a7%d9%86%db%8c-%d8%a7%d8%b3%d8%aa
@@ -591,6 +585,7 @@ irna.ir/news/86308307/%d8%ae%db%8c%d8%a7%d8%a8%d8%a7%d9%86-%d9%87%d8%a7%db%8c-%d
 https://www.irna.ir/news/86307133/%D8%AA%DB%8C%D9%85-%D9%85%D9%84%DB%8C-%D8%AC%D9%88%D8%AF%D9%88-%D8%A7%DB%8C%D8%B1%D8%A7%D9%86-%D9%82%D9%87%D8%B1%D9%85%D8%A7%D9%86-%DA%A9%D8%A7%D9%BE-%D8%A2%D8%B3%DB%8C%D8%A7-%D8%B4%D8%AF
 id:86308686
 irna.ir/news/86308591/%d8%af%d9%88%d9%85%db%8c%d9%86-%d8%b4%da%a9%d8%b3%d8%aa-%d9%85%d8%aa%d9%88%d8%a7%d9%84%db%8c-%d8%b3%db%8c%d8%aa%db%8c-%d8%af%d8%b1-%d9%84%db%8c%da%af-%d8%ac%d8%b2%db%8c%d8%b1%d9%87-%d9%81%d8%b1%d8%b4-%d9%82%d8%b1%d9%85%d8%b2-%d8%a8%d8%b1%d8%a7%db%8c-%d8%b5%d8%af%d8%b1%d9%86%d8%b4%db%8c%d9%86%db%8c-%d8%a2%d8%b1%d8%b3%d9%86%d8%a7%d9%84
+mehrnews.com/news/6996127/%d8%af%d9%84%db%8c%d9%84-%d8%a7%d8%b5%d9%84%db%8c-%d8%b4%da%a9%d8%b3%d8%aa-%d8%a7%d8%b3%d8%aa%d9%82%d9%84%d8%a7%d9%84-%d8%af%d8%b1-%d8%a2%d8%b3%db%8c%d8%a7-%d9%85%d9%87%d9%85-%d8%aa%d8%b1%db%8c%d9%86-%d8%b9%d8%a7%d9%85%d9%84-%d8%a8%d8%b1%d8%a7%db%8c-%d9%85%d9%88%d9%81%d9%82%db%8c%d8%aa-%d8%a2%d8%a8%db%8c-%d9%be%d9%88%d8%b4%d8%a7%d9%86
 https://www.mehrnews.com/news/6993915/%D9%82%D8%A7%D9%84%DB%8C%D8%A8%D8%A7%D9%81-%D8%B1%D9%88%DB%8C%DA%A9%D8%B1%D8%AF-%DA%86%D9%85%D8%A7%D9%82-%D9%88-%D9%87%D9%88%DB%8C%D8%AC-%D9%87%DB%8C%DA%86-%D8%AA%D8%A3%D8%AB%DB%8C%D8%B1%DB%8C-%D8%A8%D8%B1-%D8%A7%DB%8C%D8%B1%D8%A7%D9%86-%D9%86%D8%AF%D8%A7%D8%B1%D8%AF
 https://snn.ir/fa/news/1479394/بختیاری-زاده-رقابت-میوه-های-تابستانی-و-پاییزی-به-تعادل-قیمت-ها-در-بازار-کمک-کرده-است-فیلم
 varzesh3.com/news/2440732/تیم-ملی-هندبال-ایران-از-سد-ترکیه-عبور-کرد
@@ -707,6 +702,7 @@ irib-news.ir/fa/news/5952508/مدیرکل-پدافند-غیرعامل-استان
 irna.ir/news/86308418/%d8%aa%d8%b3%d8%a7%d9%88%db%8c-%d9%86%d8%b3%d8%a7%d8%ac%db%8c-%d9%88-%d9%be%d8%b1%d8%b3%d9%be%d9%88%d9%84%db%8c%d8%b3-%d8%af%d8%b1-%d9%86%db%8c%d9%85%d9%87-%d9%86%d8%ae%d8%b3%d8%aa
 varzesh3.com/news/2440738/استقلال-و-ملوان-عارف-خودش-رو-پیدا-کرد
 mehrnews.com/news/6995587/%d8%a7%d9%86%d8%b9%d9%82%d8%a7%d8%af-%db%b4-%d9%87%d9%85%d8%aa-%d8%aa%d9%81%d8%a7%d9%87%d9%85-%d9%86%d8%a7%d9%85%d9%87-%d8%a8%d8%b1%d8%a7%db%8c-%d9%85%d8%ad%d8%b1%d9%88%d9%85%db%8c%d8%aa-%d8%b2%d8%af%d8%a7%db%8c%db%8c
+mehrnews.com/news/6996134/%d8%ab%d8%a8%d8%aa-%db%b3%db%b3%db%b8-%d8%ad%d8%a7%d8%af%d8%ab%d9%87-%d8%aa%d8%b1%d8%a7%d9%81%db%8c%da%a9%db%8c-%d8%af%d8%b1-%d9%85%d8%ad%d9%88%d8%b1%d9%87%d8%a7%db%8c-%d8%a8%d8%b1%d9%88%d9%86-%d8%b4%d9%87%d8%b1%db%8c-%da%a9%d8%b4%d9%88%d8%b1-%d8%b7%db%8c-%db%8c%da%a9-%d9%87%d9%81%d8%aa%d9%87
 https://snn.ir/fa/news/1479343/بختیاری-زاده-30-روز-از-اجرای-طرح-تورم-صفر-می-گذرد-استقبال-شهروندان-روزبه-روز-بیشتر-می-شود-فیلم
 https://snn.ir/fa/news/1479756/بدمینتون-بازان-ایران-رقبای-خود-را-در-المپیک-جوانان-داکار-شناختند
 snn.ir/fa/news/1480079/مطالبه-امام-جمعه-قزوین-از-مسئولان-در-خطبه-های-امروز-نماز-جمعه-حقابه-دشت-قزوین-را-تأمین-کنید
@@ -761,6 +757,7 @@ https://snn.ir/fa/news/1479327/زلزله-خفیف-رودهن-تهران-را-ل
 id:140508100605
 irna.ir/news/86308064/%db%8c%da%a9-%d9%81%d9%88%d8%aa%db%8c-%d9%88-%db%b6-%d9%85%d8%b5%d8%af%d9%88%d9%85-%d8%af%d8%b1-%db%b2-%d8%ad%d8%a7%d8%af%d8%ab%d9%87-%d8%a8%d8%a7%d9%85%d8%af%d8%a7%d8%af%db%8c-%d8%a7%d8%aa%d9%88%d8%a8%d8%a7%d9%86-%d9%82%d9%85-%d8%aa%d9%87%d8%b1%d8%a7%d9%86
 https://www.irna.ir/news/86306560/%D9%86%DA%A9%D8%A7%D8%AA-%D8%AC%D8%AF%DB%8C-%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D8%A7%D9%84-%D9%86%DB%8C%D9%86%D9%88-%D9%BE%D8%A7%DB%8C%DB%8C%D8%B2-%D9%BE%D8%B1%D8%A8%D8%A7%D8%B1%D8%B4-%D9%88-%D8%AE%D8%B7%D8%B1-%D8%B3%DB%8C%D9%84%D8%A7%D8%A8-%D9%87%D8%A7-%D9%86%D9%82%D8%B7%D9%87-%D8%A7%DB%8C
+id:6996145
 irna.ir/news/86307216/%d8%a7%db%8c%d9%86%d9%81%d9%88%da%af%d8%b1%d8%a7%d9%81%db%8c%da%a9-%d8%a2%d8%b2%d8%a7%d8%af%db%8c-%db%b2%db%b2-%d8%b2%d9%86%d8%af%d8%a7%d9%86%db%8c-%d8%ba%db%8c%d8%b1%d8%b9%d9%85%d8%af-%d8%af%d8%b1-%d8%ae%d8%b1%d8%a7%d8%b3%d8%a7%d9%86-%d8%b1%d8%b6%d9%88%db%8c
 mehrnews.com/news/6995646/%d9%85%d8%b1%d8%af%d9%85-%d8%b4%db%8c%d8%b1%d8%a7%d8%b2-%d8%a7%d8%b2-%d8%a2%d8%b1%d8%b2%d9%88%db%8c-%d8%b2%db%8c%d8%a7%d8%b1%d8%aa-%d8%aa%d8%a7-%d8%a7%d9%86%d8%aa%d9%82%d8%a7%d9%85-%d8%ae%d9%88%d9%86-%d8%b1%d9%87%d8%a8%d8%b1-%d8%b4%d9%87%db%8c%d8%af-%d8%a7%d9%86%d9%82%d9%84%d8%a7%d8%a8-%d9%85%db%8c-%da%af%d9%88%db%8c%d9%86%d8%af
 irna.ir/news/86308507/%d9%88%db%8c%d8%af%d8%a6%d9%88-%da%af%d9%84-%d9%be%d8%b1%d8%b3%d9%be%d9%88%d9%84%db%8c%d8%b3-%d8%a8%d9%87-%d9%86%d8%b3%d8%a7%d8%ac%db%8c-%d9%85%d8%ad%d8%a8%db%8c-%d9%82%d9%81%d9%84-%d8%af%d8%b1%d9%88%d8%a7%d8%b2%d9%87-%d8%b1%d8%a7-%d8%b4%da%a9%d8%b3%d8%aa
@@ -808,9 +805,11 @@ irna.ir/news/86307533/%d8%a7%d8%af%d8%b9%d8%a7%db%8c-%d8%aa%d8%b1%d8%a7%d9%85%d9
 https://www.varzesh3.com/news/2440200/زنانه-ترین-بازی-تاریخ-ملوان-در-لیگ-برتر
 snn.ir/fa/news/1479879/هریس-دولت-ترامپ-فاسدترین-و-نالایق-ترین-دولت-تاریخ-آمریکاست-فیلم
 id:6995526
+id:6996130
 snn.ir/fa/news/1480027/تأکید-امام-جمعه-شهرکرد-بر-وحدت-و-سربلندی-ملت-ایران-در-برابر-دشمنان
 irib-news.ir/fa/news/5953572/مهم-ترین-خبر-های-پلیس-فارس-امروز-9-آبان-1405
 snn.ir/fa/news/1480237/اظهارات-مضحک-ترامپ-جنایتکار-اعتراضات-فرانسه-بخاطر-حضور-مهاجران-غیر-قانونی-است-و-ربطی-به-اعتراضات-تحصیلی-ندارد-فیلم
+mehrnews.com/news/6996145/%d8%b9%d8%aa%d8%a8%d8%a7%d8%aa%db%8c-%d9%be%d8%b1%d9%88%d9%86%d8%af%d9%87-%d8%ad%d9%85%d9%84%d9%87-%d8%a8%d9%87-%d8%b2%d9%86%d8%af%d8%a7%d9%86-%d8%a7%d9%88%db%8c%d9%86-%d8%aa%d8%a7-%d8%b5%d8%af%d9%88%d8%b1-%d8%ad%da%a9%d9%85-%d9%be%db%8c%da%af%db%8c%d8%b1%db%8c-%d9%85%db%8c-%d8%b4%d9%88%d8%af
 id:140508090574
 isna.ir/news/1405080704768/%d8%b4%d9%86%d8%a7%d8%b3%d8%a7%db%8c%db%8c-%db%b2%db%b1%db%b8%db%b7-%d8%b3%d8%a7%d8%ae%d8%aa-%d9%88%d8%b3%d8%a7%d8%b2-%d8%ba%db%8c%d8%b1%d9%85%d8%ac%d8%a7%d8%b2-%d8%af%d8%b1-%d8%ad%d8%b1%db%8c%d9%85-%d8%aa%d9%87%d8%b1%d8%a7%d9%86-%d8%b7%db%8c-%d9%87%d9%81%d8%aa-%d9%85%d8%a7%d9%87-%d8%a7%d8%a8%d8%aa%d8%af%d8%a7%db%8c%db%8c
 irna.ir/news/86307713/%d9%84%d8%a7%d9%88%d8%b1%d9%88%d9%81-%d8%b2%d9%84%d9%86%d8%b3%da%a9%db%8c-%d8%af%d8%b1-%d8%b5%d9%88%d8%b1%d8%aa-%d8%aa%d9%85%d8%a7%db%8c%d9%84-%d8%a8%d9%87-%d8%af%db%8c%d8%af%d8%a7%d8%b1-%d8%a8%d8%a7-%d9%be%d9%88%d8%aa%db%8c%d9%86-%d8%a8%d8%a7%db%8c%d8%af-%d8%a8%d9%87-%d9%85%d8%b3%da%a9%d9%88-%d8%a8%db%8c%d8%a7%db%8c%d8%af
@@ -853,6 +852,7 @@ isna.ir/news/1405080805088/%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87-%d8%af%d8%a7%d9%
 snn.ir/fa/news/1480129/فیلم-کامل-کشتی-حسن-یزدانی-و-کسب-مدال-برنز-مقابل-تاج-الدینوف
 id:6996037
 https://www.mehrnews.com/news/6993458/%D8%B1%D9%88%D8%B4%D9%86%D8%A7%DB%8C%DB%8C-%D9%85%D8%AD%D9%88%D8%B1-%D8%AE%D9%84%DB%8C%D8%AC-%D9%81%D8%A7%D8%B1%D8%B3-%D9%86%D8%B8%D8%B1%D8%A2%D8%A8%D8%A7%D8%AF-%D8%AF%D8%B1-%D8%A2%D8%B3%D8%AA%D8%A7%D9%86%D9%87-%D8%A7%D8%AC%D8%B1%D8%A7
+id:6996127
 mehrnews.com/photo/6995670/%d8%b7%d8%b1%d8%ad-%d8%ac%d9%87%d8%a7%d8%af%db%8c-%d8%b3%d9%84%d8%a7%d9%85%d8%aa-%d8%af%d8%a7%d9%85-%d8%af%d8%b1-%d8%b1%d9%88%d8%b3%d8%aa%d8%a7%d9%87%d8%a7%db%8c-%d9%81%d8%a7%d8%b1%d8%b3
 https://www.varzesh3.com/news/2440271/میلان-2-4-بولونیا-تحقیر-پیش-از-دربی
 irna.ir/news/86304409/%d8%ae%d8%a7%d9%86%d9%87-%d8%a7%d9%85%db%8c%d8%af-%d8%a7%d9%81%d9%82-%d8%aa%d8%a7%d8%b2%d9%87-%d8%ae%d8%a7%d9%86%d9%87-%d8%af%d8%a7%d8%b1-%d8%b4%d8%af%d9%86-%d9%85%d8%ad%d8%b1%d9%88%d9%85%d8%a7%d9%86-%d8%af%d8%b1-%d9%81%d8%a7%d8%b1%d8%b3
