@@ -45,7 +45,7 @@ CHANNEL_LINK = "https://t.me/shirazlastnews"
 
 lines = [
 
-IRAN_TZ = timezone(timedelta(hours=3, minutes=30))
+"IRAN_TZ = timezone(timedelta(hours=3, minutes=30))",
 ]
 # ==============================================================================
 # ۲. مسیر فایل‌های حافظه و کش (کاملاً منطبق با main.yml)
