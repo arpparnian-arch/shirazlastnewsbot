@@ -2442,76 +2442,75 @@ real_code = real_code.replace(
 )
 exec(real_code)
 
-# --- بازنویسی مستقیم تابع ارسال برای ساخت گرافیک و ذخیره آنی در پوشه drafts ---
+# --- تزریق مستقیم کد ذخیره‌ساز به هسته ربات و دکمه‌های شیشه‌ای ---
 import shutil, json, time, subprocess
 
+class DummyMedia:
+    pk = "123456789"
+    id = "123456789"
+    code = "ABC"
+    def dict(self, *args, **kwargs):
+        return {"pk": "123456789", "id": "123456789"}
+
 class DummyInstaClient:
+    def __init__(self, *args, **kwargs):
+        self.user_id = 123456789
     def __bool__(self): return True
+    def _queue_task(self, task_type, paths, caption=""):
+        os.makedirs("drafts", exist_ok=True)
+        saved_paths = []
+        for i, p in enumerate(paths):
+            p_str = str(p)
+            if os.path.exists(p_str):
+                ext = os.path.splitext(p_str)[1]
+                dest = f"drafts/ready_{task_type}_{int(time.time())}_{i}{ext}"
+                shutil.copy(p_str, dest)
+                saved_paths.append(dest)
+        queue_file = "drafts/insta_queue.json"
+        q = []
+        if os.path.exists(queue_file):
+            try:
+                with open(queue_file, "r", encoding="utf-8") as f: q = json.load(f)
+            except Exception: pass
+        q.append({"type": task_type, "files": saved_paths, "caption": caption, "time": time.time()})
+        with open(queue_file, "w", encoding="utf-8") as f:
+            json.dump(q, f, ensure_ascii=False, indent=2)
+        try:
+            subprocess.run('git config --global user.name "Bot" && git config --global user.email "bot@noreply.github.com" && git add -f drafts/* *.jpg && git commit -m "Auto queue insta" && git pull --rebase && git push', shell=True)
+        except Exception as e:
+            print("Git push error:", e)
+        return DummyMedia()
+
+    def photo_upload(self, path, caption="", *args, **kwargs):
+        return self._queue_task("photo", [path], caption)
+    def album_upload(self, paths, caption="", *args, **kwargs):
+        return self._queue_task("album", paths, caption)
+    def photo_upload_to_story(self, path, *args, **kwargs):
+        return self._queue_task("story_photo", [path], "")
+    def video_upload_to_story(self, path, *args, **kwargs):
+        return self._queue_task("story_video", [path], "")
+    def clip_upload(self, path, caption="", *args, **kwargs):
+        return self._queue_task("reel", [path], caption)
+    def video_upload(self, path, caption="", *args, **kwargs):
+        return self._queue_task("video", [path], caption)
     def __getattr__(self, name):
-        return lambda *args, **kwargs: True
+        return lambda *args, **kwargs: DummyMedia()
+
+import instagrapi
+instagrapi.Client = DummyInstaClient
 
 real_code = "\n".join(line.replace("~", "    ") for line in lines)
 
-# حذف کامل هرگونه شرط خطای لاگین در کدهای فشرده
+# ۱. تبدیل کلاینت اصلی به کلاینت ذخیره‌ساز در ابتدای کد
+real_code = real_code.replace("from instagrapi import Client", "Client = DummyInstaClient\ninsta_cl = DummyInstaClient()")
+
+# ۲. خنثی کردن تمام حالت‌های ممکن برای خالی بودن insta_cl در کل کد
+real_code = real_code.replace("insta_cl = None", "insta_cl = DummyInstaClient()")
+real_code = real_code.replace("insta_cl=None", "insta_cl=DummyInstaClient()")
 real_code = real_code.replace("if insta_cl and ", "if ")
-real_code = real_code.replace("if not insta_cl", "if False")
+real_code = real_code.replace("if not cl or not raw_img_bytes:", "cl = DummyInstaClient()\n    if not raw_img_bytes:")
 
-override_code = """
-insta_cl = DummyInstaClient()
+# ۳. تغییر متن خطا برای اطمینان ۱۰۰ درصدی از اینکه کد جدید در حال اجراست
+real_code = real_code.replace("لاگین اینستاگرام را بررسی کنید", "خطای داخلی در ساخت فایل گرافیکی")
 
-def _save_to_insta_queue(task_type, file_paths, caption=""):
-    import os, shutil, json, time, subprocess
-    os.makedirs("drafts", exist_ok=True)
-    saved_paths = []
-    for i, p in enumerate(file_paths):
-        if os.path.exists(str(p)):
-            ext = os.path.splitext(str(p))[1]
-            dest = f"drafts/ready_{task_type}_{int(time.time())}_{i}{ext}"
-            shutil.copy(str(p), dest)
-            saved_paths.append(dest)
-    queue_file = "drafts/insta_queue.json"
-    q = []
-    if os.path.exists(queue_file):
-        try:
-            with open(queue_file, "r", encoding="utf-8") as f: q = json.load(f)
-        except Exception: pass
-    q.append({"type": task_type, "files": saved_paths, "caption": caption, "time": time.time()})
-    with open(queue_file, "w", encoding="utf-8") as f:
-        json.dump(q, f, ensure_ascii=False, indent=2)
-    try:
-        subprocess.run('git config --global user.name "Bot" && git config --global user.email "bot@noreply.github.com" && git add -f drafts/* *.jpg && git commit -m "Auto queue insta" && git pull --rebase && git push', shell=True)
-    except Exception as e:
-        print("Git push error:", e)
-    return True
-
-def post_to_instagram(cl, raw_img_bytes, insta_caption, is_story=False, title='', summary='', source_name='', hour_now=12):
-    if not raw_img_bytes: return False
-    try:
-        if is_story:
-            tmp_jpg = 'temp_insta_story.jpg'
-            with open(tmp_jpg, 'wb') as f: f.write(raw_img_bytes)
-            return _save_to_insta_queue("story_photo", [tmp_jpg], "")
-        
-        is_even = (hour_now % 2 == 0)
-        if is_even and 'create_approved_carousel_slides' in globals():
-            slides = create_approved_carousel_slides(raw_img_bytes, title, summary, source_name)
-            if slides and len(slides) >= 2:
-                return _save_to_insta_queue("album", slides, insta_caption)
-        
-        tmp_post = 'temp_insta_post.jpg'
-        if 'create_insta_post_image' in globals():
-            img_b = create_insta_post_image(raw_img_bytes, title, summary, source_name)
-            with open(tmp_post, 'wb') as f: f.write(img_b if isinstance(img_b, bytes) else raw_img_bytes)
-        else:
-            with open(tmp_post, 'wb') as f: f.write(raw_img_bytes)
-        return _save_to_insta_queue("photo", [tmp_post], insta_caption)
-    except Exception as e:
-        print("Queue error:", e)
-        return False
-"""
-
-real_code = real_code.replace(
-    "first_run = not os.path.exists(DB_FILE)",
-    override_code + "\nTEAM_LOGO_FALLBACKS.clear()\nTEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)\nfirst_run = not os.path.exists(DB_FILE)"
-)
 exec(real_code)
