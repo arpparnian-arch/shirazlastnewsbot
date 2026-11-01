@@ -2442,20 +2442,32 @@ real_code = real_code.replace(
 )
 exec(real_code)
 
-# --- جایگزینی هوشمند در داخل کد فشرده + ذخیره خودکار آنی در گیت‌هاب ---
+# --- جایگزینی کامل برای عبور از شرط پسورد و ذخیره آنی در پوشه drafts ---
 import shutil, json, time, subprocess
 
+INSTA_USER = "shirazlastnews"
+INSTA_PASS = "dummy_pass_for_bypass"
+
+class DummyMedia:
+    pk = "123456789"
+    id = "123456789"
+    code = "ABC"
+    def dict(self, *args, **kwargs):
+        return {"pk": "123456789", "id": "123456789"}
+
 class DummyInstaClient:
-    def __init__(self, *args, **kwargs): pass
+    def __init__(self, *args, **kwargs):
+        self.user_id = 123456789
     def set_locale(self, *args, **kwargs): pass
     def set_timezone_offset(self, *args, **kwargs): pass
-    def load_settings(self, *args, **kwargs): pass
-    def dump_settings(self, *args, **kwargs): pass
+    def load_settings(self, *args, **kwargs): return {}
+    def dump_settings(self, *args, **kwargs): return True
     def get_timeline_feed(self, *args, **kwargs): return {}
     def login(self, *args, **kwargs): return True
     def login_by_sessionid(self, *args, **kwargs): return True
     def get_settings(self, *args, **kwargs): return {}
     def set_settings(self, *args, **kwargs): pass
+    def account_info(self, *args, **kwargs): return DummyMedia()
 
     def _queue_task(self, task_type, paths, caption=""):
         os.makedirs("drafts", exist_ok=True)
@@ -2478,35 +2490,37 @@ class DummyInstaClient:
         with open(queue_file, "w", encoding="utf-8") as f:
             json.dump(q, f, ensure_ascii=False, indent=2)
             
-        # ارسال فوری فایل آماده به حافظه گیت‌هاب بدون نیاز به Stop کردن ربات
         try:
             subprocess.run('git config --global user.name "Bot" && git config --global user.email "bot@noreply.github.com" && git add -f drafts/* *.jpg && git commit -m "Auto queue insta" && git pull --rebase && git push', shell=True)
         except Exception as e:
             print("Git push error:", e)
+        return DummyMedia()
 
     def photo_upload(self, path, caption="", *args, **kwargs):
-        self._queue_task("photo", [path], caption)
-        return True
+        return self._queue_task("photo", [path], caption)
 
     def album_upload(self, paths, caption="", *args, **kwargs):
-        self._queue_task("album", paths, caption)
-        return True
+        return self._queue_task("album", paths, caption)
 
     def photo_upload_to_story(self, path, *args, **kwargs):
-        self._queue_task("story_photo", [path], "")
-        return True
+        return self._queue_task("story_photo", [path], "")
 
     def video_upload_to_story(self, path, *args, **kwargs):
-        self._queue_task("story_video", [path], "")
-        return True
+        return self._queue_task("story_video", [path], "")
 
     def clip_upload(self, path, caption="", *args, **kwargs):
-        self._queue_task("reel", [path], caption)
-        return True
+        return self._queue_task("reel", [path], caption)
 
     def video_upload(self, path, caption="", *args, **kwargs):
-        self._queue_task("video", [path], caption)
-        return True
+        return self._queue_task("video", [path], caption)
+
+    def __getattr__(self, name):
+        def _missing(*args, **kwargs):
+            return DummyMedia()
+        return _missing
+
+import instagrapi
+instagrapi.Client = DummyInstaClient
 
 real_code = "\n".join(line.replace("~", "    ") for line in lines)
 real_code = real_code.replace("from instagrapi import Client", "Client = DummyInstaClient")
@@ -2514,4 +2528,5 @@ real_code = real_code.replace(
     "first_run = not os.path.exists(DB_FILE)",
     "TEAM_LOGO_FALLBACKS.clear()\nTEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)\nfirst_run = not os.path.exists(DB_FILE)"
 )
+real_code += "\n\ndef safe_insta_login(cl=None):\n    return True\n"
 exec(real_code)
