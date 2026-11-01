@@ -1,8 +1,9 @@
-TOKEN = "8679178452:AAHukNo-fp9dLYZ49h-4H4LrPM2T5wnsl2Q"
+import os
+TOKEN = os.environ.get("BOT_TOKEN", "")
 BOT_USERNAME = "shirazlastnews_bot"
 ADMIN_ID = "30956754"  
-INSTA_USER = "shirazlastnews"
-INSTA_PASS = "2280902801AliRezaParni@n"
+INSTA_USER = os.environ.get("INSTA_USER", "shirazlastnews")
+INSTA_PASS = os.environ.get("INSTA_PASS", "")
 TARGET_CHAT = "@shirazlastnews"
 CHANNEL_SIGN = "@shirazlastnews"
 CHANNEL_LINK = "https://t.me/shirazlastnews"
