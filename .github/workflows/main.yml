@@ -34,8 +34,7 @@ jobs:
       - name: Run bot (Continuous Drip-Feed Mode)
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          INSTA_USER: ${{ secrets.INSTA_USER }}
-          INSTA_PASS: ${{ secrets.INSTA_PASS }}
+          IG_SESSIONID: ${{ secrets.IG_SESSIONID }}
         run: python bot.py
 
       - name: Save state
