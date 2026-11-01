@@ -2442,6 +2442,70 @@ real_code = real_code.replace(
 )
 exec(real_code)
 
-def safe_insta_login(cl):
-    """غیرفعال در اکانت اول - ارسال بر عهده اکانت دوم است"""
-    return False
+# --- جایگزینی هوشمند برای اکانت اول (ذخیره فایل‌های آماده بدون اتصال به اینستاگرام) ---
+import shutil, json, time
+
+class DummyInstaClient:
+    def __init__(self, *args, **kwargs): pass
+    def set_locale(self, *args, **kwargs): pass
+    def set_timezone_offset(self, *args, **kwargs): pass
+    def load_settings(self, *args, **kwargs): pass
+    def dump_settings(self, *args, **kwargs): pass
+    def get_timeline_feed(self, *args, **kwargs): return {}
+    def login(self, *args, **kwargs): return True
+    def login_by_sessionid(self, *args, **kwargs): return True
+
+    def _queue_task(self, task_type, paths, caption=""):
+        os.makedirs("drafts", exist_ok=True)
+        saved_paths = []
+        for i, p in enumerate(paths):
+            p_str = str(p)
+            if os.path.exists(p_str):
+                ext = os.path.splitext(p_str)[1]
+                dest = f"drafts/ready_{task_type}_{int(time.time())}_{i}{ext}"
+                shutil.copy(p_str, dest)
+                saved_paths.append(dest)
+        
+        queue_file = "drafts/insta_queue.json"
+        q = []
+        if os.path.exists(queue_file):
+            try:
+                with open(queue_file, "r", encoding="utf-8") as f: q = json.load(f)
+            except Exception: pass
+        q.append({"type": task_type, "files": saved_paths, "caption": caption, "time": time.time()})
+        with open(queue_file, "w", encoding="utf-8") as f:
+            json.dump(q, f, ensure_ascii=False, indent=2)
+
+    def photo_upload(self, path, caption="", *args, **kwargs):
+        self._queue_task("photo", [path], caption)
+        return True
+
+    def album_upload(self, paths, caption="", *args, **kwargs):
+        self._queue_task("album", paths, caption)
+        return True
+
+    def photo_upload_to_story(self, path, *args, **kwargs):
+        self._queue_task("story_photo", [path], "")
+        return True
+
+    def video_upload_to_story(self, path, *args, **kwargs):
+        self._queue_task("story_video", [path], "")
+        return True
+
+    def clip_upload(self, path, caption="", *args, **kwargs):
+        self._queue_task("reel", [path], caption)
+        return True
+
+    def video_upload(self, path, caption="", *args, **kwargs):
+        self._queue_task("video", [path], caption)
+        return True
+
+import instagrapi
+instagrapi.Client = DummyInstaClient
+
+real_code = "\n".join(line.replace("~", "    ") for line in lines)
+real_code = real_code.replace(
+    "first_run = not os.path.exists(DB_FILE)",
+    "TEAM_LOGO_FALLBACKS.clear()\nTEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)\nfirst_run = not os.path.exists(DB_FILE)"
+)
+exec(real_code)
