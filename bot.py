@@ -1630,7 +1630,7 @@ def create_3d_live_match_story(match_data, banner_text='گزارش زنده و �
         draw.rounded_rectangle([pill_x - 5, pill_y - 5, pill_x + pill_w + 5, pill_y + pill_h + 5], radius=45, fill=(255, 45, 55, 165))
         draw.rounded_rectangle([pill_x, pill_y, pill_x + pill_w, pill_y + pill_h], radius=44, fill=(185, 18, 28, 245), outline=(255, 195, 110, 255), width=3)
         f_pill = load_font(42)
-        p_txt = 'زنده | لیگ برتر ایران'
+        p_txt = 'زنده | تب داغ فوتبال '
         bb_p = draw.textbbox((0, 0), p_txt, font=f_pill)
         draw.text(((W - (bb_p[2] - bb_p[0])) / 2, pill_y + 15), p_txt, font=f_pill, fill=(255, 255, 255, 255))
         f_3d = load_font(96)
