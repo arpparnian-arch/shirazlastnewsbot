@@ -1,5 +1,3 @@
-exclusive_draft_11
-id:140508100639
 irna.ir/news/86307721/%d9%88%d9%82%d9%88%d8%b9-%d8%ad%d9%85%d9%84%d8%a7%d8%aa-%d9%87%d9%88%d8%a7%db%8c%db%8c-%da%af%d8%b3%d8%aa%d8%b1%d8%af%d9%87-%d8%b1%d9%88%d8%b3%db%8c%d9%87-%d8%a8%d9%87-%da%a9%db%8c-%db%8c%d9%81-%d9%81%db%8c%d9%84%d9%85
 id:6996132
 mehrnews.com/news/6996765/%d8%b4%d9%87%d8%b1%d8%af%d8%a7%d8%b1-%da%a9%d8%b1%d8%ac-%d8%a7%d8%b2-%d8%a7%d8%b3%d8%aa%db%8c%d8%b6%d8%a7%d8%ad-%d9%81%d8%a7%d8%b5%d9%84%d9%87-%da%af%d8%b1%d9%81%d8%aa-%d9%87%d9%81%d8%aa-%d8%b9%d8%b6%d9%88-%d8%b4%d9%88%d8%b1%d8%a7-%d8%a8%d9%87-%da%a9%db%8c%d8%a7%d9%86%db%8c-%d8%a7%d8%ae%d8%b7%d8%a7%d8%b1
@@ -495,6 +493,7 @@ https://www.irib-news.ir/fa/news/5951759/بازگشت-چرخه-تولید-به-�
 irna.ir/news/86307724/%d8%b1%d8%a7%db%8c%d8%b2%d9%86%db%8c-%d9%88%d8%b2%db%8c%d8%b1%d8%a7%d9%86-%d8%ae%d8%a7%d8%b1%d8%ac%d9%87-%d8%b9%d8%b1%d8%a8%d8%b3%d8%aa%d8%a7%d9%86-%d9%88-%d8%a2%d9%85%d8%b1%db%8c%da%a9%d8%a7-%d8%af%d8%b1%d8%a8%d8%a7%d8%b1%d9%87-%d9%85%d8%b3%d8%a7%d8%a6%d9%84-%d9%85%d9%86%d8%b7%d9%82%d9%87
 varzesh3.com/news/2441306/استقلالی-ها-به-اسکوییدگیم-دعوت-شدند-عکس
 mehrnews.com/news/6997676/%d9%be%d9%88%db%8c%d8%b4-%d9%85%d9%84%db%8c-%d8%af%d8%a7%d9%86%d8%b4-%d8%a2%d9%85%d9%88%d8%b2%db%8c-%d8%a7%d8%b2-%d9%85%db%8c%d8%af%d8%a7%d9%86-%d8%ad%d8%b6%d9%88%d8%b1-%d8%aa%d8%a7-%d9%82%d8%a7%d8%a8-%d9%85%d8%a7%d9%86%d8%af%da%af%d8%a7%d8%b1-%d8%a8%d8%b1%da%af%d8%b2%d8%a7%d8%b1-%d9%85%db%8c-%d8%b4%d9%88%d8%af
+id:5955654
 id:6997155
 irib-news.ir/fa/news/5955084/میزبانی-استان-فارس-از-پیکر-20-شهید-گمنام-دوران-دفاع-مقدس
 id:6996746
@@ -706,6 +705,7 @@ id:86310389
 id:2440862
 irna.ir/news/86309662/%d8%a8%d9%87%d8%a7%db%8c-%d9%86%d9%81%d8%aa-%d8%af%d8%b1-%d8%a8%d8%a7%d8%b2%d8%a7%d8%b1%d9%87%d8%a7%db%8c-%d8%ac%d9%87%d8%a7%d9%86%db%8c-%da%a9%d8%a7%d9%87%d8%b4-%db%8c%d8%a7%d9%81%d8%aa
 varzesh3.com/news/2440748/جدول-پخش-زنده-بازی-های-شنبه-9-آبان
+irib-news.ir/fa/news/5955654/تجدید-عهد-مردم-فارس-با-رهبر-انقلاب-در-تجمعات-شبانه
 varzesh3.com/news/2440803/تاجرنیا-خدا-نگهدار-دیگر-به-من-زنگ-نزنید
 id:86308736
 mehrnews.com/news/6997288/%d8%b4%d8%b1%d8%b7-%d9%85%d8%af%d8%b1%da%a9-%d9%81%d9%88%d9%82-%d9%84%db%8c%d8%b3%d8%a7%d9%86%d8%b3-%d9%88-%d8%af%da%a9%d8%aa%d8%b1%d8%a7-%d8%a8%d8%b1%d8%a7%db%8c-%d9%85%d8%b4%d8%a7%d8%ba%d9%84-%d8%b3%d8%aa%d8%a7%d8%af%db%8c-%d8%af%d8%b3%d8%aa%da%af%d8%a7%d9%87-%d9%87%d8%a7%db%8c-%d8%a7%d8%ac%d8%b1%d8%a7%db%8c%db%8c
