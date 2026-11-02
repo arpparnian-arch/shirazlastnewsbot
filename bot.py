@@ -56,37 +56,37 @@ os.makedirs("drafts", exist_ok=True)
 os.makedirs("logos_cache", exist_ok=True)
 
 # ==========================================
-# ۲. سیستم هوشمند کش لوگوهای ورزشی
+# ۲. سیستم هوشمند کش لوگوهای ورزشی (متصل به گیت‌هاب LordArma)
 # ==========================================
 NEW_TEAM_LOGOS = {
-    # لیگ برتر خلیج فارس ایران و فجر سپاسی
-    'فجر سپاسی': 'https://api.sofascore.app/api/v1/team/36442/image',
-    'فجرسپاسی': 'https://api.sofascore.app/api/v1/team/36442/image',
-    'فجر': 'https://api.sofascore.app/api/v1/team/36442/image',
-    'پرسپولیس': 'https://api.sofascore.app/api/v1/team/36435/image',
-    'استقلال خوزستان': 'https://api.sofascore.app/api/v1/team/115249/image',
-    'استقلال': 'https://api.sofascore.app/api/v1/team/36433/image',
-    'سپاهان': 'https://api.sofascore.app/api/v1/team/36429/image',
-    'تراکتور': 'https://api.sofascore.app/api/v1/team/43898/image',
-    'فولاد': 'https://api.sofascore.app/api/v1/team/36431/image',
-    'ذوب آهن': 'https://api.sofascore.app/api/v1/team/36430/image',
-    'ذوب‌آهن': 'https://api.sofascore.app/api/v1/team/36430/image',
-    'ملوان': 'https://api.sofascore.app/api/v1/team/36440/image',
-    'گل گهر': 'https://api.sofascore.app/api/v1/team/169586/image',
-    'گل‌گهر': 'https://api.sofascore.app/api/v1/team/169586/image',
-    'آلومینیوم': 'https://api.sofascore.app/api/v1/team/212437/image',
-    'مس رفسنجان': 'https://api.sofascore.app/api/v1/team/169582/image',
-    'شمس آذر': 'https://api.sofascore.app/api/v1/team/399254/image',
-    'شمس‌آذر': 'https://api.sofascore.app/api/v1/team/399254/image',
-    'چادرملو': 'https://api.sofascore.app/api/v1/team/450473/image',
-    'خیبر': 'https://api.sofascore.app/api/v1/team/236888/image',
-    'نساجی': 'https://api.sofascore.app/api/v1/team/169578/image',
-    'هوادار': 'https://api.sofascore.app/api/v1/team/329446/image',
-    'پیکان': 'https://api.sofascore.app/api/v1/team/36436/image',
-    'صنعت نفت': 'https://api.sofascore.app/api/v1/team/43897/image',
-    'سایپا': 'https://api.sofascore.app/api/v1/team/36432/image',
+    # لیگ برتر خلیج فارس ایران و فجر سپاسی (بدون تحریم روی گیت‌هاب)
+    'فجر سپاسی': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Fajr%20Sepasi.png',
+    'فجرسپاسی': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Fajr%20Sepasi.png',
+    'فجر': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Fajr%20Sepasi.png',
+    'پرسپولیس': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Persepolis.png',
+    'استقلال خوزستان': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Esteghlal%20Khuzestan.png',
+    'استقلال': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Esteghlal.png',
+    'سپاهان': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Sepahan.png',
+    'تراکتور': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Tractor.png',
+    'فولاد': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Foolad.png',
+    'ذوب آهن': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Zob%20Ahan.png',
+    'ذوب‌آهن': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Zob%20Ahan.png',
+    'ملوان': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Malavan.png',
+    'گل گهر': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Gol%20Gohar.png',
+    'گل‌گهر': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Gol%20Gohar.png',
+    'آلومینیوم': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Aluminium%20Arak.png',
+    'مس رفسنجان': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Mes%20Rafsanjan.png',
+    'شمس آذر': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Shams%20Azar.png',
+    'شمس‌آذر': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Shams%20Azar.png',
+    'چادرملو': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Chadormalu.png',
+    'خیبر': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Kheybar.png',
+    'نساجی': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Nassaji.png',
+    'هوادار': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Havadar.png',
+    'پیکان': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Paykan.png',
+    'صنعت نفت': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Sanat%20Naft.png',
+    'سایپا': 'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/main/Logos/Saipa.png',
 
-    # لیگ برتر انگلیس (تمامی ۲۰ تیم)
+    # لیگ برتر انگلیس (تمامی ۲۰ تیم - دست‌نخورده)
     'لیورپول': 'https://a.espncdn.com/i/teamlogos/soccer/500/364.png',
     'آرسنال': 'https://a.espncdn.com/i/teamlogos/soccer/500/359.png',
     'منچسترسیتی': 'https://a.espncdn.com/i/teamlogos/soccer/500/382.png',
@@ -117,7 +117,7 @@ NEW_TEAM_LOGOS = {
     'ایپسویچ': 'https://a.espncdn.com/i/teamlogos/soccer/500/373.png',
     'ساوتهمپتون': 'https://a.espncdn.com/i/teamlogos/soccer/500/376.png',
 
-    # لالیگا اسپانیا (تمامی ۲۰ تیم)
+    # لالیگا اسپانیا (تمامی ۲۰ تیم - دست‌نخورده)
     'رئال مادرید': 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png',
     'بارسلونا': 'https://a.espncdn.com/i/teamlogos/soccer/500/83.png',
     'اتلتیکو مادرید': 'https://a.espncdn.com/i/teamlogos/soccer/500/1068.png',
@@ -146,7 +146,7 @@ NEW_TEAM_LOGOS = {
     'وایادولید': 'https://a.espncdn.com/i/teamlogos/soccer/500/95.png',
     'لگانس': 'https://a.espncdn.com/i/teamlogos/soccer/500/17534.png',
 
-    # بوندسلیگا آلمان و اروپا
+    # بوندسلیگا آلمان و اروپا (دست‌نخورده)
     'بایرن مونیخ': 'https://a.espncdn.com/i/teamlogos/soccer/500/132.png',
     'دورتموند': 'https://a.espncdn.com/i/teamlogos/soccer/500/124.png',
     'لورکوزن': 'https://a.espncdn.com/i/teamlogos/soccer/500/131.png',
@@ -156,16 +156,21 @@ NEW_TEAM_LOGOS = {
     'پاری‌سن‌ژرمن': 'https://a.espncdn.com/i/teamlogos/soccer/500/160.png',
 }
 
-IR_TEAM_EN_MAP = {
-    '36442': 'Fajr Sepasi', '36435': 'Persepolis', '115249': 'Esteghlal Khuzestan',
-    '36433': 'Esteghlal', '36429': 'Sepahan', '43898': 'Tractor', '36431': 'Foolad',
-    '36430': 'Zob Ahan', '36440': 'Malavan', '169586': 'Gol Gohar',
-    '212437': 'Aluminium Arak', '169582': 'Mes Rafsanjan', '399254': 'Shams Azar',
-    '450473': 'Chadormalu', '236888': 'Kheybar', '169578': 'Nassaji',
-    '329446': 'Havadar', '36436': 'Paykan', '43897': 'Sanat Naft', '36432': 'Saipa'
+IR_WIKI_FALLBACKS = {
+    'Fajr': 'https://upload.wikimedia.org/wikipedia/fa/thumb/8/87/Fajr_Sepasi_Shiraz_FC_Logo.svg/400px-Fajr_Sepasi_Shiraz_FC_Logo.svg.png',
+    'Persepolis': 'https://upload.wikimedia.org/wikipedia/fa/thumb/f/f6/Persepolis_FC_Logo.svg/400px-Persepolis_FC_Logo.svg.png',
+    'Esteghlal': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Esteghlal_FC_Logo.svg/400px-Esteghlal_FC_Logo.svg.png',
+    'Sepahan': 'https://upload.wikimedia.org/wikipedia/fa/thumb/1/1d/Sepahan_FC_logo.svg/400px-Sepahan_FC_logo.svg.png',
+    'Tractor': 'https://upload.wikimedia.org/wikipedia/fa/thumb/8/87/Tractor_FC_Logo.svg/400px-Tractor_FC_Logo.svg.png',
+    'Foolad': 'https://upload.wikimedia.org/wikipedia/fa/thumb/6/6b/Foolad_FC_Logo.svg/400px-Foolad_FC_Logo.svg.png',
+    'Zob': 'https://upload.wikimedia.org/wikipedia/fa/thumb/c/c8/Zob_Ahan_FC_Logo.svg/400px-Zob_Ahan_FC_Logo.svg.png',
+    'Malavan': 'https://upload.wikimedia.org/wikipedia/fa/thumb/6/6f/Malavan_FC_Logo.svg/400px-Malavan_FC_Logo.svg.png',
+    'Gol': 'https://upload.wikimedia.org/wikipedia/fa/thumb/e/e0/Gol_Gohar_Sirjan_FC_Logo.svg/400px-Gol_Gohar_Sirjan_FC_Logo.svg.png',
+    'Aluminium': 'https://upload.wikimedia.org/wikipedia/fa/thumb/f/f8/Aluminium_Arak_FC_Logo.svg/400px-Aluminium_Arak_FC_Logo.svg.png',
 }
 
 _orig_get = requests.get
+_lordarma_tree_cache = None
 
 class _CachedResp:
     def __init__(self, content):
@@ -173,9 +178,30 @@ class _CachedResp:
         self.content = content
         self.ok = True
 
+def _find_in_lordarma_repo(en_keyword):
+    global _lordarma_tree_cache
+    try:
+        if _lordarma_tree_cache is None:
+            for branch in ['main', 'master']:
+                r_tree = _orig_get(f'https://api.github.com/repos/LordArma/Iran-Football-Leagues/git/trees/{branch}?recursive=1', timeout=7)
+                if r_tree.status_code == 200:
+                    _lordarma_tree_cache = (branch, r_tree.json().get('tree', []))
+                    break
+            if _lordarma_tree_cache is None:
+                _lordarma_tree_cache = ('main', [])
+        branch, tree = _lordarma_tree_cache
+        kw_clean = en_keyword.lower().replace('%20', ' ').split()[0]
+        for item in tree:
+            p = item.get('path', '')
+            if p.lower().endswith(('.png', '.jpg', '.webp')) and kw_clean in p.lower():
+                return f'https://raw.githubusercontent.com/LordArma/Iran-Football-Leagues/{branch}/{urllib.parse.quote(p)}'
+    except Exception:
+        pass
+    return None
+
 def _smart_logo_get(url, *args, **kwargs):
     u_str = str(url)
-    if "espncdn.com/i/teamlogos/" in u_str or "api.sofascore.app/api/v1/team/" in u_str:
+    if any(x in u_str for x in ["espncdn.com/i/teamlogos/", "LordArma/Iran-Football-Leagues", "api.sofascore.app"]):
         ckey = re.sub(r"[^a-zA-Z0-9_]", "_", u_str.split("//")[-1]) + ".png"
         cpath = os.path.join("logos_cache", ckey)
         if os.path.exists(cpath) and os.path.getsize(cpath) > 400:
@@ -189,20 +215,40 @@ def _smart_logo_get(url, *args, **kwargs):
                 return r
         except Exception:
             pass
-        for tid, en_name in IR_TEAM_EN_MAP.items():
-            if f"/{tid}/" in u_str:
+        if "LordArma" in u_str:
+            fname = urllib.parse.unquote(u_str.split("/")[-1]).replace(".png", "")
+            real_git_url = _find_in_lordarma_repo(fname)
+            if real_git_url:
                 try:
-                    q = urllib.parse.quote(en_name)
-                    r2 = _orig_get(f"https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t={q}", timeout=6)
-                    teams = (r2.json() or {}).get("teams") or []
-                    if teams and teams[0].get("strBadge"):
-                        r3 = _orig_get(teams[0]["strBadge"], timeout=8)
-                        if r3.status_code == 200 and len(r3.content) > 400:
-                            with open(cpath, "wb") as f:
-                                f.write(r3.content)
-                            return r3
+                    r_git = _orig_get(real_git_url, timeout=8)
+                    if r_git.status_code == 200 and len(r_git.content) > 400:
+                        with open(cpath, "wb") as f:
+                            f.write(r_git.content)
+                        return r_git
                 except Exception:
                     pass
+            try:
+                q = urllib.parse.quote(fname)
+                r2 = _orig_get(f"https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t={q}", timeout=6)
+                teams = (r2.json() or {}).get("teams") or []
+                if teams and teams[0].get("strBadge"):
+                    r3 = _orig_get(teams[0]["strBadge"], timeout=8)
+                    if r3.status_code == 200 and len(r3.content) > 400:
+                        with open(cpath, "wb") as f:
+                            f.write(r3.content)
+                        return r3
+            except Exception:
+                pass
+            for wk_k, wk_u in IR_WIKI_FALLBACKS.items():
+                if wk_k.lower() in fname.lower():
+                    try:
+                        r4 = _orig_get(wk_u, headers={'User-Agent': 'Mozilla/5.0'}, timeout=8)
+                        if r4.status_code == 200 and len(r4.content) > 400:
+                            with open(cpath, "wb") as f:
+                                f.write(r4.content)
+                            return r4
+                    except Exception:
+                        pass
     return _orig_get(url, *args, **kwargs)
 
 requests.get = _smart_logo_get
