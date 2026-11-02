@@ -2442,7 +2442,7 @@ real_code = real_code.replace(
 )
 exec(real_code)
 
-# --- اتصال ۱۰۰٪ تمام بخش‌های ربات (خبر اختصاصی، فوتبال، پست و ریلز) به صف گیت‌هاب ---
+# --- نسخه ضدقفل گیت‌هاب برای ذخیره فوری فایل‌های گرافیکی در پوشه drafts ---
 import os, shutil, json, time, subprocess
 
 def _master_queue_saver(task_type, paths, caption=""):
@@ -2469,12 +2469,12 @@ def _master_queue_saver(task_type, paths, caption=""):
     with open(queue_file, "w", encoding="utf-8") as f:
         json.dump(q, f, ensure_ascii=False, indent=2)
         
-    # ارسال فوری فایل به گیت‌هاب در همان ثانیه
+    # ثبت تمام تغییرات محلی قبل از Pull برای جلوگیری از قفل شدن گیت‌هاب
     cmds = [
         'git config --global user.name "Bot"',
         'git config --global user.email "bot@noreply.github.com"',
-        'git add -f drafts/insta_queue.json drafts/* *.jpg || true',
-        'git commit -m "Add new task to insta queue" || true',
+        'git add -f drafts/insta_queue.json drafts/* *.jpg *.txt *.json || true',
+        'git commit -m "Auto queue insta task" || true',
         'git pull --rebase -X ours || true',
         'git push || true'
     ]
@@ -2518,7 +2518,6 @@ instagrapi.Client = DummyInstaClient
 
 real_code = "\n".join(line.replace("~", "    ") for line in lines)
 
-# جایگزینی کلاینت و فعال نگه داشتن دائمی insta_cl در کل کد
 real_code = real_code.replace("from instagrapi import Client", "Client = DummyInstaClient\ninsta_cl = DummyInstaClient()")
 real_code = real_code.replace("insta_cl = None", "insta_cl = DummyInstaClient()")
 real_code = real_code.replace("if insta_cl and ", "if ")
