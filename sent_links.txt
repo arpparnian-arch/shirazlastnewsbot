@@ -1,4 +1,3 @@
-id:86310633
 irna.ir/news/86307982/%da%a9%d8%a7%d8%b1%d9%86%db%8c-%d9%88%d8%a7%d8%a8%d8%b3%d8%aa%da%af%db%8c-%d8%a7%d9%82%d8%aa%d8%b5%d8%a7%d8%af%db%8c-%da%a9%d8%a7%d9%86%d8%a7%d8%af%d8%a7-%d8%a8%d9%87-%d8%a2%d9%85%d8%b1%db%8c%da%a9%d8%a7-%d8%a8%db%8c%d8%b4-%d8%a7%d8%b2-%d8%ad%d8%af-%d8%a7%d9%81%d8%b2%d8%a7%db%8c%d8%b4-%db%8c%d8%a7%d9%81%d8%aa%d9%87
 snn.ir/fa/news/1480164/جدول-لیگ-برتر-پس-از-پایان-روز-نخست-هفته-یازدهم-سپاهان-صدرنشین-شد-فولاد-در-تعقیب-طلایی-پوشان
 varzesh3.com/news/2440764/استقلال-۳۶۰-دقیقه-در-جاده-و-چاله-هوایی
@@ -431,6 +430,7 @@ mehrnews.com/news/6997715/%d8%af%d8%b3%d8%aa%da%af%db%8c%d8%b1%db%8c-%d8%aa%d9%8
 https://www.varzesh3.com/news/2440476/سوتیریس-و-تاجرنیا-تماشاگر-حساس-ترین-بازی-هفته
 id:6988173
 id:6961402
+exclusive_draft_34
 snn.ir/fa/news/1482211/حضور-حجت-الاسلام-والمسلمین-محسنی-اژه-ای-بر-مزار-رهبر-شهید-انقلاب-فیلم
 https://www.irna.ir/news/86306229/%D9%81%D8%A7%D8%B1%D8%B3-%D8%B3%D8%B1%D8%B2%D9%85%DB%8C%D9%86-%D8%AA%D9%84%D8%A7%D9%82%DB%8C-%D8%AA%D9%85%D8%AF%D9%86-%D9%87%D8%A7%D8%B3%D8%AA-%D8%A2%D9%85%D8%A7%D8%AF%DA%AF%DB%8C-%DA%A9%D8%A7%D9%85%D9%84-%D8%A8%D8%B1%D8%A7%DB%8C-%D9%87%D9%85%DA%A9%D8%A7%D8%B1%DB%8C-%D9%87%D9%85%D9%87-%D8%AC%D8%A7%D9%86%D8%A8%D9%87
 mehrnews.com/news/6997046/%d8%a8%d8%b3%db%8c%d8%ac-%d8%b8%d8%b1%d9%81%db%8c%d8%aa-%d9%87%d8%a7%db%8c-%d8%a7%d8%ac%d8%b1%d8%a7%db%8c%db%8c-%d9%88-%d9%82%d8%b6%d8%a7%db%8c%db%8c-%d8%a8%d8%b1%d8%a7%db%8c-%d9%be%db%8c%d8%b4%da%af%db%8c%d8%b1%db%8c-%d8%a7%d8%b2-%d9%be%d8%b3%d9%85%d8%a7%d9%86%d8%af%d8%b3%d9%88%d8%b2%db%8c
