@@ -343,7 +343,7 @@ FARS_FEEDS = [
     'https://www.mehrnews.com/rss/tp/93',
     'https://www.isna.ir/rss/tp/414',
     'https://fars.isna.ir/rss',
-    'https://www.tasnimnews.com/fa/rss/feed/0/7/1262/%D9%81%D8%A7%D8%B1%D8%B3',
+    'https://www.varzesh3.com/rss/domesticfootball',
     'https://www.irib-news.ir/fa/rss/27'
 ]
 
