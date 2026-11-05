@@ -478,7 +478,7 @@ TOURISM_DB = [
     {
         'name': 'مسجد نصیرالملک (مسجد صورتی)',
         'in_shiraz': True,
-        'img': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Nasir_ol_Molk_Mosque_%2831157941492%29.jpg/1080px-Nasir_ol_Molk_Mosque_%2831157941492%29.jpg',
+        'img': 'https://upload.wikimedia.org/wikipedia/commons/8/80/Nasir-al_molk_-1.jpg?utm_source=fa.wikipedia.org&utm_campaign=imageinfo&utm_content=original.jpg',
         'desc': 'مسجد نصیرالملک یکی از زیباترین شاهکارهای معماری دوران قاجار در شیراز است که به دلیل استفاده از شیشه‌های رنگی و کاشی‌کاری‌های هفت‌رنگ با طرح گل‌ومرغ، به مسجد صورتی شهرت دارد. رقص نورهای رنگارنگ صبحگاهی بر فرش‌های دستباف شبستان غربی و ستون‌های سنگی مارپیچ آن، فضایی رویایی خلق می‌کند.',
         'loc_desc': 'مسجد نصیرالملک در قلب بافت تاریخی شیراز (خیابان لطفعلی‌خان زند، محله گود عربان) قرار دارد.',
         'distances': ['مرودشت: ۵۰ کیلومتر (حدود ۵۰ دقیقه)', 'کازرون: ۱۴۰ کیلومتر (حدود ۲ ساعت)', 'جهرم: ۱۸۵ کیلومتر (حدود ۲ ساعت و ۱۵ دقیقه)', 'فسا: ۱۴۵ کیلومتر (حدود ۲ ساعت)']
@@ -486,7 +486,7 @@ TOURISM_DB = [
     {
         'name': 'مجموعه جهانی تخت جمشید (پرسپولیس)',
         'in_shiraz': False,
-        'img': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Persepolis_stairs_of_the_Apadana_relief02.JPG/1080px-Persepolis_stairs_of_the_Apadana_relief02.JPG',
+        'img': 'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Persian_ccity.jpg/1920px-Persian_ccity.jpg?utm_source=fa.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail.jpg',
         'desc': 'تخت جمشید یا پارسه، پایتخت باشکوه تشریفاتی امپراتوری هخامنشیان است که به فرمان داریوش بزرگ بنا نهاده شد. کاخ آپادانا، دروازه ملل، کاخ صدستون و سنگ‌نگاره‌های بی‌نظیر اهدای هدایا توسط نمایندگان ملل باستان، شکوه تمدن و هنر معماری ایران زمین را به رخ جهانیان می‌کشد.',
         'loc_desc': 'مجموعه جهانی تخت جمشید در شمال شهرستان مرودشت و در دامنه کوه رحمت واقع شده است.',
         'distances': ['شیراز: ۶۰ کیلومتر (حدود ۵۵ دقیقه)', 'مرودشت: ۱۰ کیلومتر (حدود ۱۵ دقیقه)', 'آباده: ۲۲۰ کیلومتر (حدود ۲ ساعت و نیم)', 'پاسارگاد: ۸۰ کیلومتر (حدود ۱ ساعت)']
@@ -494,7 +494,7 @@ TOURISM_DB = [
     {
         'name': 'آرامگاه لسان‌الغیب حافظ شیرازی (حافظیه)',
         'in_shiraz': True,
-        'img': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Hafezieh_Shiraz_Iran.jpg/1080px-Hafezieh_Shiraz_Iran.jpg',
+        'img': 'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/Hafezieh_001.jpg/1920px-Hafezieh_001.jpg?utm_source=fa.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail.jpg',
         'desc': 'حافظیه، میعادگاه عاشقان شعر و ادب پارسی در شمال شهر شیراز است. گنبد مسی کلاه‌فرنگی این بنا که بر هشت ستون سنگی استوار شده، با کاشی‌های معرق فیروزه‌ای و ابیاتی از غزلیات خواجه شمس‌الدین محمد حافظ شیرازی آراسته گشته و در میان باغی پر از درختان نارنج و سرو می‌درخشد.',
         'loc_desc': 'آرامگاه حافظ در شهر شیراز، حدفاصل چهارراه ادبیات و دروازه قرآن واقع شده است.',
         'distances': ['مرودشت: ۴۵ کیلومتر (حدود ۴۵ دقیقه)', 'کازرون: ۱۴۵ کیلومتر (حدود ۲ ساعت)', 'سپیدان (اردکان): ۸۰ کیلومتر (حدود ۱ ساعت و ربع)', 'جهرم: ۱۹۰ کیلومتر (حدود ۲ ساعت و نیم)']
@@ -502,7 +502,7 @@ TOURISM_DB = [
     {
         'name': 'باغ جهانی ارم شیراز',
         'in_shiraz': True,
-        'img': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Eram_Garden_Shiraz.jpg/1080px-Eram_Garden_Shiraz.jpg',
+        'img': 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/Bagh-e_Eram_.jpg/1920px-Bagh-e_Eram_.jpg?utm_source=fa.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail.jpg',
         'desc': 'باغ ارم یکی از زیباترین باغ‌های ایرانی ثبت‌شده در میراث جهانی یونسکو است. عمارت سه‌طبقه مرکزی باغ با کاشی‌کاری‌های هلالی دوره‌ی قاجار، حوض بزرگ پیش‌رو، سروهای سر به فلک کشیده (از جمله سرو ناز هزارساله) و باغ گیاه‌شناسی کم‌نظیر، آن را به بهشتی در قلب شیراز تبدیل کرده است.',
         'loc_desc': 'باغ ارم در شمال غربی شیراز، خیابان ارم و در مجاورت مجموعه دانشگاه شیراز قرار دارد.',
         'distances': ['مرودشت: ۵۰ کیلومتر (حدود ۵۰ دقیقه)', 'کازرون: ۱۳۵ کیلومتر (حدود ۱ ساعت و ۵۰ دقیقه)', 'سپیدان: ۷۵ کیلومتر (حدود ۱ ساعت)', 'فسا: ۱۵۰ کیلومتر (حدود ۲ ساعت)']
@@ -510,7 +510,7 @@ TOURISM_DB = [
     {
         'name': 'مجموعه میراث جهانی پاسارگاد',
         'in_shiraz': False,
-        'img': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Pasargadae_tomb_of_Cyrus_II.jpg/1080px-Pasargadae_tomb_of_Cyrus_II.jpg',
+        'img': 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Pasargad_Tomb_Cyrus3.jpg/1920px-Pasargad_Tomb_Cyrus3.jpg?utm_source=fa.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail.jpg',
         'desc': 'پاسارگاد نخستین پایتخت امپراتوری هخامنشی است که به فرمان کوروش بزرگ در دشت مرغاب ساخته شد. آرامگاه سنگی و باصلابت کوروش بزرگ، کاخ بارعام، کاخ اختصاصی و باغ شاهی پاسارگاد، نخستین نمونه مهندسی باغ ایرانی و نماد همزیستی فرهنگ‌ها در دنیای باستان به شمار می‌رود.',
         'loc_desc': 'مجموعه جهانی پاسارگاد در شهرستان پاسارگاد (سعادت‌شهر) در مسیر بزرگراه شیراز به اصفهان قرار دارد.',
         'distances': ['شیراز: ۱۳۵ کیلومتر (حدود ۱ ساعت و ۴۵ دقیقه)', 'مرودشت: ۸۵ کیلومتر (حدود ۱ ساعت)', 'آباده: ۱۴۵ کیلومتر (حدود ۱ ساعت و نیم)', 'ارسنجان: ۶۵ کیلومتر (حدود ۵۰ دقیقه)']
@@ -518,7 +518,7 @@ TOURISM_DB = [
     {
         'name': 'ارگ تاریخی کریمخانی شیراز',
         'in_shiraz': True,
-        'img': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Karim_Khan_Citadel_Shiraz.jpg/1080px-Karim_Khan_Citadel_Shiraz.jpg',
+        'img': 'https://upload.wikimedia.org/wikipedia/commons/1/17/Arg.karimkhan.jpg?utm_source=fa.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled.jpg',
         'desc': 'ارگ کریمخانی در مرکز شهر شیراز، محل سکونت و فرمانروایی کریم‌خان زند (وکیل‌الرعایا) بوده است. این بنا با ترکیب معماری نظامی (برج‌های آجری دوازده‌متری و دیوارهای کنگره‌دار) و معماری مسکونی (ایوان‌های شاه‌نشین، حوض‌خانه و باغچه نارنجستان داخلی) جلوه‌ای بی‌همتا دارد.',
         'loc_desc': 'ارگ کریمخانی در مرکز شهر شیراز، میدان شهدا (شهرداری) و ابتدای خیابان زند واقع شده است.',
         'distances': ['مرودشت: ۴۸ کیلومتر (حدود ۵۰ دقیقه)', 'کازرون: ۱۴۰ کیلومتر (حدود ۲ ساعت)', 'فیروزآباد: ۱۱۵ کیلومتر (حدود ۱ ساعت و ۴۵ دقیقه)', 'سروستان: ۸۵ کیلومتر (حدود ۱ ساعت)']
@@ -526,7 +526,7 @@ TOURISM_DB = [
     {
         'name': 'آبشار دیدنی مارگون سپیدان',
         'in_shiraz': False,
-        'img': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Margoon_Waterfall_in_Fars_province.jpg/1080px-Margoon_Waterfall_in_Fars_province.jpg',
+        'img': 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Margoon_river.JPG/1920px-Margoon_river.JPG?utm_source=fa.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail.jpg',
         'desc': 'آبشار مارگون در شهرستان سپیدان، یکی از بزرگ‌ترین و شگفت‌انگیزترین آبشارهای چشمه‌ای جهان است. در بالای این کوه هیچ رودخانه‌ای وجود ندارد، بلکه هزاران چشمه از دل دیواره صخره‌ای به بیرون می‌جوشند و آبشاری به ارتفاع ۷۰ متر و عرض ۱۰۰ متر را در دل طبیعت سرسبز زاگرس خلق می‌کنند.',
         'loc_desc': 'آبشار مارگون در بخش همایجان شهرستان سپیدان و در نزدیکی روستای مارگون قرار دارد.',
         'distances': ['شیراز: ۱۳۰ کیلومتر (حدود ۲ ساعت)', 'سپیدان (اردکان): ۴۸ کیلومتر (حدود ۵۰ دقیقه)', 'مرودشت: ۱۲۵ کیلومتر (حدود ۲ ساعت)', 'نورآباد ممسنی: ۱۱۰ کیلومتر (حدود ۱ ساعت و ۵۰ دقیقه)']
@@ -534,7 +534,7 @@ TOURISM_DB = [
     {
         'name': 'شهر باستانی بیشاپور و تنگ چوگان',
         'in_shiraz': False,
-        'img': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Bishapur_Temple_of_Anahita.jpg/1080px-Bishapur_Temple_of_Anahita.jpg',
+        'img': 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/Anahita_Temple_of_Bishapur_%28Kazerun%29_1.jpg/1920px-Anahita_Temple_of_Bishapur_%28Kazerun%29_1.jpg?utm_source=fa.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail.jpg',
         'desc': 'شهر باستانی بیشاپور به دستور شاپور اول ساسانی با تلفیق هنر معماری ایرانی و رومی ساخته شد. معبد آناهیتا با مهندسی شگفت‌انگیز تقسیم آب، تالار تشریفات و شش کتیبه و سنگ‌نگاره عظیم پیروزی‌های شاپور ساسانی در تنگ چوگان، این منطقه را به موزه‌ای سرباز تبدیل کرده است.',
         'loc_desc': 'شهر باستانی بیشاپور در ۲۵ کیلومتری شمال شهرستان کازرون و در ابتدای تنگ چوگان قرار دارد.',
         'distances': ['شیراز: ۱۴۰ کیلومتر (حدود ۲ ساعت)', 'کازرون: ۲۵ کیلومتر (حدود ۲۵ دقیقه)', 'نورآباد ممسنی: ۵۵ کیلومتر (حدود ۵۰ دقیقه)', 'مرودشت: ۱۷۵ کیلومتر (حدود ۲ ساعت و نیم)']
