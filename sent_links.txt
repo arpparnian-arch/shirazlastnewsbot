@@ -1,7 +1,3 @@
-irna.ir/news/86310456/%d9%86%d8%a8%d8%b1%d8%af-%d8%a8%d8%a7%d9%84%d8%a7%d9%86%d8%b4%db%8c%d9%86%d8%a7%d9%86-%d8%a8%d8%b1%d9%86%d8%af%d9%87-%d9%86%d8%af%d8%a7%d8%b4%d8%aa-%d9%be%d8%a7%d8%b1%d8%b3-%d8%ac%d9%86%d9%88%d8%a8%db%8c-%d8%b5%d8%af%d8%b1%d9%86%d8%b4%db%8c%d9%86-%d9%85%d8%a7%d9%86%d8%af
-id:6999216
-https://www.irna.ir/news/86306443/%D8%B3%D8%AE%D9%86%DA%AF%D9%88%DB%8C-%D8%B3%D8%A7%D8%B2%D9%85%D8%A7%D9%86-%D9%85%D9%84%D9%84-%D8%AC%D9%87%D8%A7%D9%86-%D8%A8%D9%87-%D8%AF%DB%8C%D9%BE%D9%84%D9%85%D8%A7%D8%B3%DB%8C-%D8%A8%DB%8C%D8%B4%D8%AA%D8%B1%DB%8C-%D9%86%DB%8C%D8%A7%D8%B2-%D8%AF%D8%A7%D8%B1%D8%AF
-id:6997945
 id:6996703
 mehrnews.com/news/7000831/%d9%87%d8%b4%d8%af%d8%a7%d8%b1-%d9%85%db%8c%d8%b1%d8%a8%d8%a7%d9%82%d8%b1%db%8c-%d8%af%d8%b1%d8%a8%d8%a7%d8%b1%d9%87-%d8%b3%d8%b1%d9%86%d9%88%d8%b4%d8%aa-%d8%ac%d8%b1%db%8c%d8%a7%d9%86-%d9%87%d8%a7%db%8c-%d9%88%d8%a7%d8%a8%d8%b3%d8%aa%d9%87-%d8%a8%d9%87-%d8%a2%d9%85%d8%b1%db%8c%da%a9%d8%a7-%d8%b3%d9%82%d9%88%d8%b7
 isna.ir/news/1405081308550/%d9%be%d8%a7%d8%b1%d8%a7%d8%af%d9%88%d9%88%d9%85%db%8c%d8%af%d8%a7%d9%86%db%8c-%d9%81%d8%af%d8%b1%d8%a7%d8%b3%db%8c%d9%88%d9%86-%d8%b4%d8%af%d9%87-%d8%a7%d9%85%d8%a7-%d8%b2%db%8c%d8%b1%d8%b3%d8%a7%d8%ae%d8%aa-%d9%86%d8%af%d8%a7%d8%b1%d8%af-%d8%b3%d9%86-%d8%a8%d8%b1%d8%ae%db%8c-%d9%82%d9%87%d8%b1%d9%85%d8%a7%d9%86%d8%a7%d9%86
@@ -550,6 +546,7 @@ id:140508120773
 isna.ir/news/1405081309070/%d9%85%d8%af%db%8c%d8%b1%db%8c%d8%aa-%d9%86%d8%a7%d8%aa%d8%b1%d8%a7%d8%b2%db%8c-%d8%a7%d9%86%d8%b1%da%98%db%8c-%d8%a7%d9%88%d9%84%d9%88%db%8c%d8%aa-%d9%85%d8%af%db%8c%d8%b1%db%8c%d8%aa-%d8%b4%d9%87%d8%b1%db%8c-%d8%aa%d9%87%d8%b1%d8%a7%d9%86-%d9%be%db%8c%da%af%db%8c%d8%b1%db%8c-%d8%a8%d8%b1%d8%a7%db%8c-%d8%b1%d9%81%d8%b9
 irib-news.ir/fa/news/5956387/معرفی-بیش-از-680-طرح-و-محصول-فناورانه-در-رویداد-پتروفن-1405
 irib-news.ir/fa/news/5957683/تجهیز-آزمایشگاه-آب-و-فاضلاب-شیراز-به-فناوری-های-پیشرفته-پایش-کیفیت
+id:5958436
 id:5956102
 id:6998827
 varzesh3.com/news/2442133/مهمان-ویژه-ای-که-از-مهدوی-کیا-جواب-رد-شنید
@@ -674,6 +671,7 @@ id:86312956
 id:86313292
 id:140508130836
 id:6999370
+irib-news.ir/fa/news/5958436/طنین-فریاد-استکبارستیزی-در-فارس-تأکید-بر-نقش-راهبردی-تنگه-هرمز-در-تجمع-شبانه
 id:140508140921
 id:86313274
 id:86310912
@@ -770,6 +768,7 @@ irna.ir/news/86312988/%d8%ad%d8%b2%d8%a8-%d8%a7%d9%84%d9%84%d9%87-%d8%b9%d8%b1%d
 irna.ir/news/86310085/%d8%a7%d8%ac%d8%b1%d8%a7%db%8c-%d8%a7%d9%84%d8%b2%d8%a7%d9%85%d8%a7%d8%aa-%d8%b5%d8%b1%d9%81%d9%87-%d8%ac%d9%88%db%8c%db%8c-%d8%a7%d9%86%d8%b1%da%98%db%8c-%d8%af%d8%b1-%d8%b3%d8%a7%d8%ae%d8%aa%d9%85%d8%a7%d9%86-%d9%87%d8%a7%db%8c-%d8%a8%d9%84%d9%86%d8%af%d9%85%d8%b1%d8%aa%d8%a8%d9%87-%d9%81%d8%a7%d8%b1%d8%b3-%d9%be%db%8c%da%af%db%8c%d8%b1%db%8c
 id:7000390
 id:140508100614
+irna.ir/news/86312009/%d9%84%d8%b7%d9%81%db%8c-%d8%a8%d8%ae%d8%aa%db%8c%d8%a7%d8%b1%db%8c-%d8%b2%d8%a7%d8%af%d9%87-%d8%a8%d9%87-%d9%85%d8%b1%d8%a8%db%8c%d8%a7%d9%86-%d8%a2%d9%85%d9%88%d8%ae%d8%aa-%d8%a8%d9%87%d8%a7%d9%86%d9%87-%d8%ac%d9%88%db%8c%db%8c-%d9%86%da%a9%d9%86%d9%86%d8%af-%d8%a2%d8%b3%d8%a7%d9%86%db%8c-%d9%81%d9%88%d9%82
 mehrnews.com/news/6998362/%d8%ac%d9%86%d8%a7%db%8c%d8%aa-%d9%85%db%8c%d9%86%d8%a7%d8%a8-%d9%86%d8%a8%d8%a7%db%8c%d8%af-%d8%af%d8%b1-%d8%ad%d8%a7%d9%81%d8%b8%d9%87-%d8%ac%d9%87%d8%a7%d9%86%db%8c-%d8%a8%d9%87-%d9%81%d8%b1%d8%a7%d9%85%d9%88%d8%b4%db%8c-%d8%b3%d9%be%d8%b1%d8%af%d9%87-%d8%b4%d9%88%d8%af
 id:86312651
 https://www.irna.ir/news/86306797/%D8%A2%D9%85%D9%88%D8%B2%D8%B4-%D9%88-%D9%BE%D8%B1%D9%88%D8%B1%D8%B4-%DB%B7%DB%B3%DB%B0-%D9%85%D8%AF%D8%B1%D8%B3%D9%87-%D8%AD%D9%81%D8%B8-%D9%82%D8%B1%D8%A2%D9%86-%D8%AF%D8%B1-%D9%85%D8%B3%DB%8C%D8%B1-%D8%AA%D8%AD%D9%82%D9%82-%D8%A7%D9%87%D8%AF%D8%A7%D9%81-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%87%D9%81%D8%AA%D9%85
@@ -878,6 +877,7 @@ irna.ir/news/86312651/%d8%a2%d9%84%d9%85%d8%a7%d9%86-%d9%85%d8%b3%d8%a7%d9%84%d9
 id:86312272
 mehrnews.com/news/7000372/%da%a9%d8%a7%d8%a8%d9%88%d8%b3-%d8%ae%d9%88%d8%af%d8%b2%d9%86%db%8c-%d8%af%d8%b1-%d8%ae%d8%a7%d8%aa%d9%88%d9%86-%da%af%d9%84-%d8%a8%d9%87-%d8%ae%d9%88%d8%af%db%8c-%d9%87%d8%a7-%d8%a8%d9%84%d8%a7%db%8c-%d8%ac%d8%a7%d9%86-%d9%86%d9%85%d8%a7%db%8c%d9%86%d8%af%d9%87-%d9%81%d9%88%d8%aa%d8%a8%d8%a7%d9%84
 mehrnews.com/news/6999287/%db%b1-%db%b3-%d9%87%d9%85%d8%aa-%d8%a7%d8%b2-%d9%85%d8%ad%d9%84-%d9%85%d9%88%d9%84%d8%af%d8%b3%d8%a7%d8%b2%db%8c-%d8%a8%d9%87-%d8%a8%db%8c%d9%85%d8%a7%d8%b1%d8%b3%d8%aa%d8%a7%d9%86-%db%b1%db%b5%db%b0%db%b0-%d8%aa%d8%ae%d8%aa-%d8%ae%d9%88%d8%a7%d8%a8%db%8c-%d8%aa%d8%a8%d8%b1%db%8c%d8%b2-%d8%a7%d8%ae%d8%aa%d8%b5%d8%a7%d8%b5
+id:86312009
 mehrnews.com/news/6995463/%d9%81%da%a9%d8%aa-%da%86%da%a9-%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1%db%8c-%da%a9%d9%87-%db%b9-%d8%a2%d8%a8%d8%a7%d9%86-%db%b1%db%b4%db%b0%db%b5-%d8%aa%da%a9%d8%b0%db%8c%d8%a8-%d8%b4%d8%af%d9%86%d8%af
 mehrnews.com/news/6994509/%d8%b0%d9%88%d8%a8-%d8%a2%d9%87%d9%86-%d8%b1%d8%a8%db%8c%d8%b9%db%8c-%d8%af%d8%b1-%d8%ad%d8%b3%d8%b1%d8%aa-%d9%86%d8%ae%d8%b3%d8%aa%db%8c%d9%86-%db%b3-%d8%a7%d9%85%d8%aa%db%8c%d8%a7%d8%b2
 id:140508130854
