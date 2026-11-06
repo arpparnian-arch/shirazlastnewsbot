@@ -1,5 +1,3 @@
-id:86313202
-exclusive_draft_13
 id:86308967
 mehrnews.com/news/6999075/%d8%a2%db%8c%d8%aa-%d8%a7%d9%84%d9%84%d9%87-%d8%a2%d9%85%d9%84%db%8c-%d9%84%d8%a7%d8%b1%db%8c%d8%ac%d8%a7%d9%86%db%8c-%d9%85%d9%84%d8%aa-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%af%d8%b1-%d8%a8%d8%b1%d8%a7%d8%a8%d8%b1-%d8%af%d8%b4%d9%85%d9%86%d8%a7%d9%86-%d8%aa%d8%b3%d9%84%db%8c%d9%85-%d9%86%d8%ae%d9%88%d8%a7%d9%87%d8%af
 irna.ir/news/86313689/%d8%b2%d9%84%d9%86%d8%b3%da%a9%db%8c-%d8%a7%d9%88%da%a9%d8%b1%d8%a7%db%8c%d9%86-%d9%87%d9%86%d9%88%d8%b2-%db%b1%db%b6-%d9%85%db%8c%d9%84%db%8c%d8%a7%d8%b1%d8%af-%d8%af%d9%84%d8%a7%d8%b1-%da%a9%d9%85%da%a9-%d8%aa%d9%88%d8%a7%d9%81%d9%82-%d8%b4%d8%af%d9%87-%d8%a8%d8%a7-%d8%a2%d9%85%d8%b1%db%8c%da%a9%d8%a7
@@ -282,6 +280,7 @@ id:7001140
 irna.ir/news/86310573/%d9%85%db%8c%d8%af%d8%b1%db%8c-%d8%b4%d9%81%d8%a7%d9%81%db%8c%d8%aa-%d9%85%d8%b9%d8%a7%d9%85%d9%84%d8%a7%d8%aa-%d9%88-%d8%a7%d8%b5%d9%84%d8%a7%d8%ad-%d8%b3%d8%a7%d8%b2-%d9%88-%da%a9%d8%a7%d8%b1-%d9%82%db%8c%d9%85%d8%aa-%da%af%d8%b0%d8%a7%d8%b1%db%8c-%d8%b3%d9%88%d8%af%d8%a2%d9%88%d8%b1%db%8c-%d8%a8%d9%86%da%af%d8%a7%d9%87-%d9%87%d8%a7
 id:7000757
 irna.ir/news/86307355/%da%a9%d8%aa%d8%a7%d8%a8-%d9%87%d8%a7%db%8c-%d8%b7%d9%86%d8%b2-%da%a9%d9%88%d8%af%da%a9-%d9%88-%d9%86%d9%88%d8%ac%d9%88%d8%a7%d9%86-%d8%af%d8%b1-%d8%a7%d8%ba%d9%84%d8%a8-%d8%ac%d9%88%d8%a7%db%8c%d8%b2-%d8%a7%d8%af%d8%a8%db%8c-%d9%86%d8%a7%d8%af%db%8c%d8%af%d9%87-%da%af%d8%b1%d9%81%d8%aa%d9%87-%d9%85%db%8c-%d8%b4%d9%88%d9%86%d8%af
+isna.ir/news/1405081509928/%d9%85%d8%b9%d8%a7%d9%88%d9%86-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86%d8%af%d8%a7%d8%b1-%d8%aa%d9%85%d8%a7%d9%85-%d9%85%d8%ad%d9%88%d8%b1%d9%87%d8%a7%db%8c-%d9%85%d9%88%d8%a7%d8%b5%d9%84%d8%a7%d8%aa%db%8c-%d9%81%d8%a7%d8%b1%d8%b3-%d8%b2%db%8c%d8%b1-%d9%be%d9%88%d8%b4%d8%b4-%d8%ae%d8%af%d9%85%d8%a7%d8%aa-%d8%b1%d8%a7%d9%87%d8%af%d8%a7%d8%b1%db%8c
 mehrnews.com/news/6997728/%db%b2%db%b5%db%b0%db%b0-%d9%be%d8%b1%d9%88%d9%86%d8%af%d9%87-%d8%ad%d9%81%d8%a7%d8%b1%db%8c-%d8%ba%db%8c%d8%b1%d9%85%d8%ac%d8%a7%d8%b2-%d8%af%d8%b1-%d8%af%d8%b3%d8%aa%da%af%d8%a7%d9%87-%d9%82%d8%b6%d8%a7%db%8c%db%8c-%d8%af%d8%b1-%d8%ad%d8%a7%d9%84-%d9%be%db%8c%da%af%db%8c%d8%b1%db%8c-%d8%a7%d8%b3%d8%aa
 snn.ir/fa/news/1482946/مجید-مجیدی-رئیس-هیات-داوران-جشنواره-فیلم-استانبول-شد
 id:86308693
@@ -560,6 +559,7 @@ mehrnews.com/news/6994718/%d8%aa%d8%a7%da%a9%db%8c%d8%af-%d9%88%d8%b2%db%8c%d8%b
 id:6998640
 id:6999466
 irib-news.ir/fa/news/5958499/اهتزار-پرچم-عزای-فاطمی-بر-بلندای-گنبد-فیروزه-ای
+id:140508150992
 irib-news.ir/fa/news/5956446/پرورش-260-هزار-بلدرچین-در-واحدهای-صنعتی-و-سنتی-استان-فارس
 id:1482234
 snn.ir/fa/news/1483564/از-حزب-برده-داران-تا-فتح-کنگره-آمریکا-دموکرات-ها-چگونه-در-دو-قرن-تاریخ-سیاسی-ایالات-متحده-تغییر-چهره-دادند
