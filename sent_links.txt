@@ -1,5 +1,3 @@
-id:6999609
-irib-news.ir/fa/news/5958234/پرتقال-و-خرمای-کازرون-کددار-شدند-آغاز-طرح-رهگیری-هوشمند-محصولات-کشاورزی-در-فارس
 id:86313381
 id:1483658
 irna.ir/news/86312961/%d8%af%db%8c%d8%af%d8%a7%d8%b1-%d9%85%d8%af%db%8c%d8%b1%d8%b9%d8%a7%d9%85%d9%84-%d8%ae%d8%a7%d9%86%d9%87-%d8%b3%db%8c%d9%86%d9%85%d8%a7-%d8%a8%d8%a7-%d8%b3%d9%81%db%8c%d8%b1-%d9%81%d8%b1%d8%a7%d9%86%d8%b3%d9%87-%d8%af%d8%b1-%d8%a7%db%8c%d8%b1%d8%a7%d9%86
@@ -85,6 +83,7 @@ irna.ir/news/86312858/%d9%85%d8%b9%d8%a7%d9%88%d9%86-%d8%a7%d8%b3%d8%aa%d8%a7%d9
 mehrnews.com/news/7002135/%d9%85%d8%af%d8%a7%d8%b1%d8%b3-%d9%88-%d8%af%d8%a7%d9%86%d8%b4%da%af%d8%a7%d9%87-%d9%87%d8%a7%db%8c%db%b4-%d8%b4%d9%87%d8%b1-%d8%ae%d9%88%d8%b2%d8%b3%d8%aa%d8%a7%d9%86-%d8%ba%db%8c%d8%b1%d8%ad%d8%b6%d9%88%d8%b1%db%8c-%d8%b4%d8%af-%d9%81%d8%b9%d8%a7%d9%84%db%8c%d8%aa-%d8%a7%d8%af%d8%a7%d8%b1%d8%a7%d8%aa-%db%b2%d8%b3%d8%a7%d8%b9%d8%aa
 id:140508100651
 https://www.varzesh3.com/news/2440294/اولین-واکنش-ایراندوست-به-باخت-اولین-دربی-تاریخ
+mehrnews.com/news/7002246/%d9%85%d8%af%d8%a7%d8%af-%d9%88-%d9%85%d9%88%d8%b4%da%a9-%d8%b1%d9%88%d8%a7%db%8c%d8%aa-%d8%b4%d8%b9%d8%b1%db%8c-%db%b1%db%b6%db%b8-%d8%af%d8%a7%d9%86%d8%b4-%d8%a2%d9%85%d9%88%d8%b2-%d8%b4%d9%87%db%8c%d8%af-%d9%85%db%8c%d9%86%d8%a7%d8%a8-%d8%af%d8%b1-%d8%af%d8%a8%db%8c%d8%b1%d8%a7%d9%86
 snn.ir/fa/news/1483564/از-حزب-برده-داران-تا-فتح-کنگره-آمریکا-دموکرات-ها-چگونه-در-دو-قرن-تاریخ-سیاسی-ایالات-متحده-تغییر-چهره-دادند
 mehrnews.com/news/7000740/%d9%85%da%a9%d8%a7%d9%81%d8%a7%d8%aa-%d8%a8%d9%87-%db%b1%db%b7%db%b4-%d8%b4%d9%87%db%8c%d8%af-%d9%86%d8%a7%d8%ac%d8%a7-%d8%af%d8%b1-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86-%db%8c%d8%b2%d8%af-%d8%aa%d9%82%d8%af%db%8c%d9%85-%d8%b4%d8%af
 varzesh3.com/news/2442300/تنها-خاطره-خوب-رضا-شکاری-در-پرسپولیس
@@ -168,6 +167,7 @@ id:86314118
 varzesh3.com/news/2442393/بالاخره-درخشش-پدیده-والیبال-ایران-به-برد-ختم-شد
 isna.ir/news/1405081308450/%d9%81%d8%b1%db%8c%d8%a7%d8%af-%d8%a7%d8%b3%d8%aa%da%a9%d8%a8%d8%a7%d8%b1%d8%b3%d8%aa%db%8c%d8%b2%db%8c-%d8%af%d8%b1-%d9%82%d9%84%d8%a8-%d8%b4%db%8c%d8%b1%d8%a7%d8%b2-%d8%b1%d8%a7%d9%87%d9%be%db%8c%d9%85%d8%a7%db%8c%db%8c-%db%b1%db%b3-%d8%a2%d8%a8%d8%a7%d9%86-%d8%a2%d8%ba%d8%a7%d8%b2-%d8%b4%d8%af
 snn.ir/fa/news/1482946/مجید-مجیدی-رئیس-هیات-داوران-جشنواره-فیلم-استانبول-شد
+id:7002246
 id:6998678
 mehrnews.com/news/7001123/%d9%84%d8%b9%d8%a8%d8%aa-%d8%a8%d8%a7%d8%b2-%d9%86%d9%82%d8%af-%d9%88-%d8%a8%d8%b1%d8%b1%d8%b3%db%8c-%d8%b4%d8%af-%d8%b9%d8%b1%d9%88%d8%b3%da%a9-%d9%87%d8%a7%db%8c-%d8%ae%db%8c%d9%85%d9%87-%d8%b4%d8%a8-%d8%a8%d8%a7%d8%b2%db%8c-%d9%88-%d8%a8%d8%a7%d8%b2%d8%aa%d8%a7%d8%a8-%d8%af%d8%b1%d8%af
 id:7001177
