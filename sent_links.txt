@@ -1,5 +1,3 @@
-id:6982394
-mehrnews.com/news/7001560/%d8%aa%d8%ae%d8%b5%db%8c%d8%b5-%db%b1%db%b5%d9%85%db%8c%d9%84%db%8c%d8%a7%d8%b1%d8%af-%d8%aa%d9%88%d9%85%d8%a7%d9%86-%d8%a7%d8%b9%d8%aa%d8%a8%d8%a7%d8%b1-%d8%a8%d8%b1%d8%a7%db%8c-%d9%85%d8%af%db%8c%d8%b1%db%8c%d8%aa-%d8%b1%d9%88%d8%a7%d9%86-%d8%a2%d8%a8-%d9%87%d8%a7-%d8%af%d8%b1-%d9%85%d8%b1%d8%a7%d8%ba%d9%87
 snn.ir/fa/news/1483645/رهبر-معظم-انقلاب-انسجام-اجتماعی-عنصر-اصلی-موفقیت-کشور-است-عکس
 id:140508130860
 id:7000809
@@ -86,6 +84,7 @@ mehrnews.com/news/6999187/%d8%a7%d8%b3%d8%aa%d8%a7%d9%86-%d8%b3%d9%85%d9%86%d8%a
 mehrnews.com/news/7001212/%d8%b4%d8%a7%d9%87%d8%b1%d8%ae%db%8c-%d8%aa%d9%82%d9%88%db%8c%d8%aa-%d9%81%d8%b1%d9%87%d9%86%da%af-%d8%b9%d9%85%d9%88%d9%85%db%8c-%d9%88-%d9%87%d9%88%db%8c%d8%aa-%d8%a7%db%8c%d8%b1%d8%a7%d9%86%db%8c-%d8%a7%d8%b3%d9%84%d8%a7%d9%85%db%8c-%d8%b6%d8%b1%d9%88%d8%b1%d8%aa%db%8c-%d8%b1%d8%a7%d9%87%d8%a8%d8%b1%d8%af%db%8c
 varzesh3.com/news/2442134/قایدی-پس-از-319-روز-به-چشم-آمد
 id:6995832
+id:5958804
 id:7000653
 id:140508130853
 id:1483654
@@ -432,6 +431,7 @@ id:6999268
 id:2442349
 irna.ir/news/86309481/%d9%81%d8%b1%db%8c%d8%a8%d8%a7-%d8%af%d9%84%d9%85-%d8%a8%d8%b1%d8%a7%db%8c-%d8%b3%d9%87%d8%b1%d8%a7%d8%a8-%d8%a8%d8%ae%d8%aa%db%8c%d8%a7%d8%b1%db%8c-%d8%b2%d8%a7%d8%af%d9%87-%d9%85%db%8c-%d8%b3%d9%88%d8%b2%d8%af-%d8%b9%d9%84%db%8c%d8%af%d9%88%d8%b3%d8%aa%db%8c-%d9%86%d8%ac%db%8c%d8%a8-%d8%aa%d8%b1%db%8c%d9%86
 id:140508120809
+irib-news.ir/fa/news/5958804/ایجاد-18-دفتر-استانداردسازی-در-فارس
 id:6996168
 id:6998940
 id:6999187
