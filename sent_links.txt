@@ -1,5 +1,3 @@
-mehrnews.com/news/6999082/%d8%a7%d9%82%d8%af%d8%a7%d9%85%d8%a7%d8%aa-%d8%a2%d9%85%d8%b1%db%8c%da%a9%d8%a7-%d9%88-%d8%b1%da%98%db%8c%d9%85-%d8%b5%d9%87%db%8c%d9%88%d9%86%db%8c%d8%b3%d8%aa%db%8c-%d9%85%d9%88%d8%ac%d8%a8-%d8%a8%d8%b1%d9%87%d9%85-%d8%ae%d9%88%d8%b1%d8%af%d9%86-%d8%ab%d8%a8%d8%a7%d8%aa-%d9%85%d9%86%d8%b7%d9%82%d9%87-%d8%b4%d8%af%d9%87
-id:7000859
 id:2442345
 id:1484144
 id:86312272
@@ -129,6 +127,7 @@ id:2442502
 id:86314081
 mehrnews.com/news/6998993/%d9%be%d9%88%d8%aa%db%8c%d9%86-%d9%85%d8%ae%d8%a7%d9%84%d9%81%d8%a7%d9%86-%d8%b3%db%8c%d8%a7%d8%b3%db%8c-%d9%85%d8%a7-%d9%85%d8%af%d8%aa-%d9%87%d8%a7%d8%b3%d8%aa-%d8%af%d8%b1-%d9%be%db%8c-%d8%aa%d8%ac%d8%b2%db%8c%d9%87-%d8%b1%d9%88%d8%b3%db%8c%d9%87-%d9%87%d8%b3%d8%aa%d9%86%d8%af
 irna.ir/news/86313165/%da%af%d8%b1%d9%87-%db%b1%db%b0-%d9%88%d8%a7%d8%ad%d8%af-%d8%aa%d9%88%d9%84%db%8c%d8%af%db%8c-%da%af%d9%84%d8%b3%d8%aa%d8%a7%d9%86-%da%af%d8%b4%d9%88%d8%af%d9%87-%d8%b4%d8%af
+irna.ir/news/86314241/%d8%b4%d9%88%d8%b1%d8%a7%db%8c-%d8%a2%db%8c%d9%85%d9%88-%d8%a8%d8%b1-%d8%ad%d9%81%d8%a7%d8%b8%d8%aa-%d8%a7%d8%b2-%d8%af%d8%b1%db%8c%d8%a7%d9%86%d9%88%d8%b1%d8%af%d8%a7%d9%86-%d9%81%d8%a7%d8%b1%d8%ba-%d8%a7%d8%b2-%d8%a7%d8%ae%d8%aa%d9%84%d8%a7%d9%81%d8%a7%d8%aa-%d8%b3%db%8c%d8%a7%d8%b3%db%8c-%d8%aa%d8%a3%da%a9%db%8c%d8%af
 mehrnews.com/news/7001412/%da%86%d8%b1%d8%ae%d9%87-%d8%aa%d9%88%d9%84%db%8c%d8%af-%d8%af%d8%b1-%d9%81%d8%a7%d8%b1%d8%b3-%d9%86%d8%a8%d8%a7%db%8c%d8%af-%d8%ad%d8%aa%db%8c-%d9%84%d8%ad%d8%b8%d9%87-%d8%a7%db%8c-%d9%85%d8%aa%d9%88%d9%82%d9%81-%d8%b4%d9%88%d8%af
 varzesh3.com/news/2442497/ستاره-محبوب-هواداران-پرسپولیس-در-استادیوم
 isna.ir/news/1405081409441/%d8%b3%db%8c%d9%85%d8%a7%db%8c%db%8c-%d8%b5%d8%b1%d8%a7%d9%81-%d8%aa%d9%84%d8%a7%d9%88%d8%aa-%d9%88-%d8%ad%d9%81%d8%b8-%d9%82%d8%b1%d8%a2%d9%86-%d8%a8%d8%a7%db%8c%d8%af-%d8%a8%d9%87-%d9%81%d9%87%d9%85-%d9%85%d8%b9%d8%a7%d8%b1%d9%81-%d9%88-%d8%b1%d9%81%d8%aa%d8%a7%d8%b1-%d9%82%d8%b1%d8%a2%d9%86%db%8c
@@ -978,6 +977,7 @@ exclusive_draft_51
 isna.ir/news/1405081309023/%d9%87%d9%85%da%a9%d8%a7%d8%b1%db%8c-%d8%af%d8%a7%d9%86%d8%b4%da%af%d8%a7%d9%87-%d8%b4%db%8c%d8%b1%d8%a7%d8%b2-%d8%a8%d8%a7-%d8%ac%d9%87%d8%a7%d8%af%d8%af%d8%a7%d9%86%d8%b4%da%af%d8%a7%d9%87%db%8c-%d9%81%d8%a7%d8%b1%d8%b3-%d8%a8%d8%b1%d8%a7%db%8c-%d8%a8%d8%b1%da%af%d8%b2%d8%a7%d8%b1%db%8c-%d9%85%d8%b3%d8%a7%d8%a8%d9%82%d8%a7%d8%aa
 id:86311017
 varzesh3.com/news/2442259/ویدیوی-عجیب-و-خنده-دار-چالش-مسی-با-چت-چی-پی-تی
+id:86314241
 mehrnews.com/news/6997991/%d9%81%da%a9%d8%aa-%da%86%da%a9-%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1%db%8c-%da%a9%d9%87-%db%b1%db%b1-%d8%a2%d8%a8%d8%a7%d9%86-%db%b1%db%b4%db%b0%db%b5-%d8%aa%da%a9%d8%b0%db%8c%d8%a8-%d8%b4%d8%af%d9%86%d8%af
 id:86312959
 id:86310576
