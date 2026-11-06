@@ -1,5 +1,3 @@
-varzesh3.com/news/2441559/یابود-تلخ-و-باشکوه-علیدوستی-در-لیگ-یک-عکس
-id:7000032
 id:86312983
 id:86311611
 id:86313682
@@ -194,6 +192,7 @@ https://www.varzesh3.com/news/2440294/اولین-واکنش-ایراندوست-�
 id:7001522
 id:7000972
 irib-news.ir/fa/news/5955147/دعوت-از-پینگ-پنگ-باز-شیرازی-به-اردوی-تیم-ملی-تنیس-روی-میز
+irna.ir/news/86311810/%d9%81%db%8c%d9%84%d9%85-%d8%a2%d8%b1%d8%a7%d9%85%d8%b4-%da%af%d9%88%d9%86%d9%87-%d8%b4%d8%a7%d8%ae%d8%b5-%da%a9%d9%84-%d9%88-%d8%a8%d8%b2-%d8%af%d8%b1-%d8%af%d9%86%d8%a7
 id:2442291
 irna.ir/news/86313420/%d9%81%d8%a7%d8%b1%d8%b3-%d8%af%d8%b1-%d9%85%d8%b3%db%8c%d8%b1-%d8%aa%d8%a8%d8%af%db%8c%d9%84-%d8%b4%d8%af%d9%86-%d8%a8%d9%87-%d9%82%d8%b7%d8%a8-%d8%aa%d9%88%d9%84%db%8c%d8%af-%d8%a8%d8%b1%d9%82-%d8%ae%d9%88%d8%b1%d8%b4%db%8c%d8%af%db%8c
 irna.ir/news/86312755/%d9%88%d8%b2%db%8c%d8%b1-%d8%ae%d8%a7%d8%b1%d8%ac%d9%87-%d9%be%d8%a7%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d9%88-%d8%b3%d9%81%db%8c%d8%b1-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%af%d8%b1%d8%a8%d8%a7%d8%b1%d9%87-%d8%aa%d9%88%d8%b3%d8%b7-%d8%b1%d9%88%d8%a7%d8%a8%d8%b7-%d9%88-%d8%aa%d8%ad%d9%88%d9%84%d8%a7%d8%aa-%d9%85%d9%86%d8%b7%d9%82%d9%87
@@ -352,6 +351,7 @@ snn.ir/fa/news/1484130/رحمت-الهی-بر-قزوین-بارید-بارش-ش�
 id:1483640
 id:5958559
 irna.ir/news/86312608/%d8%a7%d8%b3%d8%aa%d9%82%d9%84%d8%a7%d9%84-%d9%81%d8%af%d8%b1%d8%a7%d8%b3%db%8c%d9%88%d9%86-%d9%be%d8%a7%d8%b1%d8%a7%d8%af%d9%88%d9%88%d9%85%db%8c%d8%af%d8%a7%d9%86%db%8c-%d9%85%d8%b3%db%8c%d8%b1-%d8%aa%d9%88%d8%b3%d8%b9%d9%87-%d8%a7%db%8c%d9%86-%d8%b1%d8%b4%d8%aa%d9%87-%d8%b1%d8%a7-%d9%87%d9%85%d9%88%d8%a7%d8%b1
+id:86311810
 mehrnews.com/news/6982394/%d9%81%d9%88%d8%aa%d8%a8%d8%a7%d9%84-%d8%a7%d8%b2-%d9%85%d8%af%d8%b1%d8%b3%d9%87-%d8%aa%d8%a7-%d8%aa%db%8c%d9%85-%d9%85%d9%84%db%8c-%d9%88%d8%b9%d8%af%d9%87-%d8%aa%d8%a7%d8%b2%d9%87-%d8%a8%d8%b1%d8%a7%db%8c-%da%a9%d8%b4%d9%81-%d8%a7%d8%b3%d8%aa%d8%b9%d8%af%d8%a7%d8%af-%d8%af%d8%b1-%d8%af%d8%a7%d9%86%d8%b4-%d8%a2%d9%85%d9%88%d8%b2%d8%a7%d9%86
 irna.ir/news/86307309/%d8%a7%d9%85%d8%a7%d9%85-%d8%ac%d9%85%d8%b9%d9%87-%d8%a8%d8%ac%d9%86%d9%88%d8%b1%d8%af-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%b2%db%8c%d8%b1-%d8%a8%d8%a7%d8%b1-%d8%b3%d9%84%d8%b7%d9%87-%d8%a2%d9%85%d8%b1%db%8c%da%a9%d8%a7-%d9%86%d9%85%db%8c-%d8%b1%d9%88%d8%af
 mehrnews.com/news/7000656/%d8%b3%d8%b1%d9%84%d8%b4%da%a9%d8%b1-%d8%b1%d8%b6%d8%a7%db%8c%db%8c-%d9%87%d8%b1-%da%a9%d8%b3%db%8c-%d8%a8%d8%a7-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d9%88%d8%a7%d8%b1%d8%af-%d8%aa%d9%82%d8%a7%d8%a8%d9%84-%d8%b4%d9%88%d8%af-%d8%a8%d9%87%d8%a7%db%8c-%d8%a2%d9%86-%d8%b1%d8%a7-%d8%ae%d9%88%d8%a7%d9%87%d8%af
