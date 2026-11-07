@@ -1,5 +1,3 @@
-id:5959246
-id:2442347
 mehrnews.com/news/7002872/%d9%86%d8%ac%d8%a7%d8%aa-%db%b2%db%b3-%d9%86%d9%81%d8%b1-%d8%af%d8%b1-%d8%a2%d8%aa%d8%b4-%d8%b3%d9%88%d8%b2%db%8c-%d9%88%d8%a7%d8%ad%d8%af-%d8%aa%d8%ac%d8%a7%d8%b1%db%8c-%da%a9%db%8c%d8%a7%d9%86%d9%85%d9%87%d8%b1
 mehrnews.com/news/7001087/%d8%a7%d8%b1%d8%aa%d9%82%d8%a7-%d8%b3%d9%87%d9%85-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%a7%d8%b2-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86%d8%af%d8%a7%d8%b1%d8%af%d9%87%d8%a7%db%8c-%d8%a8%db%8c%d9%86-%d8%a7%d9%84%d9%85%d9%84%d9%84%db%8c-%d8%a8%d9%87-%db%b1%db%b5%db%b7-%d9%85%d9%88%d8%b1%d8%af
 id:2442163
@@ -391,6 +389,7 @@ id:5958585
 id:7000757
 id:140508120829
 id:86310576
+irib-news.ir/fa/news/5960089/روند-سوخت-گیری-در-فارس-تسریع-شد-افزایش-دوبرابری-کارت-های-سوخت-جایگاه-ها
 id:5958491
 id:7000216
 isna.ir/news/1405081610383/%d8%b4%da%a9%d8%a7%d8%b1%da%86%db%8c-%d8%ba%db%8c%d8%b1%d9%85%d8%ac%d8%a7%d8%b2-%d8%af%d8%b1-%d9%85%d9%86%d8%b7%d9%82%d9%87-%d8%ad%d9%81%d8%a7%d8%b8%d8%aa-%d8%b4%d8%af%d9%87-%d9%85%db%8c%d8%a7%d9%86-%d8%ac%d9%86%da%af%d9%84-%d9%81%d8%b3%d8%a7-%d8%af%d8%b3%d8%aa%da%af%db%8c%d8%b1-%d8%b4%d8%af
@@ -452,6 +451,7 @@ mehrnews.com/news/7001409/%d9%86%d8%a7%d9%88%d9%87%d8%a7-%d9%88-%d9%87%d9%88%d8%
 id:5958808
 id:86311637
 id:2442640
+id:5960089
 mehrnews.com/news/7001206/%d8%ac%d8%b2%d8%a6%db%8c%d8%a7%d8%aa-%d8%ae%d8%b3%d8%a7%d8%b1%d8%aa-%d8%a8%db%8c-%d8%b3%d8%a7%d8%a8%d9%82%d9%87-%d8%a7%d9%82%d8%aa%d8%b5%d8%a7%d8%af%db%8c-%d8%aa%d8%b1%d8%a7%d9%85%d9%be-%d8%af%d8%b1-%d9%86%d8%aa%db%8c%d8%ac%d9%87-%d8%b4%da%a9%d8%b3%d8%aa-%d8%af%d8%b1-%d8%a7%d9%86%d8%aa%d8%ae%d8%a7%d8%a8%d8%a7%d8%aa
 id:86309663
 varzesh3.com/news/2440487/تاج-هدف-فوتبال-ساحلی-باید-قهرمانی-جهان-باشد
