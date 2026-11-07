@@ -1,5 +1,14 @@
 [
   {
+    "type": "story_video",
+    "files": [
+      "drafts/ready_story_video_1794084418_0.mp4"
+    ],
+    "caption": "",
+    "time": 9999999999.0,
+    "vip": true
+  },
+  {
     "type": "reel",
     "files": [
       "drafts/ready_reel_1794084415_0.mp4"
