@@ -254,9 +254,30 @@ def _smart_logo_get(url, *args, **kwargs):
 requests.get = _smart_logo_get
 
 # ==========================================
-# ۳. سیستم صف ضدقفل گیت‌هاب برای اینستاگرام
+# ۳. سیستم صف ضدقفل گیت‌هاب برای اینستاگرام + موتور VIP
 # ==========================================
-def _master_queue_saver(task_type, paths, caption=""):
+GH_PAT_TOKEN = os.environ.get("GH_PAT_TOKEN", "").strip()
+GH_USERNAME = "arpparnian-arch"
+
+def trigger_github_vip_workflow(repo_name):
+    """بیدار کردن آنی سرور گیت‌هاب (X یا اینستاگرام) از داخل ربات تلگرام"""
+    if not GH_PAT_TOKEN:
+        return False
+    try:
+        url = f"https://api.github.com/repos/{GH_USERNAME}/{repo_name}/dispatches"
+        headers = {
+            "Authorization": f"Bearer {GH_PAT_TOKEN}",
+            "Accept": "application/vnd.github+json"
+        }
+        r = _orig_get(url, headers=headers, timeout=5) if False else requests.post(
+            url, headers=headers, json={"event_type": "vip_publish"}, timeout=10
+        )
+        return r.status_code == 204
+    except Exception as e:
+        print("VIP Trigger error:", e)
+        return False
+
+def _master_queue_saver(task_type, paths, caption="", is_vip=False):
     os.makedirs("drafts", exist_ok=True)
     saved_paths = []
     for i, p in enumerate(paths):
@@ -276,7 +297,20 @@ def _master_queue_saver(task_type, paths, caption=""):
         except Exception:
             pass
 
-    q.append({"type": task_type, "files": saved_paths, "caption": caption, "time": time.time()})
+    new_item = {
+        "type": task_type,
+        "files": saved_paths,
+        "caption": caption,
+        "time": 9999999999.0 if is_vip else time.time(),
+        "vip": is_vip
+    }
+
+    # اگر خبر VIP باشد، در بالاترین نقطه صف (اندیس ۰) قرار می‌گیرد
+    if is_vip:
+        q.insert(0, new_item)
+    else:
+        q.append(new_item)
+
     with open(queue_file, "w", encoding="utf-8") as f:
         json.dump(q, f, ensure_ascii=False, indent=2)
 
@@ -302,6 +336,7 @@ class DummyInstaClient:
     def __init__(self, *args, **kwargs):
         self.user_id = 123456789
         self.delay_range = [2, 5]
+        self.vip_mode = False
     def __bool__(self):
         return True
     def load_settings(self, *args, **kwargs):
@@ -311,22 +346,22 @@ class DummyInstaClient:
     def login(self, *args, **kwargs):
         return True
     def photo_upload(self, path, caption="", *args, **kwargs):
-        _master_queue_saver("photo", [path], caption)
+        _master_queue_saver("photo", [path], caption, is_vip=self.vip_mode)
         return DummyMedia()
     def album_upload(self, paths, caption="", *args, **kwargs):
-        _master_queue_saver("album", paths, caption)
+        _master_queue_saver("album", paths, caption, is_vip=self.vip_mode)
         return DummyMedia()
     def photo_upload_to_story(self, path, *args, **kwargs):
-        _master_queue_saver("story_photo", [path], "")
+        _master_queue_saver("story_photo", [path], "", is_vip=self.vip_mode)
         return DummyMedia()
     def video_upload_to_story(self, path, *args, **kwargs):
-        _master_queue_saver("story_video", [path], "")
+        _master_queue_saver("story_video", [path], "", is_vip=self.vip_mode)
         return DummyMedia()
     def clip_upload(self, path, caption="", *args, **kwargs):
-        _master_queue_saver("reel", [path], caption)
+        _master_queue_saver("reel", [path], caption, is_vip=self.vip_mode)
         return DummyMedia()
     def video_upload(self, path, caption="", *args, **kwargs):
-        _master_queue_saver("video", [path], caption)
+        _master_queue_saver("video", [path], caption, is_vip=self.vip_mode)
         return DummyMedia()
     def __getattr__(self, name):
         return lambda *args, **kwargs: DummyMedia()
@@ -2118,15 +2153,53 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
         mk.add(KeyboardButton('⚽️ آخرین استوری ورزش و لیگ برتر'), KeyboardButton('📸 ارسال سوژه و ارتباط با ما'))
         if is_admin:
             mk.add(KeyboardButton('📋 برنامه این ساعت و وضعیت ربات'), KeyboardButton('🔥 تست استوری زنده فوتبال'))
+            mk.add(KeyboardButton('⚡ مدیریت صف و انتشار فوری VIP'))
         return mk
 
     def draft_confirm_kb(dkey):
         mk = InlineKeyboardMarkup(row_width=1)
+        mk.add(InlineKeyboardButton('⚡ ۰) انتشار فوری VIP (تلگرام + صدر صف اینستا + X)', callback_data=f'pubdraft_vip|{dkey}'))
         mk.add(InlineKeyboardButton('📢 ۱) انتشار در کانال و استوری', callback_data=f'pubdraft_ch_st|{dkey}'))
         mk.add(InlineKeyboardButton('📱 ۲) انتشار در استوری', callback_data=f'pubdraft_st|{dkey}'))
         mk.add(InlineKeyboardButton('🚀 ۳) انتشار در پست، استوری و کانال تلگرام', callback_data=f'pubdraft_all|{dkey}'))
         mk.add(InlineKeyboardButton('❌ لغو و حذف پیش‌نمایش', callback_data=f'canceldraft|{dkey}'))
         return mk
+
+    def build_vip_queue_panel():
+        queue_file = "drafts/insta_queue.json"
+        q = []
+        if os.path.exists(queue_file):
+            try:
+                with open(queue_file, "r", encoding="utf-8") as f:
+                    q = json.load(f)
+            except Exception:
+                pass
+        iran_now = datetime.utcnow() + timedelta(hours=3, minutes=30)
+        h_ir = iran_now.hour
+        if (13 <= h_ir <= 15) or (20 <= h_ir <= 23):
+            p_status = "🔥 <b>ساعت طلایی (Prime Time) فعال است</b> (اولویت حداکثری انتشار)"
+        elif 0 <= h_ir < 7:
+            p_status = "💤 <b>ساعت استراحت شبانه</b> (نگهداری پست‌ها برای صبح)"
+        else:
+            p_status = "✅ <b>ساعت عادی انتشار روزانه</b>"
+
+        txt_q = (
+            f"⚡ <b>پنل فرماندهی انتشار فوری (VIP) و ساعت طلایی</b>\n\n"
+            f"🕒 وضعیت الگوریتم: {p_status}\n"
+            f"📦 تعداد آیتم‌های منتظر در صف اینستاگرام: <b>{to_persian_num(len(q))} مورد</b>\n\n"
+        )
+        if q:
+            txt_q += "📋 <b>۳ آیتم اول صف انتظار فعلی:</b>\n"
+            for idx, item in enumerate(q[:3], 1):
+                t_type = item.get("type", "post")
+                is_v = "⚡ [VIP]" if item.get("vip") else ""
+                cap_short = (item.get("caption") or "بدون کپشن (استوری)").split("\n")[0][:40]
+                txt_q += f"{to_persian_num(idx)}. <code>{t_type}</code> {is_v} | {html.escape(cap_short)}...\n"
+        mk_v = InlineKeyboardMarkup(row_width=1)
+        mk_v.add(InlineKeyboardButton("🚀 اجرای فوری ربات X و اینستاگرام (همین ثانیه)", callback_data="vip_action|trigger_now"))
+        if len(q) > 1:
+            mk_v.add(InlineKeyboardButton("🔝 انتقال آخرین خبر صف به صدر اولویت (VIP)", callback_data="vip_action|promote_last"))
+        return txt_q, mk_v
 
     def send_file_by_key(cid, fkey, is_adm=False):
         f_info = s_data['files'].get(fkey)
@@ -2162,6 +2235,35 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                             bot.send_message(cid, f'⭕️ <b>عضویت شما تایید شد</b>\n\n✅ همشهری عزیز، از دکمه‌های پایین صفحه خدمت مورد نظر خود را انتخاب کنید:\n\n🛑 <b>{CHANNEL_SIGN}</b>', parse_mode='HTML', reply_markup=main_kb(is_adm_cb))
                     else:
                         bot.answer_callback_query(cq.id, '❌ هنوز عضو کانال نشده‌اید! ابتدا دکمه اول را بزنید.', show_alert=True)
+                elif cq.data.startswith('vip_action|'):
+                    sub_act = cq.data.split('|', 1)[1]
+                    if sub_act == 'trigger_now':
+                        ok_x = trigger_github_vip_workflow("shiraz-x-publisher")
+                        ok_ig = trigger_github_vip_workflow("shiraz-insta-publisher")
+                        bot.answer_callback_query(cq.id, '⚡ فرمان بیدارباش فوری ارسال شد!')
+                        bot.send_message(
+                            cid,
+                            f"⚡ <b>فرمان اجرای فوری (Zero-Delay) صادر شد:</b>\n\n"
+                            f"🐦 ربات شبکه X: {'✅ بیدار شد (در حال پست)' if ok_x else '⏳ در نوبت ۱۰ دقیقه‌ای (توکن GH_PAT_TOKEN نیاز است)'}\n"
+                            f"📸 ربات اینستاگرام: {'✅ بیدار شد (در حال آپلود)' if ok_ig else '⏳ در صف اولویت اول'}",
+                            parse_mode='HTML', reply_markup=main_kb(is_adm_cb)
+                        )
+                    elif sub_act == 'promote_last':
+                        queue_file = "drafts/insta_queue.json"
+                        if os.path.exists(queue_file):
+                            try:
+                                q = json.load(open(queue_file, "r", encoding="utf-8"))
+                                if len(q) > 1:
+                                    last_it = q.pop()
+                                    last_it["vip"] = True
+                                    last_it["time"] = 9999999999.0
+                                    q.insert(0, last_it)
+                                    json.dump(q, open(queue_file, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+                                    save_memory_state(push_git=True)
+                                    bot.answer_callback_query(cq.id, '🔝 خبر به صدر صف اولویت منتقل شد!')
+                                    bot.send_message(cid, "✅ <b>آخرین خبر با موفقیت به صدر صف اولویت (VIP) اینستاگرام منتقل شد!</b>", parse_mode='HTML')
+                            except Exception:
+                                pass
                 elif cq.data.startswith('publivestory|'):
                     if not os.path.exists(LAST_SPORT_STORY_FILE):
                         bot.answer_callback_query(cq.id, '⚠️ فایل استوری یافت نشد.', show_alert=True)
@@ -2177,16 +2279,19 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                     s_data['drafts'].pop(dkey, None)
                     bot.answer_callback_query(cq.id, '❌ پیش‌نمایش لغو و حذف شد.')
                     bot.send_message(cid, '❌ پیش‌نمایش خبر اختصاصی لغو شد. می‌توانید نسخه جدید را ارسال کنید.', reply_markup=main_kb(is_adm_cb))
-                elif cq.data.startswith(('pubdraft_ch_st|', 'pubdraft_st|', 'pubdraft_all|', 'pubdraft|')):
+                elif cq.data.startswith(('pubdraft_vip|', 'pubdraft_ch_st|', 'pubdraft_st|', 'pubdraft_all|', 'pubdraft|')):
                     act, dkey = cq.data.split('|', 1)
                     dr = s_data['drafts'].get(dkey)
                     if not dr:
                         bot.answer_callback_query(cq.id, '⚠️ این پیش‌نمایش قبلاً منتشر یا حذف شده است.', show_alert=True)
                         continue
-                    do_channel = act in ('pubdraft_ch_st', 'pubdraft_all', 'pubdraft')
+                    is_vip_req = (act == 'pubdraft_vip')
+                    do_channel = act in ('pubdraft_vip', 'pubdraft_ch_st', 'pubdraft_all', 'pubdraft')
                     do_story = True
-                    do_post = act in ('pubdraft_all', 'pubdraft')
-                    bot.answer_callback_query(cq.id, '🚀 در حال انتشار طبق گزینه انتخابی شما...')
+                    do_post = act in ('pubdraft_vip', 'pubdraft_all', 'pubdraft')
+                    bot.answer_callback_query(cq.id, '⚡ در حال انتشار فوری VIP...' if is_vip_req else '🚀 در حال انتشار طبق گزینه انتخابی شما...')
+                    if insta_cl:
+                        insta_cl.vip_mode = is_vip_req
                     src_exclusive = 'اختصاصی آخرین خبرهای شیراز'
                     tg_cap = format_caption(dr['title'], dr['lead'], True, 'exclusive', is_video=(dr['type'] == 'video'))
                     insta_cap = format_insta_caption(dr['title'], dr['lead'], True, 'exclusive', is_even_hour=(current_iran_hour % 2 == 0), is_video=(dr['type'] == 'video'))
@@ -2206,13 +2311,10 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                                     st_b = create_premium_news_story(raw_bytes, dr['title'], dr['lead'], src_exclusive)
                                     if st_b:
                                         post_to_instagram(insta_cl, st_b, '', is_story=True)
-                            msg_done = '✅ <b>خبر تصویری اختصاصی با موفقیت منتشر شد!</b>'
-                            if act == 'pubdraft_ch_st':
-                                msg_done = '✅ <b>خبر اختصاصی در «کانال تلگرام + استوری اینستاگرام» منتشر شد!</b>'
-                            elif act == 'pubdraft_st':
-                                msg_done = '✅ <b>خبر اختصاصی فقط در «استوری اینستاگرام» منتشر شد!</b>'
-                            elif act in ('pubdraft_all', 'pubdraft'):
-                                msg_done = '✅ <b>خبر اختصاصی در «پست اینستاگرام + استوری + کانال تلگرام» منتشر شد!</b>'
+                            if is_vip_req:
+                                trigger_github_vip_workflow("shiraz-x-publisher")
+                                trigger_github_vip_workflow("shiraz-insta-publisher")
+                            msg_done = '⚡ <b>خبر ویژه (VIP) در تلگرام منتشر شد، در صدر صف اینستاگرام قرار گرفت و فرمان انتشار فوری X صادر گردید!</b>' if is_vip_req else '✅ <b>خبر تصویری اختصاصی با موفقیت منتشر شد!</b>'
                             bot.send_message(cid, msg_done, parse_mode='HTML', reply_markup=main_kb(is_adm_cb))
                     elif dr['type'] == 'video':
                         tg_vp = dr.get('tg_vid_path', '')
@@ -2225,14 +2327,13 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                                 post_video_to_insta(insta_cl, reel_vp, insta_cap, also_story=do_story)
                             elif do_story:
                                 post_video_story_only_to_insta(insta_cl, reel_vp)
-                        msg_done = '✅ <b>ویدیوی اختصاصی با موفقیت منتشر شد!</b>'
-                        if act == 'pubdraft_ch_st':
-                            msg_done = '✅ <b>ویدیوی اختصاصی در «کانال تلگرام + استوری اینستاگرام» منتشر شد!</b>'
-                        elif act == 'pubdraft_st':
-                            msg_done = '✅ <b>ویدیوی اختصاصی فقط در «استوری اینستاگرام» منتشر شد!</b>'
-                        elif act in ('pubdraft_all', 'pubdraft'):
-                            msg_done = '✅ <b>ویدیوی اختصاصی در «ریلز (پست) + استوری + کانال تلگرام» منتشر شد!</b>'
+                        if is_vip_req:
+                            trigger_github_vip_workflow("shiraz-x-publisher")
+                            trigger_github_vip_workflow("shiraz-insta-publisher")
+                        msg_done = '⚡ <b>ویدیوی ویژه (VIP) در تلگرام منتشر شد، در صدر صف ریلز قرار گرفت و فرمان انتشار فوری صادر گردید!</b>' if is_vip_req else '✅ <b>ویدیوی اختصاصی با موفقیت منتشر شد!</b>'
                         bot.send_message(cid, msg_done, parse_mode='HTML', reply_markup=main_kb(is_adm_cb))
+                    if insta_cl:
+                        insta_cl.vip_mode = False
                     s_data['drafts'].pop(dkey, None)
 
             elif u.message and u.message.chat.type == 'private':
@@ -2245,19 +2346,18 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                     bot.send_message(
                         cid,
                         f'⭕️ <b>پنل تحریریه اختصاصی ادمین فعال است</b>\n\n'
-                        f'✅ <b>۱. ارسال خبر اختصاصی (با ۳ گزینه انتشار):</b>\n'
-                        f'یک عکس یا ویدیو بفرستید و در کپشن:\n'
-                        f'• خط اول: تیتر خبر\n'
-                        f'• خط دوم: لید و متن خبر را بنویسید.\n\n'
-                        f'✅ <b>۲. مشاهده برنامه ساعت جاری:</b>\n'
-                        f'دکمه <b>«📋 برنامه این ساعت و وضعیت ربات»</b> یا دستور /barname را بزنید.\n\n'
-                        f'✅ <b>۳. تست یا ساخت دستی استوری زنده فوتبال:</b>\n'
-                        f'دکمه <b>«🔥 تست استوری زنده فوتبال»</b> را بزنید یا با فرمت زیر پیام بفرستید:\n'
-                        f'<code>زنده: فجر سپاسی | پرسپولیس | 2-1 | دقیقه ۷۸ | انفجار در ورزشگاه! گل دوم فجر</code>\n\n'
+                        f'✅ <b>۱. ارسال خبر اختصاصی (با دکمه VIP):</b>\n'
+                        f'یک عکس یا ویدیو بفرستید و در کپشن خط اول تیتر و خط دوم لید را بنویسید.\n\n'
+                        f'✅ <b>۲. فرماندهی صف و انتشار فوری VIP:</b>\n'
+                        f'دکمه <b>«⚡ مدیریت صف و انتشار فوری VIP»</b> یا دستور /vip را بزنید.\n\n'
                         f'🛑 <b>{CHANNEL_SIGN}</b>',
                         parse_mode='HTML',
                         reply_markup=main_kb(True)
                     )
+                    continue
+                if is_admin_user and (txt in ['/vip', 'vip', '⚡ مدیریت صف و انتشار فوری VIP'] or 'انتشار فوری' in txt):
+                    v_txt, v_kb = build_vip_queue_panel()
+                    bot.send_message(cid, v_txt, parse_mode='HTML', reply_markup=v_kb)
                     continue
                 if is_admin_user and (txt in ['/barname', '/schedule', '/plan', 'برنامه', 'وضعیت'] or 'برنامه این ساعت' in txt):
                     bot.send_message(cid, build_admin_schedule_report(), parse_mode='HTML', reply_markup=main_kb(True))
@@ -2288,9 +2388,6 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                         s_io.name = 'live_test_story.jpg'
                         guide_txt = (
                             '🔥 <b>پیش‌نمایش استوری سه‌بعدی زنده آماده شد!</b>\n\n'
-                            '💡 <b>روش ساخت با نتیجه و متن دلخواه:</b>\n'
-                            'کافیست متنی با فرمت زیر بفرستید:\n'
-                            '<code>زنده: فجر سپاسی | استقلال | 2-0 | دقیقه ۶۵ | انفجار در ورزشگاه پارس! گل دوم فجر</code>\n\n'
                             '👇 در صورت تایید، دکمه زیر را بزنید تا در استوری پیج منتشر شود:'
                         )
                         bot.send_photo(cid, s_io, caption=guide_txt, parse_mode='HTML', reply_markup=mk_lv)
@@ -2312,7 +2409,7 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                             st_b = create_premium_news_story(raw_b, title_ex, lead_ex, src_exclusive)
                             post_p = create_approved_post_slide1(raw_b, title_ex, lead_ex, src_exclusive, is_carousel=False)
                             s_data['drafts'][dkey] = {'type': 'photo', 'title': title_ex, 'lead': lead_ex, 'raw_path': raw_p}
-                            prev_cap = format_caption(title_ex, lead_ex, True, 'exclusive', is_video=False) + '\n\n👇 <b>محل انتشار این خبر را از بین ۳ گزینه زیر انتخاب کنید:</b>'
+                            prev_cap = format_caption(title_ex, lead_ex, True, 'exclusive', is_video=False) + '\n\n👇 <b>محل انتشار این خبر را انتخاب کنید (گزینه ۰ برای انتشار فوری VIP):</b>'
                             p_io = io.BytesIO(framed_b)
                             p_io.name = 'preview_tg.jpg'
                             bot.send_photo(cid, p_io, caption=prev_cap, parse_mode='HTML', reply_markup=draft_confirm_kb(dkey))
@@ -2339,7 +2436,7 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                                     'vw': out_vw, 'vh': out_vh
                                 }
                                 sz_mb = round(os.path.getsize(reel_vp or tg_vp) / (1024.0 * 1024.0), 1)
-                                prev_cap = format_caption(title_ex, lead_ex, True, 'exclusive', is_video=True) + f'\n\n📦 حجم بهینه‌شده: {to_persian_num(sz_mb)} مگابایت\n👇 <b>محل انتشار این ویدیو را از بین ۳ گزینه زیر انتخاب کنید:</b>'
+                                prev_cap = format_caption(title_ex, lead_ex, True, 'exclusive', is_video=True) + f'\n\n📦 حجم بهینه‌شده: {to_persian_num(sz_mb)} مگابایت\n👇 <b>محل انتشار این ویدیو را انتخاب کنید:</b>'
                                 with open(reel_vp or tg_vp, 'rb') as vf:
                                     bot.send_video(cid, vf, caption=prev_cap, parse_mode='HTML', width=1080, height=1920, supports_streaming=True, reply_markup=draft_confirm_kb(dkey))
                                 continue
@@ -2841,6 +2938,11 @@ def get_insta_client():
     return DummyInstaClient()
 
 def can_post_to_insta(is_video=False):
+    iran_now = datetime.utcnow() + timedelta(hours=3, minutes=30)
+    h_ir = iran_now.hour
+    # جلوگیری از سوختن پست‌ها در ساعات مرده شب (۱ تا ۷ صبح)
+    if 1 <= h_ir < 7:
+        return False
     if is_video:
         return get_active_reel_schedule_slot() is not None
     now_ts = int(time.time())
@@ -2850,7 +2952,9 @@ def can_post_to_insta(is_video=False):
         txt = open(INSTA_LOG).read().strip()
         if not txt:
             return True
-        return (now_ts - int(txt)) >= 1800
+        # در ساعات طلایی (۱۳ تا ۱۵ و ۲۰ تا ۲۳) فاصله پست‌ها ۲۰ دقیقه و در ساعات عادی ۳۰ دقیقه است
+        cooldown = 1200 if ((13 <= h_ir <= 15) or (20 <= h_ir <= 23)) else 1800
+        return (now_ts - int(txt)) >= cooldown
     except Exception:
         return True
 
