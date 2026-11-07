@@ -37,6 +37,7 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           IG_SESSIONID: ${{ secrets.IG_SESSIONID }}
+          GH_PAT_TOKEN: ${{ secrets.GH_PAT_TOKEN }}
         run: python bot.py
 
       - name: Save state
