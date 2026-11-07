@@ -1,9 +1,3 @@
-id:6996195
-id:1482234
-snn.ir/fa/news/1483679/دیپلمات-روس-جنگ-ایران-بر-انتخابات-میان-دوره-اثر-گذاشت
-https://www.mehrnews.com/news/6993343/%D8%A8%D8%A7%D8%B2%D8%AF%DB%8C%D8%AF-%D8%B3%D9%81%DB%8C%D8%B1-%D8%B9%D8%B1%D8%A8%D8%B3%D8%AA%D8%A7%D9%86-%D8%A7%D8%B2-%D8%B8%D8%B1%D9%81%DB%8C%D8%AA-%D9%87%D8%A7%DB%8C-%D9%85%D8%B9%D8%AF%D9%86%DB%8C-%D8%AE%D8%B1%D8%A7%D8%B3%D8%A7%D9%86-%D8%AC%D9%86%D9%88%D8%A8%DB%8C
-id:7002098
-snn.ir/fa/news/1483620/ادعای-مضحک-ترامپ-اگر-من-در-برگه-رأی-بودم-ما-در-انتخابات-پیروز-می-شدیم-فیلم
 id:7001885
 isna.ir/news/1405080804868/%d8%b9%d9%85%d8%af%d9%87-%d9%81%d9%88%d8%aa-%d8%b4%d8%af%da%af%d8%a7%d9%86-%d8%a7%d9%84%da%a9%d9%84-%d8%af%d8%b1-%d8%b3%d9%86%db%8c%d9%86-%d8%ac%d9%88%d8%a7%d9%86%db%8c-%d9%82%d8%b1%d8%a7%d8%b1-%d8%af%d8%a7%d8%b1%d9%86%d8%af
 mehrnews.com/news/6998074/%d8%aa%d8%a7%da%a9%db%8c%d8%af-%d9%88%d8%b2%d8%b1%d8%a7%db%8c-%d8%a7%d9%82%d8%aa%d8%b5%d8%a7%d8%af-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d9%88-%d8%aa%d8%ac%d8%a7%d8%b1%d8%aa-%d9%be%d8%a7%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d8%a8%d8%b1-%d8%aa%d8%b3%d9%87%db%8c%d9%84-%d8%aa%d8%b1%d8%a7%d9%86%d8%b2%db%8c%d8%aa-%da%a9%d8%a7%d9%84%d8%a7
@@ -259,6 +253,7 @@ irib-news.ir/fa/news/5958074/آزادی-190-زندانی-جرائم-غیرعمد
 id:2442599
 id:1484516
 mehrnews.com/news/7001697/%d8%b7%d8%b1%d8%ad-%d8%aa%d8%a7%d9%85%db%8c%d9%86-%d8%b1%d9%81%d8%a7%d9%87-%d8%a8%d8%a7-%d9%87%d8%af%d9%81-%d8%a7%d9%81%d8%b2%d8%a7%db%8c%d8%b4-%d9%82%d8%af%d8%b1%d8%aa-%d8%ae%d8%b1%db%8c%d8%af-%d8%a7%d8%b9%d8%aa%d8%a8%d8%a7%d8%b1%db%8c-%d8%a8%d8%a7%d8%b2%d9%86%d8%b4%d8%b3%d8%aa%da%af%d8%a7%d9%86-%d8%a7%d8%ac%d8%b1%d8%a7
+mehrnews.com/news/7002195/%da%af%d8%b1%d8%af%d8%b4%da%af%d8%b1%db%8c-%d8%b3%d9%84%d8%a7%d9%85%d8%aa-%da%a9%d8%b4%d9%88%d8%b1-%d9%81%d8%a7%d9%82%d8%af-%d9%86%d9%82%d8%b4%d9%87-%d8%b1%d8%a7%d9%87-%d8%ac%d8%a7%d9%85%d8%b9-%d8%a7%d8%b3%d8%aa
 irna.ir/news/86307721/%d9%88%d9%82%d9%88%d8%b9-%d8%ad%d9%85%d9%84%d8%a7%d8%aa-%d9%87%d9%88%d8%a7%db%8c%db%8c-%da%af%d8%b3%d8%aa%d8%b1%d8%af%d9%87-%d8%b1%d9%88%d8%b3%db%8c%d9%87-%d8%a8%d9%87-%da%a9%db%8c-%db%8c%d9%81-%d9%81%db%8c%d9%84%d9%85
 irna.ir/news/86314127/%d8%b2%d9%86%d9%86%d8%af%d9%87-%da%af%d9%84-%d9%81%d8%ac%d8%b1-%d8%ae%d9%88%d8%b4%d8%ad%d8%a7%d9%84%d9%85-%d8%a8%d8%a7-%da%af%d9%84%d9%85-%d9%88-%d9%be%d8%a7%d8%b3-%d9%85%d9%86-%d9%be%d8%b1%d8%b3%d9%be%d9%88%d9%84%db%8c%d8%b3-%d8%b1%d8%a7-%d8%b4%da%a9%d8%b3%d8%aa-%d8%af%d8%a7%d8%af%db%8c%d9%85
 mehrnews.com/photo/6999395/%d8%b5%d9%81%d8%ad%d9%87-%d9%86%d8%ae%d8%b3%d8%aa-%d8%b1%d9%88%d8%b2%d9%86%d8%a7%d9%85%d9%87-%d9%87%d8%a7%db%8c-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86-%d9%81%d8%a7%d8%b1%d8%b3-%da%86%d9%87%d8%a7%d8%b1%d8%b4%d9%86%d8%a8%d9%87-%db%b1%db%b3-%d8%a2%d8%a8%d8%a7%d9%86-%d9%85%d8%a7%d9%87
@@ -431,6 +426,7 @@ irna.ir/news/86313132/%d8%a2%d8%ae%d8%b1%db%8c%d9%86-%d8%af%d9%88%d8%b1-%d8%a7%d
 mehrnews.com/news/7000372/%da%a9%d8%a7%d8%a8%d9%88%d8%b3-%d8%ae%d9%88%d8%af%d8%b2%d9%86%db%8c-%d8%af%d8%b1-%d8%ae%d8%a7%d8%aa%d9%88%d9%86-%da%af%d9%84-%d8%a8%d9%87-%d8%ae%d9%88%d8%af%db%8c-%d9%87%d8%a7-%d8%a8%d9%84%d8%a7%db%8c-%d8%ac%d8%a7%d9%86-%d9%86%d9%85%d8%a7%db%8c%d9%86%d8%af%d9%87-%d9%81%d9%88%d8%aa%d8%a8%d8%a7%d9%84
 https://www.mehrnews.com/news/6993494/%D8%A8%D8%A7%D9%86%DA%A9-%D9%85%D8%B3%DA%A9%D9%86-%D9%88%D8%B8%DB%8C%D9%81%D9%87-%D8%AE%D9%88%D8%AF-%D8%B1%D8%A7-%D8%AF%D8%B1-%D8%A8%D9%84%D8%AF%D8%A7%D9%84%D8%A7%D9%85%DB%8C%D9%86-%D8%A8%D9%87-%D8%AE%D9%88%D8%A8%DB%8C-%D8%A7%DB%8C%D9%81%D8%A7-%DA%A9%D8%B1%D8%AF
 id:5958585
+id:7002195
 irib-news.ir/fa/news/5955672/آغاز-برداشت-شلتوک-از-شالیزار-های-شهرستان-ممسنی
 id:2442592
 varzesh3.com/news/2440783/زنده-از-روز-سرنوشت-کشتی-ایران-فقط-طلا-و-فینال
@@ -475,6 +471,7 @@ mehrnews.com/news/6997991/%d9%81%da%a9%d8%aa-%da%86%da%a9-%d8%a7%d8%ae%d8%a8%d8%
 id:86309968
 varzesh3.com/news/2442582/لغو-بازی-آسیایی-به-دلیل-نگرانی-از-امنیت-اردن
 id:7000499
+id:7000414
 id:1484517
 id:7002021
 irna.ir/news/86313665/%d9%88%d8%a7%da%a9%d9%86%d8%b4-%d9%88%d8%b2%db%8c%d8%b1-%d8%ac%d9%86%da%af-%d8%aa%d8%b1%d8%a7%d9%85%d9%be-%d8%a8%d9%87-%d8%aa%d9%84%d8%a7%d8%b4-%d9%87%d8%a7-%d8%a8%d8%b1%d8%a7%db%8c-%d8%a8%d8%b1%da%a9%d9%86%d8%a7%d8%b1%db%8c-%d8%b9%d9%82%d8%a8-%d9%86%d8%b4%db%8c%d9%86%db%8c-%d9%86%d9%85%db%8c-%da%a9%d9%86%db%8c%d9%85
@@ -522,6 +519,7 @@ varzesh3.com/news/2442619/مدافع-الهلال-زیدان-را-مسخره-ک�
 id:6998089
 id:86310417
 id:7001595
+mehrnews.com/news/7000414/%d8%aa%d9%87%d8%b1%d8%a7%d9%86-%d9%82%d9%85-%d8%b3%d8%a8%d8%b2%d9%be%d9%88%d8%b4-%d9%85%db%8c-%d8%b4%d9%88%d8%af-%d8%a7%d9%85%db%8c%d8%af-%d8%a8%d9%87-%d8%a7%d8%ad%db%8c%d8%a7%db%8c-%d8%b7%d8%a8%db%8c%d8%b9%d8%aa-%d8%a8%d8%a7-%da%a9%d8%a7%d8%b4%d8%aa-%da%af%d8%b2-%d9%88-%d8%b7%d8%a7%d9%82
 varzesh3.com/news/2442336/شکست-ساروی-ها-در-روز-باخت-برادر-رحمان-عموزاد
 mehrnews.com/news/7002290/%d8%a7%d9%85%d9%86%db%8c%d8%aa-%d8%ae%d9%84%db%8c%d8%ac-%d9%81%d8%a7%d8%b1%d8%b3-%d9%85%d8%b1%d9%87%d9%88%d9%86-%d8%a7%db%8c%d8%b3%d8%aa%d8%a7%d8%af%da%af%db%8c-%d9%85%d8%b1%d8%af%d9%85-%d8%ac%d9%86%d9%88%d8%a8-%d8%a7%d8%b3%d8%aa
 irna.ir/news/86309540/%d9%86%d8%b3%d8%ae%d9%87-%d8%b3%d8%a7%d9%86%d8%aa%d8%a7%d9%86%d8%af%d8%b1-%d8%af%d8%b1-%d8%ae%d8%a7%d9%86%d9%87-%d9%be%db%8c%da%86%db%8c%d8%af%d9%87-%d8%b4%d8%af-%d8%b1%d8%a6%d8%a7%d9%84-%d9%85%d8%a7%d8%af%d8%b1%db%8c%d8%af-%d9%86%d9%81%d8%b3-%d8%a8%d9%87-%d9%86%d9%81%d8%b3-%d8%a8%d8%a7%d8%b1%d8%b3%d9%84%d9%88%d9%86%d8%a7
@@ -745,6 +743,7 @@ mehrnews.com/news/7002284/%d8%aa%d9%84%d8%a7%d8%b4-%d9%87%d8%a7%db%8c-%d9%be%d8%
 mehrnews.com/news/7002257/%d8%a7%d8%ac%d8%a7%d8%b2%d9%87-%d9%86%d9%85%db%8c-%d8%af%d9%87%db%8c%d9%85-%d8%aa%d8%b1%d8%a7%d9%85%d9%be-%d8%a8%db%8c-%d9%87%d8%b2%db%8c%d9%86%d9%87-%d9%88-%d8%ba%d8%b1%d8%a7%d9%85%d8%aa-%d8%a7%d8%b2-%d9%85%d9%86%d8%b7%d9%82%d9%87-%d9%81%d8%b1%d8%a7%d8%b1-%da%a9%d9%86%d8%af
 id:86312495
 varzesh3.com/news/2442593/اخباری-نظر-مطهری-برایم-اهمیتی-ندارد
+id:7001966
 id:1483606
 id:86310912
 mehrnews.com/news/6999718/%d8%af%d8%b1%db%8c%d8%a7%da%86%d9%87-%d8%a7%d8%b1%d9%88%d9%85%db%8c%d9%87-%d8%ac%d8%a7%d9%86-%da%af%d8%b1%d9%81%d8%aa%d9%87-%d8%a7%d8%b3%d8%aa-%d8%a7%d9%85%d8%a7-%d9%87%d9%86%d9%88%d8%b2-%d8%aa%d8%a7-%d8%a7%d8%ad%db%8c%d8%a7-%d9%81%d8%a7%d8%b5%d9%84%d9%87-%d8%af%d8%a7%d8%b1%d8%af
@@ -836,6 +835,7 @@ varzesh3.com/news/2442576/پیروز-معین-و-خانم-ه-مثلث-جنجال
 varzesh3.com/news/2442561/مصاحبه-ستاره-جوان-پرسپولیس-کوتاه-اما-جنجالی
 id:86314261
 irna.ir/news/86313034/%d8%a7%d8%b1%d8%aa%d9%82%d8%a7%db%8c-%d8%ac%d8%a7%db%8c%da%af%d8%a7%d9%87-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%af%d8%b1-%d8%b3%d8%a7%d8%b2%d9%85%d8%a7%d9%86-%d8%ac%d9%87%d8%a7%d9%86%db%8c-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86%d8%af%d8%a7%d8%b1%d8%af
+mehrnews.com/news/7001966/%d9%be%db%8c%d8%b4%d9%86%d9%87%d8%a7%d8%af-%d8%a7%db%8c%d8%ac%d8%a7%d8%af-%d8%b4%d8%a8%da%a9%d9%87-%d9%87%d9%85%da%a9%d8%a7%d8%b1%db%8c-%d8%a2%d9%85%d9%88%d8%b2%d8%b4%db%8c-%d9%85%d9%86%d8%b7%d9%82%d9%87-%d8%a7%db%8c-%d8%b9%d8%b6%d9%88-%d8%a7%da%a9%d9%88
 id:86313292
 irna.ir/news/86311106/%d9%86%da%a9%d9%88%d9%86%d8%a7%d9%85-%d8%a8%d8%b1%d9%81-%d8%aa%d8%a8%d8%b1%db%8c%d8%b2-%d8%b1%d8%a7-%d9%85%db%8c-%d8%a8%db%8c%d9%86%d8%af-%d9%be%d8%b1%d9%88%da%98%d9%87-%d8%a8%d8%a7%d8%b2%da%af%d8%b4%d8%aa-%d8%a7%d8%b3%da%a9%d9%88%da%86%db%8c%da%86-%d8%a8%d9%87-%d8%aa%d8%b1%d8%a7%da%a9%d8%aa%d9%88%d8%b1
 id:2442373
