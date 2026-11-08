@@ -1,5 +1,3 @@
-irib-news.ir/fa/news/5958798/مربی-فجر-12-روز-برای-پرسپولیس-آماده-شدیم
-id:86314031
 mehrnews.com/news/7004660/%d8%ae%d9%88%d8%b2%d8%b3%d8%aa%d8%a7%d9%86-%d8%ac%d8%b2%d9%88-%db%b5-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86-%d8%a7%d9%88%d9%84-%da%a9%d8%b4%d9%88%d8%b1-%d8%af%d8%b1-%d8%a8%db%8c%d9%85%d8%a7%d8%b1%db%8c-%d9%87%d8%a7%db%8c-%d8%ae%d8%a7%d8%b5-%d8%a7%d8%b3%d8%aa
 irna.ir/news/86313330/%da%a9%d8%a7%d9%87%d8%b4-%da%a9%d9%85%db%8c-%d9%88-%da%a9%db%8c%d9%81%db%8c-%d9%88%d8%b1%d8%b2%d8%b4-%d9%be%d8%a7%db%8c%d9%87-%d9%81%d8%a7%d8%b1%d8%b3-%d8%af%d8%b1%d8%a7%d9%84%d9%85%d9%be%db%8c%da%a9-%d8%ac%d9%88%d8%a7%d9%86%d8%a7%d9%86-%d8%a7%d8%b2-%db%b2-%d8%b7%d9%84%d8%a7-%d8%a8%d9%88%d8%a6%d9%86%d9%88%d8%b3-%d8%a2%db%8c%d8%b1%d8%b3-%d8%aa%d8%a7
 mehrnews.com/news/7004763/%db%b3%db%b0-%d8%a8%d8%a7%d8%b2%db%8c%da%a9%d9%86-%d8%a8%d9%87-%d8%a7%d8%b1%d8%af%d9%88%db%8c-%d8%aa%db%8c%d9%85-%d9%81%d9%88%d8%aa%d8%a8%d8%a7%d9%84-%d8%a7%d9%85%db%8c%d8%af-%d8%af%d8%b9%d9%88%d8%aa-%d8%b4%d8%af%d9%86%d8%af
@@ -429,6 +427,7 @@ snn.ir/fa/news/1480202/حادثه-برای-یک-کشتی-در-40-مایلی-جن
 varzesh3.com/news/2442443/اولین-سهمیه-لس-آنجلس-۲۰۲۸-به-نام-دختر-تیرانداز-ایران
 id:7004765
 id:86315828
+id:7004823
 id:5958585
 varzesh3.com/news/2442367/هراس-در-مادرید-قلعه-اتلتیکو-در-تصرف-بارسا
 id:5957608
@@ -734,6 +733,7 @@ isna.ir/news/1405081711751/%d8%a8%d8%a7%d8%b1%d9%86%d8%af%da%af%db%8c-%d9%85%d8%
 id:7004223
 id:86314241
 id:7002225
+mehrnews.com/news/7004823/%da%a9%d8%b1%db%8c%d9%85%db%8c-%d8%a7%d8%ac%d8%aa%d9%85%d8%a7%d8%b9%d8%a7%d8%aa-%d9%85%d8%b1%d8%af%d9%85%db%8c-%d8%af%d8%b1-%d9%85%db%8c%d8%af%d8%a7%d9%86-%d9%85%d9%82%d8%a7%d8%a8%d9%84%d9%87-%d8%a8%d8%a7-%d8%af%d8%b4%d9%85%d9%86-%d8%a7%d8%ab%d8%b1%da%af%d8%b0%d8%a7%d8%b1-%d8%a7%d8%b3%d8%aa
 id:1485212
 id:7003803
 id:86315868
