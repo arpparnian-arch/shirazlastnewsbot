@@ -1,7 +1,3 @@
-snn.ir/fa/news/1482934/نیویورک-تایمز-دولت-ترامپ-به-دنبال-حضور-نظامی-بلندمدت-در-ونزوئلا-است
-isna.ir/news/1405081711458/%d8%a7%d8%b5%d9%84%d8%a7%d8%ad-%db%b1%db%b5%db%b6%db%b0-%da%a9%db%8c%d9%84%d9%88%d9%85%d8%aa%d8%b1-%d8%a7%d8%b2-%d8%b4%d8%a8%da%a9%d9%87-%d8%aa%d9%88%d8%b2%db%8c%d8%b9-%d8%a8%d8%b1%d9%82-%d9%81%d8%a7%d8%b1%d8%b3-%d8%af%d8%b1-%d9%82%d8%a7%d9%84%d8%a8-%d8%b7%d8%b1%d8%ad-%d8%b3%d8%a7%d9%85%d8%a7%d9%86
-id:86303586
-id:7002246
 id:86315545
 id:7003783
 mehrnews.com/news/7003620/%d8%aa%d8%a3%d9%85%db%8c%d9%86-%d8%a7%d8%b9%d8%aa%d8%a8%d8%a7%d8%b1-%d9%81%d9%86%d8%b3-%da%a9%d8%b4%db%8c-%d9%be%d8%a7%d8%b1%da%a9-%d9%85%d9%84%db%8c-%d8%a8%d9%85%d9%88-%d8%a8%d8%a7-%d9%85%d8%b4%d8%a7%d8%b1%da%a9%d8%aa-%d9%85%d8%a7%d9%84%db%8c%d8%a7%d8%aa%db%8c-%d8%b5%d9%86%d8%a7%db%8c%d8%b9-%d9%88-%d9%85%d8%b4%d8%a7%d8%ba%d9%84
@@ -716,6 +712,7 @@ isna.ir/news/1405081610918/%d8%a7%d9%85%d8%a7%d9%85-%d8%ac%d9%85%d8%b9%d9%87-%d8
 id:5957608
 mehrnews.com/news/7003192/%d8%ac%d8%a7%d8%af%d9%87-%da%86%d8%a7%d9%84%d9%88%d8%b3-%d9%85%d8%b3%d8%af%d9%88%d8%af-%d8%b4%d8%af
 id:7004123
+id:7004657
 id:7002284
 irna.ir/news/86309509/%d9%be%db%8c%d8%a7%d9%85-%d8%aa%d8%b3%d9%84%db%8c%d8%aa-%d9%88%d8%b2%d8%a7%d8%b1%d8%aa-%d9%88%d8%b1%d8%b2%d8%b4-%d9%88-%d8%ac%d9%88%d8%a7%d9%86%d8%a7%d9%86-%d8%af%d8%b1-%d9%be%db%8c-%d8%af%d8%b1%da%af%d8%b0%d8%b4%d8%aa-%d8%ad%d9%85%db%8c%d8%af-%d8%b9%d9%84%db%8c%d8%af%d9%88%d8%b3%d8%aa%db%8c
 id:1483666
@@ -743,6 +740,7 @@ id:7000159
 mehrnews.com/news/7002479/%db%b1%db%b2%db%b8%db%b8-%d9%85%d8%af%d8%b1%d8%b3%d9%87-%d8%a2%d8%b3%db%8c%d8%a8-%d8%af%db%8c%d8%af%d9%87-%d8%af%d8%b1-%d8%ac%d9%86%da%af-%d8%a8%d8%a7%d8%b2%d8%b3%d8%a7%d8%b2%db%8c-%d8%b4%d8%af
 id:7002510
 mehrnews.com/photo/7003066/%d8%a8%d8%a7%d8%b1%d8%a7%d9%86-%d9%be%d8%a7%db%8c%db%8c%d8%b2%db%8c-%d8%af%d8%b1-%d8%aa%d9%87%d8%b1%d8%a7%d9%86
+irna.ir/news/86316228/%d8%a7%d9%81%d8%b9%db%8c-%d9%87%d8%a7-%da%a9%d9%88%d9%85%d9%88-%d8%b1%d8%a7-%d8%a8%d9%87-%d8%b2%d8%a7%d9%86%d9%88-%d8%af%d8%b1%d8%a2%d9%88%d8%b1%d8%af%d9%86%d8%af
 id:6999241
 id:86315548
 id:1484516
@@ -882,6 +880,7 @@ id:140508171136
 mehrnews.com/news/7004467/%d8%ad%da%a9%d9%85%d8%b1%d8%a7%d9%86%db%8c-%d9%86%d9%88%d8%ac%d9%88%d8%a7%d9%86-%d8%af%d8%b1-%d8%af%d8%b3%d8%aa%d9%88%d8%b1-%da%a9%d8%a7%d8%b1-%d8%aa%d8%a8%d9%84%db%8c%d8%ba%d8%a7%d8%aa-%d8%a7%d8%b3%d9%84%d8%a7%d9%85%db%8c-%d9%88-%d8%a2%d9%85%d9%88%d8%b2%d8%b4-%d9%88-%d9%be%d8%b1%d9%88%d8%b1%d8%b4-%d9%81%d8%a7%d8%b1%d8%b3
 id:86316243
 mehrnews.com/photo/7001488/%d8%a7%d8%ae%d8%aa%d8%aa%d8%a7%d9%85%db%8c%d9%87-%d9%86%d9%88%d8%b2%d8%af%d9%87%d9%85%db%8c%d9%86-%d8%ac%d8%b4%d9%86%d9%88%d8%a7%d8%b1%d9%87-%d8%a8%db%8c%d9%86-%d8%a7%d9%84%d9%85%d9%84%d9%84%db%8c-%d9%81%db%8c%d9%84%d9%85-%d9%85%d9%82%d8%a7%d9%88%d9%85%d8%aa
+mehrnews.com/news/7004657/%d8%b4%d8%a7%d9%87%d8%b1%d9%88%d8%af-%d9%85%db%8c%d8%b2%d8%a8%d8%a7%d9%86-%d8%b9%d9%88%d8%a7%d9%85%d9%84-%d8%aa%d9%88%d9%84%db%8c%d8%af-%d8%b3%d8%b1%db%8c%d8%a7%d9%84-%d8%b3%d9%84%d9%85%d8%a7%d9%86-%d9%81%d8%a7%d8%b1%d8%b3%db%8c
 varzesh3.com/news/2442259/ویدیوی-عجیب-و-خنده-دار-چالش-مسی-با-چت-چی-پی-تی
 varzesh3.com/news/2442367/هراس-در-مادرید-قلعه-اتلتیکو-در-تصرف-بارسا
 isna.ir/news/1405081711524/%d8%a7%d8%b1%d8%af%da%a9%d8%a7%d9%86-%d9%88-%d8%b3%d8%af%d9%87-%d8%a7%d9%82%d9%84%db%8c%d8%af-%d8%af%d8%b1-%d8%b5%d8%af%d8%b1-%d8%a8%d8%a7%d8%b1%d8%b4-%d9%87%d8%a7%db%8c-%da%a9%d9%86%d9%88%d9%86%db%8c-%d9%81%d8%a7%d8%b1%d8%b3-%da%a9%d8%a7%d9%87%d8%b4-%db%b6%db%b4-%d8%af%d8%b1%d8%b5%d8%af%db%8c
@@ -912,6 +911,7 @@ mehrnews.com/news/7004474/%d8%a8%d8%a7%d8%b2%d8%af%db%8c%d8%af-%d8%b1%d8%a6%db%8
 mehrnews.com/news/7004191/%d9%85%d9%87%d9%84%d8%aa-%d8%b3%d9%87-%d9%85%d8%a7%d9%87%d9%87-%d8%af%d8%a7%d8%af%d8%b3%d8%aa%d8%a7%d9%86%db%8c-%d8%aa%d9%87%d8%b1%d8%a7%d9%86-%d8%a8%d8%b1%d8%a7%db%8c-%d8%aa%da%a9%d9%85%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%a7%d9%86%d9%87-%d8%b9%d8%b1%d8%b6%d9%87-%d8%ae%d9%88%d8%af%d8%b1%d9%88
 irna.ir/news/86314700/%d8%af%d8%a7%d8%af%d8%a7%d8%b4-%d8%b2%d8%a7%d8%af%d9%87-%d9%85%d8%ad%d9%85%d9%88%d8%af%db%8c-%d9%86%d8%a8%d8%a7%db%8c%d8%af-%d9%88%d8%a7%d8%b1%d8%af-%d8%ad%d8%a7%d8%b4%db%8c%d9%87-%d8%b4%d9%88%d8%af-%d8%af%d8%b1%d8%b3%d8%aa-%d9%86%db%8c%d8%b3%d8%aa-%d8%a8%da%af%d9%88%db%8c%d9%85-%d9%be%d8%b1%d8%b3%d9%be%d9%88%d9%84%db%8c%d8%b3
 mehrnews.com/news/7002577/%d9%87%d8%b4%d8%af%d8%a7%d8%b1-%d9%82%d8%b1%d9%85%d8%b2-%d8%b3%db%8c%d9%84%d8%a7%d8%a8-%d8%af%d8%b1-%d8%aa%d9%87%d8%b1%d8%a7%d9%86-%d8%b4%d9%87%d8%b1%d9%88%d9%86%d8%af%d8%a7%d9%86-%d8%a7%d8%b2-%d8%aa%d8%b1%d8%af%d8%af%d9%87%d8%a7%db%8c-%d8%ba%db%8c%d8%b1%d8%b6%d8%b1%d9%88%d8%b1%db%8c-%d9%be%d8%b1%d9%87%db%8c%d8%b2
+id:86316228
 irib-news.ir/fa/news/5961202/برگزاری-یادواره-شهدا-در-روستای-شهرمیان-اقلید-فارس
 id:140508130907
 id:86316127
