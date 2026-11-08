@@ -2852,52 +2852,155 @@ def get_video_dimensions(vid_path):
     except Exception:
         return 1080, 1920
 
+def find_watermark_file():
+    for wm_name in ['watermark.mp4', 'Watermark.mp4', 'WATERMARK.MP4', 'watermark.mov']:
+        if os.path.exists(wm_name) and os.path.getsize(wm_name) > 1000:
+            return wm_name
+    return None
+
 def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه‌های خبری', out_prefix='vid'):
     try:
         tg_vid = f'{out_prefix}_tg.mp4'
         reel_vid = f'{out_prefix}_reel.mp4'
         vw, vh = get_video_dimensions(raw_vid)
         is_vertical = (vh >= vw)
+        wm_file = find_watermark_file()
+
         if is_vertical:
             ov_tg = create_9_16_video_overlay(1080, 1920, subtitle_text, source_name)
             ov_tg.save('ov_tg_9_16.png', format='PNG')
-            flt_9_16 = '[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=24:4,eq=brightness=-0.22,setsar=1[bg];[0:v]scale=1080:1920:force_original_aspect_ratio=decrease,setsar=1[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1[base];[base][1:v]overlay=0:0,setsar=1'
-            cmd_tg = [
-                'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_9_16.png', '-filter_complex', flt_9_16,
-                '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
-                '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
-                '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
-                '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
-            ]
-            subprocess.run(cmd_tg, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
+
+            flt_base_9_16 = (
+                '[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=24:4,eq=brightness=-0.22,setsar=1[bg];'
+                '[0:v]scale=1080:1920:force_original_aspect_ratio=decrease,setsar=1[fg];'
+                '[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1[base];'
+                '[base][1:v]overlay=0:0,setsar=1'
+            )
+
+            done_vertical = False
+            if wm_file:
+                try:
+                    flt_wm_9_16 = (
+                        f'{flt_base_9_16},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
+                        '[2:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
+                        'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black,'
+                        'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
+                        'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
+                        '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1'
+                    )
+                    cmd_tg_wm = [
+                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_9_16.png', '-i', wm_file,
+                        '-filter_complex', flt_wm_9_16,
+                        '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
+                        '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
+                        '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+                        '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
+                    ]
+                    subprocess.run(cmd_tg_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120, check=True)
+                    done_vertical = True
+                except Exception as e_wm:
+                    print('Watermark 9:16 fallback to standard:', e_wm)
+
+            if not done_vertical:
+                cmd_tg = [
+                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_9_16.png', '-filter_complex', flt_base_9_16,
+                    '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
+                    '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
+                    '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+                    '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
+                ]
+                subprocess.run(cmd_tg, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
+
             return tg_vid, tg_vid, 1080, 1920
+
         else:
             out_w, out_h = 1280, 720
             frame = get_transparent_frame()
             if frame:
                 frame.save('ov_tg_16_9.png', format='PNG')
-                flt_16_9 = '[0:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=#0a101e,setsar=1[base];[1:v]scale=1280:720,setsar=1[wm];[base][wm]overlay=0:0,setsar=1'
-                cmd_tg16 = [
-                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_16_9.png', '-filter_complex', flt_16_9,
-                    '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1700k', '-bufsize', '3400k',
-                    '-profile:v', 'high', '-c:a', 'aac', '-b:a', '96k', '-pix_fmt', 'yuv420p',
-                    '-movflags', '+faststart', '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
-                ]
-                subprocess.run(cmd_tg16, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=105, check=True)
+                flt_base_16_9 = (
+                    '[0:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=#0a101e,setsar=1[base];'
+                    '[1:v]scale=1280:720,setsar=1[wm];'
+                    '[base][wm]overlay=0:0,setsar=1'
+                )
+                done_16_9 = False
+                if wm_file:
+                    try:
+                        flt_wm_16_9 = (
+                            f'{flt_base_16_9},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
+                            '[2:v]fps=30,scale=1280:720:force_original_aspect_ratio=decrease,'
+                            'pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black,'
+                            'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
+                            'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
+                            '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1'
+                        )
+                        cmd_tg16_wm = [
+                            'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_16_9.png', '-i', wm_file,
+                            '-filter_complex', flt_wm_16_9,
+                            '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1700k', '-bufsize', '3400k',
+                            '-profile:v', 'high', '-c:a', 'aac', '-b:a', '96k', '-pix_fmt', 'yuv420p',
+                            '-movflags', '+faststart', '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
+                        ]
+                        subprocess.run(cmd_tg16_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=115, check=True)
+                        done_16_9 = True
+                    except Exception as e_wm16:
+                        print('Watermark 16:9 fallback to standard:', e_wm16)
+
+                if not done_16_9:
+                    cmd_tg16 = [
+                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_16_9.png', '-filter_complex', flt_base_16_9,
+                        '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1700k', '-bufsize', '3400k',
+                        '-profile:v', 'high', '-c:a', 'aac', '-b:a', '96k', '-pix_fmt', 'yuv420p',
+                        '-movflags', '+faststart', '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
+                    ]
+                    subprocess.run(cmd_tg16, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=105, check=True)
             else:
                 tg_vid = raw_vid
                 out_w, out_h = vw, vh
+
             ov_reel = create_9_16_video_overlay(1080, 1920, subtitle_text, source_name)
             ov_reel.save('ov_reel_9_16.png', format='PNG')
-            filter_reel = '[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=25:5,eq=brightness=-0.25,setsar=1[bg];[0:v]scale=1020:-2:force_original_aspect_ratio=decrease,setsar=1[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2-80,setsar=1[comp];[comp][1:v]overlay=0:0,setsar=1'
-            cmd_reel = [
-                'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-filter_complex', filter_reel,
-                '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
-                '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
-                '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
-                '-metadata:s:v:0', 'rotate=0', '-t', '58', reel_vid
-            ]
-            subprocess.run(cmd_reel, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
+            flt_base_reel = (
+                '[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=25:5,eq=brightness=-0.25,setsar=1[bg];'
+                '[0:v]scale=1020:-2:force_original_aspect_ratio=decrease,setsar=1[fg];'
+                '[bg][fg]overlay=(W-w)/2:(H-h)/2-80,setsar=1[comp];'
+                '[comp][1:v]overlay=0:0,setsar=1'
+            )
+
+            done_reel = False
+            if wm_file:
+                try:
+                    flt_wm_reel = (
+                        f'{flt_base_reel},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
+                        '[2:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
+                        'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black,'
+                        'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
+                        'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
+                        '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1'
+                    )
+                    cmd_reel_wm = [
+                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', wm_file,
+                        '-filter_complex', flt_wm_reel,
+                        '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
+                        '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
+                        '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+                        '-metadata:s:v:0', 'rotate=0', '-t', '58', reel_vid
+                    ]
+                    subprocess.run(cmd_reel_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120, check=True)
+                    done_reel = True
+                except Exception as e_wmr:
+                    print('Watermark reel fallback to standard:', e_wmr)
+
+            if not done_reel:
+                cmd_reel = [
+                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-filter_complex', flt_base_reel,
+                    '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
+                    '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
+                    '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+                    '-metadata:s:v:0', 'rotate=0', '-t', '58', reel_vid
+                ]
+                subprocess.run(cmd_reel, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
+
             return (tg_vid if os.path.exists(tg_vid) else raw_vid), (reel_vid if os.path.exists(reel_vid) else tg_vid), out_w, out_h
     except Exception as e:
         print('Local video process error:', e)
