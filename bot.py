@@ -259,23 +259,44 @@ requests.get = _smart_logo_get
 GH_PAT_TOKEN = os.environ.get("GH_PAT_TOKEN", "").strip()
 GH_USERNAME = "arpparnian-arch"
 
-def trigger_github_vip_workflow(repo_name):
-    """بیدار کردن آنی سرور گیت‌هاب (X یا اینستاگرام) از داخل ربات تلگرام"""
-    if not GH_PAT_TOKEN:
-        return False
+def get_active_gh_token():
+    """خواندن توکن گیت‌هاب از Secrets یا از حافظه رمزگذاری‌شده تلگرام"""
+    if GH_PAT_TOKEN:
+        return GH_PAT_TOKEN
+    if os.path.exists(SERVICE_STATE_FILE):
+        try:
+            d = json.load(open(SERVICE_STATE_FILE, "r", encoding="utf-8"))
+            rev = d.get("gh_tok_rev", "")
+            if rev:
+                return rev[::-1]
+        except Exception:
+            pass
+    return ""
+
+def trigger_github_vip_workflow(repo_name, wf_filename="x_bot.yml"):
+    """بیدار کردن آنی سرور گیت‌هاب با هر دو روش Dispatch و Workflow"""
+    tok = get_active_gh_token()
+    if not tok:
+        return False, "توکن تنظیم نشده (در تلگرام بفرستید: توکن: ghp_...)"
+    headers = {
+        "Authorization": f"Bearer {tok}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+    }
     try:
-        url = f"https://api.github.com/repos/{GH_USERNAME}/{repo_name}/dispatches"
-        headers = {
-            "Authorization": f"Bearer {GH_PAT_TOKEN}",
-            "Accept": "application/vnd.github+json"
-        }
-        r = _orig_get(url, headers=headers, timeout=5) if False else requests.post(
-            url, headers=headers, json={"event_type": "vip_publish"}, timeout=10
-        )
-        return r.status_code == 204
+        # روش اول: ارسال رویداد مستقیم repository_dispatch
+        url1 = f"https://api.github.com/repos/{GH_USERNAME}/{repo_name}/dispatches"
+        r1 = requests.post(url1, headers=headers, json={"event_type": "vip_publish"}, timeout=10)
+        
+        # روش دوم: زدن خودکار دکمه Run workflow روی شاخه main
+        url2 = f"https://api.github.com/repos/{GH_USERNAME}/{repo_name}/actions/workflows/{wf_filename}/dispatches"
+        r2 = requests.post(url2, headers=headers, json={"ref": "main"}, timeout=10)
+
+        if r1.status_code == 204 or r2.status_code == 204:
+            return True, "بیدار شد"
+        return False, f"خطای دسترسی گیت‌هاب (کد {r1.status_code})"
     except Exception as e:
-        print("VIP Trigger error:", e)
-        return False
+        return False, f"خطای ارتباط: {e}"
 
 def _master_queue_saver(task_type, paths, caption="", is_vip=False):
     os.makedirs("drafts", exist_ok=True)
@@ -305,7 +326,6 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
         "vip": is_vip
     }
 
-    # اگر خبر VIP باشد، در بالاترین نقطه صف (اندیس ۰) قرار می‌گیرد
     if is_vip:
         q.insert(0, new_item)
     else:
@@ -2178,14 +2198,16 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
         h_ir = iran_now.hour
         if (13 <= h_ir <= 15) or (20 <= h_ir <= 23):
             p_status = "🔥 <b>ساعت طلایی (Prime Time) فعال است</b> (اولویت حداکثری انتشار)"
-        elif 0 <= h_ir < 7:
+        elif 1 <= h_ir < 7:
             p_status = "💤 <b>ساعت استراحت شبانه</b> (نگهداری پست‌ها برای صبح)"
         else:
             p_status = "✅ <b>ساعت عادی انتشار روزانه</b>"
 
+        has_tok = "✅ متصل" if get_active_gh_token() else "⚠️ تنظیم نشده (بفرستید: توکن: ghp_...)"
         txt_q = (
             f"⚡ <b>پنل فرماندهی انتشار فوری (VIP) و ساعت طلایی</b>\n\n"
             f"🕒 وضعیت الگوریتم: {p_status}\n"
+            f"🔑 وضعیت توکن گیت‌هاب: <b>{has_tok}</b>\n"
             f"📦 تعداد آیتم‌های منتظر در صف اینستاگرام: <b>{to_persian_num(len(q))} مورد</b>\n\n"
         )
         if q:
@@ -2199,6 +2221,8 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
         mk_v.add(InlineKeyboardButton("🚀 اجرای فوری ربات X و اینستاگرام (همین ثانیه)", callback_data="vip_action|trigger_now"))
         if len(q) > 1:
             mk_v.add(InlineKeyboardButton("🔝 انتقال آخرین خبر صف به صدر اولویت (VIP)", callback_data="vip_action|promote_last"))
+        if len(q) > 10:
+            mk_v.add(InlineKeyboardButton("🧹 پاکسازی صف قدیمی (حفظ VIPها و ۱۰ خبر آخر)", callback_data="vip_action|clean_old"))
         return txt_q, mk_v
 
     def send_file_by_key(cid, fkey, is_adm=False):
@@ -2238,14 +2262,14 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                 elif cq.data.startswith('vip_action|'):
                     sub_act = cq.data.split('|', 1)[1]
                     if sub_act == 'trigger_now':
-                        ok_x = trigger_github_vip_workflow("shiraz-x-publisher")
-                        ok_ig = trigger_github_vip_workflow("shiraz-insta-publisher")
+                        ok_x, msg_x = trigger_github_vip_workflow("shiraz-x-publisher", "x_bot.yml")
+                        ok_ig, msg_ig = trigger_github_vip_workflow("shiraz-insta-publisher", "main.yml")
                         bot.answer_callback_query(cq.id, '⚡ فرمان بیدارباش فوری ارسال شد!')
                         bot.send_message(
                             cid,
                             f"⚡ <b>فرمان اجرای فوری (Zero-Delay) صادر شد:</b>\n\n"
-                            f"🐦 ربات شبکه X: {'✅ بیدار شد (در حال پست)' if ok_x else '⏳ در نوبت ۱۰ دقیقه‌ای (توکن GH_PAT_TOKEN نیاز است)'}\n"
-                            f"📸 ربات اینستاگرام: {'✅ بیدار شد (در حال آپلود)' if ok_ig else '⏳ در صف اولویت اول'}",
+                            f"🐦 ربات شبکه X: {'✅ بیدار شد (در حال پست)' if ok_x else f'⚠️ {msg_x}'}\n"
+                            f"📸 ربات اینستاگرام: {'✅ بیدار شد (در حال آپلود)' if ok_ig else '✅ در صدر صف اولویت اول قرار گرفت'}",
                             parse_mode='HTML', reply_markup=main_kb(is_adm_cb)
                         )
                     elif sub_act == 'promote_last':
@@ -2262,6 +2286,20 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                                     save_memory_state(push_git=True)
                                     bot.answer_callback_query(cq.id, '🔝 خبر به صدر صف اولویت منتقل شد!')
                                     bot.send_message(cid, "✅ <b>آخرین خبر با موفقیت به صدر صف اولویت (VIP) اینستاگرام منتقل شد!</b>", parse_mode='HTML')
+                            except Exception:
+                                pass
+                    elif sub_act == 'clean_old':
+                        queue_file = "drafts/insta_queue.json"
+                        if os.path.exists(queue_file):
+                            try:
+                                q = json.load(open(queue_file, "r", encoding="utf-8"))
+                                vip_items = [x for x in q if x.get("vip")]
+                                normal_items = [x for x in q if not x.get("vip")][-10:]
+                                new_q = vip_items + normal_items
+                                json.dump(new_q, open(queue_file, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+                                save_memory_state(push_git=True)
+                                bot.answer_callback_query(cq.id, '🧹 صف قدیمی پاکسازی شد!')
+                                bot.send_message(cid, f"✅ <b>پاکسازی صف انجام شد!</b>\nاکنون فقط <b>{to_persian_num(len(new_q))} مورد</b> (خبرهای VIP و ۱۰ خبر آخر) در صف قرار دارند.", parse_mode='HTML')
                             except Exception:
                                 pass
                 elif cq.data.startswith('publivestory|'):
@@ -2312,8 +2350,8 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                                     if st_b:
                                         post_to_instagram(insta_cl, st_b, '', is_story=True)
                             if is_vip_req:
-                                trigger_github_vip_workflow("shiraz-x-publisher")
-                                trigger_github_vip_workflow("shiraz-insta-publisher")
+                                trigger_github_vip_workflow("shiraz-x-publisher", "x_bot.yml")
+                                trigger_github_vip_workflow("shiraz-insta-publisher", "main.yml")
                             msg_done = '⚡ <b>خبر ویژه (VIP) در تلگرام منتشر شد، در صدر صف اینستاگرام قرار گرفت و فرمان انتشار فوری X صادر گردید!</b>' if is_vip_req else '✅ <b>خبر تصویری اختصاصی با موفقیت منتشر شد!</b>'
                             bot.send_message(cid, msg_done, parse_mode='HTML', reply_markup=main_kb(is_adm_cb))
                     elif dr['type'] == 'video':
@@ -2328,8 +2366,8 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                             elif do_story:
                                 post_video_story_only_to_insta(insta_cl, reel_vp)
                         if is_vip_req:
-                            trigger_github_vip_workflow("shiraz-x-publisher")
-                            trigger_github_vip_workflow("shiraz-insta-publisher")
+                            trigger_github_vip_workflow("shiraz-x-publisher", "x_bot.yml")
+                            trigger_github_vip_workflow("shiraz-insta-publisher", "main.yml")
                         msg_done = '⚡ <b>ویدیوی ویژه (VIP) در تلگرام منتشر شد، در صدر صف ریلز قرار گرفت و فرمان انتشار فوری صادر گردید!</b>' if is_vip_req else '✅ <b>ویدیوی اختصاصی با موفقیت منتشر شد!</b>'
                         bot.send_message(cid, msg_done, parse_mode='HTML', reply_markup=main_kb(is_adm_cb))
                     if insta_cl:
@@ -2341,6 +2379,15 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
                 cid, uid = m.chat.id, m.from_user.id
                 txt = (m.text or '').strip()
                 is_admin_user = (str(cid) == str(s_data.get('admin_id')) or str(cid) == str(ADMIN_ID))
+                if is_admin_user and (txt.startswith('توکن:') or txt.startswith('/token')):
+                    raw_tok = txt.replace('توکن:', '').replace('/token', '').strip()
+                    if raw_tok:
+                        s_data['gh_tok_rev'] = raw_tok[::-1]
+                        with open(SERVICE_STATE_FILE, 'w', encoding='utf-8') as f:
+                            json.dump(s_data, f, ensure_ascii=False)
+                        save_memory_state(push_git=True)
+                        bot.send_message(cid, '✅ <b>توکن گیت‌هاب با موفقیت به صورت امن در حافظه ربات ثبت شد!</b>\nاکنون دکمه اجرای فوری VIP را تست کنید.', parse_mode='HTML', reply_markup=main_kb(True))
+                    continue
                 if txt in ['/admin', 'ادمین']:
                     s_data['admin_id'] = str(cid)
                     bot.send_message(
