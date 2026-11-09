@@ -1030,3 +1030,6 @@ img:3b7df239c73b90b53281ea8e908be835
 id:140508181194
 mehrnews.com/news/7004991/%d8%a7%d9%81%d8%b2%d8%a7%db%8c%d8%b4-%d8%aa%d8%b9%d8%af%d8%a7%d8%af-%d8%a8%d8%a7%d8%b2%d8%b1%d8%b3%d8%a7%d9%86-%d9%86%d8%b8%d8%a7%d8%b1%d8%aa-%d8%a8%d8%b1-%d8%a8%d8%a7%d8%b2%d8%a7%d8%b1-%d8%aa%d9%87%d8%b1%d8%a7%d9%86
 id:7004991
+id:7004803
+mehrnews.com/news/7004803/%d8%b2%d8%a8%d8%a7%d9%86-%d9%87%d8%a7%db%8c-%d8%b3%db%8c%d8%b3%d8%aa%d8%a7%d9%86%db%8c-%d9%88-%d8%a8%d9%84%d9%88%da%86%db%8c-%da%af%d9%86%d8%ac%db%8c%d9%86%d9%87-%d9%87%d8%a7%db%8c%db%8c-%da%a9%d9%87-%d9%87%d9%86%d9%88%d8%b2-%d9%86%d8%a7%da%af%d9%81%d8%aa%d9%87-%d9%87%d8%a7%db%8c-%d8%a8%d8%b3%db%8c%d8%a7%d8%b1%db%8c
+img:c1bfa87ec40a73af62b50cd1964e94dc
