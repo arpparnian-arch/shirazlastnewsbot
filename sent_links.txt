@@ -1111,3 +1111,6 @@ irib-news.ir/fa/news/5961858/روایت-خلاقیت-و-بازی-دانش-آمو
 mehrnews.com/news/7004893/%d8%ae%d8%b1%db%8c%d8%af-%d8%a7%d8%b9%d8%aa%d8%a8%d8%a7%d8%b1%db%8c-%d8%a8%d8%a7%d8%b2%d9%86%d8%b4%d8%b3%d8%aa%da%af%d8%a7%d9%86-%d8%aa%d8%a3%d9%85%db%8c%d9%86-%d8%a7%d8%ac%d8%aa%d9%85%d8%a7%d8%b9%db%8c-%d8%a7%d8%b2-%d8%a8%db%8c%d8%b3%d8%aa%d9%85-%d9%87%d8%b1-%d9%85%d8%a7%d9%87
 id:5961858
 img:07ab033734703d7228c54422b3705217
+irna.ir/news/86316831/%d8%ac%d8%a8%d8%b1%d8%a7%d9%86-%d8%ae%d8%b3%d8%a7%d8%b1%d8%aa-%d9%86%d8%a7%d8%b4%db%8c-%d8%a7%d8%b2-%d9%81%d8%b3%d8%a7%d8%af-%d9%88-%d8%a7%d8%b1%d8%aa%d8%b4%d8%a7-%d8%a8%d8%a7%db%8c%d8%af-%d9%81%d8%b1%d8%a7%d8%aa%d8%b1-%d8%a7%d8%b2-%d9%85%d8%b1%d8%b2%d9%87%d8%a7%db%8c-%d8%af%d8%a7%d8%ae%d9%84%db%8c-%da%a9%d8%b4%d9%88%d8%b1%d9%87%d8%a7
+id:86316831
+img:1f0b507e539922d9b96416fff0916631
