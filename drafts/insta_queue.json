@@ -219,5 +219,15 @@
     "time": 1794221074.9036584,
     "vip": false,
     "sig": "album:56dea980afcbf53c7cc4332158bd7546"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794221816_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794221816.046425,
+    "vip": false,
+    "sig": "story_photo:108365920448f14f8063f99c994e35c5"
   }
 ]
