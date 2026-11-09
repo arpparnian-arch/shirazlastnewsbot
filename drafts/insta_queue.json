@@ -178,5 +178,15 @@
     "time": 1794219437.66786,
     "vip": false,
     "sig": "story_photo:a20f224ca266e674e34b23993eed45b9"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794219814_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794219814.447195,
+    "vip": false,
+    "sig": "story_photo:eadcf4d1acd5e2b492c790b4551fcbe1"
   }
 ]
