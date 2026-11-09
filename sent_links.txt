@@ -1097,3 +1097,6 @@ img:522cc182156d7178c33445fe828029e8
 img:075bcf7c323d2af81613b40e4f707144
 mehrnews.com/news/7005262/%d9%82%db%8c%d9%85%d8%aa-%d9%be%d8%a7%d8%aa%db%8c%d9%84-%d9%be%d8%ae%d8%aa-%d8%b4%db%8c%d8%b1-%d9%84%d8%a8%d9%86%db%8c%d8%a7%d8%aa%db%8c-%db%b1%db%b4%db%b0%db%b5
 id:7005262
+img:1ccfe5f2d9da00869c277f504c1a73df
+id:7005258
+mehrnews.com/news/7005258/%d8%b4%d8%a8-%d8%ad%d8%b3%d9%86-%d9%85%d9%82%d8%af%d9%85-%d8%a8%d8%b1%da%af%d8%b2%d8%a7%d8%b1-%d9%85%db%8c-%d8%b4%d9%88%d8%af
