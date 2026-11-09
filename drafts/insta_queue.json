@@ -158,5 +158,15 @@
     "time": 1794218335.0678573,
     "vip": false,
     "sig": "photo:0899795ab34d3e90393db98229033937"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794218687_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794218687.5027306,
+    "vip": false,
+    "sig": "story_photo:0513862554079f94bfa538cc6a0ff3f3"
   }
 ]
