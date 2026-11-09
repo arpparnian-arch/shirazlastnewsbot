@@ -778,7 +778,7 @@ def extract_core_tokens(text):
     words = [w for w in norm.split() if len(w) > 2 and w not in STOP_WORDS_FA]
     return set(words)
 
-def are_texts_similar(new_t, old_t, ratio_thresh=0.46, token_thresh=0.38):
+def are_texts_similar(new_t, old_t, ratio_thresh=0.62, token_thresh=0.58):
     if not new_t or not old_t:
         return False
     if new_t == old_t or new_t in old_t or old_t in new_t:
@@ -787,10 +787,10 @@ def are_texts_similar(new_t, old_t, ratio_thresh=0.46, token_thresh=0.38):
         return True
     tok1 = extract_core_tokens(new_t)
     tok2 = extract_core_tokens(old_t)
-    if len(tok1) >= 3 and len(tok2) >= 3:
+    if len(tok1) >= 4 and len(tok2) >= 4:
         common = tok1.intersection(tok2)
         overlap = len(common) / float(min(len(tok1), len(tok2)))
-        if overlap >= token_thresh or len(common) >= 3:
+        if overlap >= token_thresh or len(common) >= 5:
             return True
     return False
 
@@ -802,25 +802,19 @@ def is_duplicate_news(link, clean_t, clean_s=''):
     if nid and f'id:{nid}' in sent_links:
         return True
     norm_t = normalize_title(clean_t)
-    norm_s = normalize_title(clean_s[:140]) if clean_s else ''
     if not norm_t:
         return False
-    for old_t in sent_titles_list[-450:]:
-        if are_texts_similar(norm_t, old_t, ratio_thresh=0.46, token_thresh=0.38):
-            return True
-        if norm_s and are_texts_similar(norm_s, old_t, ratio_thresh=0.50, token_thresh=0.42):
+    for old_t in sent_titles_list[-180:]:
+        if are_texts_similar(norm_t, old_t, ratio_thresh=0.62, token_thresh=0.58):
             return True
     return False
 
 def is_duplicate_for_insta(clean_t, clean_s=''):
     norm_t = normalize_title(clean_t)
-    norm_s = normalize_title(clean_s[:140]) if clean_s else ''
     if not norm_t:
         return False
-    for old_t in insta_titles_list[-250:]:
-        if are_texts_similar(norm_t, old_t, ratio_thresh=0.44, token_thresh=0.36):
-            return True
-        if norm_s and are_texts_similar(norm_s, old_t, ratio_thresh=0.48, token_thresh=0.40):
+    for old_t in insta_titles_list[-120:]:
+        if are_texts_similar(norm_t, old_t, ratio_thresh=0.60, token_thresh=0.55):
             return True
     return False
 
@@ -3503,16 +3497,8 @@ def fetch_and_send_single_drip_news(insta_cl, current_iran_hour):
                         record_sent_news(link, clean_t, sent_to_insta=False, clean_s=clean_s)
                         continue
                     raw_img = get_raw_image(entry, link)
-                    # بررسی ضدتکرار روی هش تصویر خبر
-                    if raw_img and not tg_vid_path:
-                        img_md5 = f"img:{hashlib.md5(raw_img).hexdigest()}"
-                        if img_md5 in sent_links:
-                            record_sent_news(link, clean_t, sent_to_insta=False, clean_s=clean_s)
-                            continue
-                        sent_links.add(img_md5)
                     framed_img = clean_and_apply_frame(raw_img, clean_t) if (raw_img and not tg_vid_path) else None
                     cap = format_caption(title, clean_s, is_shiraz_fars_news, link or u, is_video=bool(tg_vid_path))
-                    # ثبت فوری در حافظه قبل از ارسال برای جلوگیری از تکرار در صورت خطای شبکه
                     record_sent_news(link, clean_t, sent_to_insta=False, clean_s=clean_s)
                     if send_news_post(TARGET_CHAT, framed_img, cap, link, video_path=tg_vid_path, vid_w=v_w, vid_h=v_h):
                         if is_shiraz_fars_news:
@@ -3525,13 +3511,18 @@ def fetch_and_send_single_drip_news(insta_cl, current_iran_hour):
                                 record_sent_news(link, clean_t, sent_to_insta=True, clean_s=clean_s)
                                 insta_cap = format_insta_caption(title, clean_s, is_shiraz_fars_news, link or u, is_even_hour=is_even_h, is_video=True)
                                 post_video_to_insta(insta_cl, reel_vid_path, insta_cap, also_story=True, slot_id=slot_now)
-                            elif raw_img and not reel_vid_path and is_shiraz_fars_news and can_post_to_insta(is_video=False):
+                            elif raw_img and not reel_vid_path and is_shiraz_fars_news:
                                 record_sent_news(link, clean_t, sent_to_insta=True, clean_s=clean_s)
-                                insta_cap = format_insta_caption(title, clean_s, True, link or u, is_even_hour=is_even_h, is_video=False)
-                                if post_to_instagram(insta_cl, raw_img, insta_cap, is_story=False, title=clean_t, summary=clean_s, source_name=src_name, hour_now=current_iran_hour):
+                                # ۱. استوری ۹:۱۶ برای تمام خبرهای جدید شیراز و فارس ساخته و در صف قرار می‌گیرد
+                                iran_now = datetime.utcnow() + timedelta(hours=3, minutes=30)
+                                if not (1 <= iran_now.hour < 7):
                                     story_b = create_premium_news_story(raw_img, clean_t, clean_s, src_name)
                                     if story_b:
                                         post_to_instagram(insta_cl, story_b, '', is_story=True)
+                                # ۲. پست ۴:۵ طبق فاصله زمانی استاندارد (۲۰ تا ۳۰ دقیقه) منتشر می‌شود
+                                if can_post_to_insta(is_video=False):
+                                    insta_cap = format_insta_caption(title, clean_s, True, link or u, is_even_hour=is_even_h, is_video=False)
+                                    post_to_instagram(insta_cl, raw_img, insta_cap, is_story=False, title=clean_t, summary=clean_s, source_name=src_name, hour_now=current_iran_hour)
                         save_memory_state(push_git=True)
                         return 1, raw_img if is_shiraz_fars_news else None, clean_t if is_shiraz_fars_news else None
         except Exception as e:
