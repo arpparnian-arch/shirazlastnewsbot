@@ -128,5 +128,15 @@
     "time": 1794207036.9872909,
     "vip": false,
     "sig": "album:057443f60af8a8b3663a2e6aa55b5364"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794207038_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794207038.9493935,
+    "vip": false,
+    "sig": "story_photo:5f234344399f58906084470042db94c0"
   }
 ]
