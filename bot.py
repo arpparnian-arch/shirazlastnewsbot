@@ -254,13 +254,15 @@ def _smart_logo_get(url, *args, **kwargs):
 requests.get = _smart_logo_get
 
 # ==========================================
-# ۳. سیستم صف ضدقفل گیت‌هاب برای اینستاگرام + موتور VIP
+# ۳. سیستم صف ضدقفل گیت‌هاب برای اینستاگرام + موتور VIP و ضدتکرار استوری
 # ==========================================
+import hashlib
+
 GH_PAT_TOKEN = os.environ.get("GH_PAT_TOKEN", "").strip()
 GH_USERNAME = "arpparnian-arch"
+QUEUE_HASH_FILE = "insta_media_hashes.txt"
 
 def get_active_gh_token():
-    """خواندن توکن گیت‌هاب از Secrets یا از حافظه رمزگذاری‌شده تلگرام"""
     if GH_PAT_TOKEN:
         return GH_PAT_TOKEN
     if os.path.exists(SERVICE_STATE_FILE):
@@ -274,40 +276,54 @@ def get_active_gh_token():
     return ""
 
 def trigger_github_vip_workflow(repo_name, wf_filename="x_bot.yml"):
-    """بیدار کردن آنی سرور گیت‌هاب با هر دو روش Dispatch و Workflow"""
     tok = get_active_gh_token()
     if not tok:
-        return False, "توکن تنظیم نشده (در تلگرام بفرستید: توکن: ghp_...)"
+        return False, "توکن تنظیم نشده"
     headers = {
         "Authorization": f"Bearer {tok}",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28"
     }
     try:
-        # روش اول: ارسال رویداد مستقیم repository_dispatch
         url1 = f"https://api.github.com/repos/{GH_USERNAME}/{repo_name}/dispatches"
         r1 = requests.post(url1, headers=headers, json={"event_type": "vip_publish"}, timeout=10)
-        
-        # روش دوم: زدن خودکار دکمه Run workflow روی شاخه main
         url2 = f"https://api.github.com/repos/{GH_USERNAME}/{repo_name}/actions/workflows/{wf_filename}/dispatches"
         r2 = requests.post(url2, headers=headers, json={"ref": "main"}, timeout=10)
-
         if r1.status_code == 204 or r2.status_code == 204:
             return True, "بیدار شد"
-        return False, f"خطای دسترسی گیت‌هاب (کد {r1.status_code})"
+        return False, f"کد {r1.status_code}"
     except Exception as e:
-        return False, f"خطای ارتباط: {e}"
+        return False, f"خطا: {e}"
+
+def _compute_file_md5(filepath):
+    try:
+        with open(filepath, "rb") as f:
+            return hashlib.md5(f.read()).hexdigest()
+    except Exception:
+        return ""
 
 def _master_queue_saver(task_type, paths, caption="", is_vip=False):
     os.makedirs("drafts", exist_ok=True)
-    saved_paths = []
-    for i, p in enumerate(paths):
-        p_str = str(p)
-        if os.path.exists(p_str):
-            ext = os.path.splitext(p_str)[1] or ".jpg"
-            dest = f"drafts/ready_{task_type}_{int(time.time())}_{i}{ext}"
-            shutil.copy(p_str, dest)
-            saved_paths.append(dest)
+    if not paths:
+        return False
+
+    # بررسی اثر انگشت فایل و کپشن برای جلوگیری ۱۰۰٪ از استوری و پست تکراری
+    first_path = str(paths[0])
+    media_hash = _compute_file_md5(first_path) if os.path.exists(first_path) else ""
+    cap_head = caption.strip().split("\n")[0][:60] if caption else ""
+    dedup_sig = f"{task_type}:{media_hash}" if media_hash else f"{task_type}:{cap_head}"
+
+    known_hashes = set()
+    if os.path.exists(QUEUE_HASH_FILE):
+        try:
+            with open(QUEUE_HASH_FILE, "r", encoding="utf-8") as hf:
+                known_hashes = set(l.strip() for l in hf if l.strip())
+        except Exception:
+            pass
+
+    if not is_vip and dedup_sig in known_hashes:
+        print(f"Duplicate Insta task blocked ({task_type}): {dedup_sig}")
+        return False
 
     queue_file = "drafts/insta_queue.json"
     q = []
@@ -318,12 +334,32 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
         except Exception:
             pass
 
+    # بررسی عدم وجود آیتم مشابه در صف فعلی
+    if not is_vip:
+        for existing in q:
+            if existing.get("sig") == dedup_sig:
+                print(f"Already in queue, skipping: {dedup_sig}")
+                return False
+            if cap_head and existing.get("caption", "").startswith(cap_head):
+                print(f"Caption already in queue, skipping: {cap_head}")
+                return False
+
+    saved_paths = []
+    for i, p in enumerate(paths):
+        p_str = str(p)
+        if os.path.exists(p_str):
+            ext = os.path.splitext(p_str)[1] or ".jpg"
+            dest = f"drafts/ready_{task_type}_{int(time.time())}_{i}{ext}"
+            shutil.copy(p_str, dest)
+            saved_paths.append(dest)
+
     new_item = {
         "type": task_type,
         "files": saved_paths,
         "caption": caption,
         "time": 9999999999.0 if is_vip else time.time(),
-        "vip": is_vip
+        "vip": is_vip,
+        "sig": dedup_sig
     }
 
     if is_vip:
@@ -334,15 +370,13 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
     with open(queue_file, "w", encoding="utf-8") as f:
         json.dump(q, f, ensure_ascii=False, indent=2)
 
-    cmds = [
-        'git config --global user.name "Bot"',
-        'git config --global user.email "bot@noreply.github.com"',
-        'git add -f drafts/insta_queue.json drafts/* *.jpg *.txt *.json || true',
-        'git commit -m "Auto queue insta task" || true',
-        'git pull --rebase -X ours || true',
-        'git push || true'
-    ]
-    subprocess.run(" && ".join(cmds), shell=True)
+    if dedup_sig:
+        known_hashes.add(dedup_sig)
+        with open(QUEUE_HASH_FILE, "w", encoding="utf-8") as hf:
+            for h_line in list(known_hashes)[-400:]:
+                hf.write(h_line + "\n")
+
+    save_memory_state(push_git=True)
     return True
 
 class DummyMedia:
@@ -398,7 +432,7 @@ FARS_FEEDS = [
     'https://www.mehrnews.com/rss/tp/93',
     'https://www.isna.ir/rss/tp/414',
     'https://fars.isna.ir/rss',
-    'https://www.varzesh3.com/rss/domesticfootball',
+    'https://www.varzesh3.ir/rss/domesticfootball',
     'https://www.irib-news.ir/fa/rss/27'
 ]
 
@@ -406,7 +440,7 @@ VIDEO_PRIORITY_FEEDS = [
     'https://www.mehrnews.com/rss/tp/6',
     'https://www.tasnimnews.com/fa/rss/feed/0/7/89/%D9%81%DB%8C%D9%84%D9%85',
     'https://www.irna.ir/rss/tp/15',
-    'https://www.varzesh3.com/rss/videos'
+    'https://www.varzesh3.ir/rss/videos'
 ]
 
 RSS_FEEDS = FARS_FEEDS + VIDEO_PRIORITY_FEEDS + [
@@ -416,7 +450,7 @@ RSS_FEEDS = FARS_FEEDS + VIDEO_PRIORITY_FEEDS + [
     'https://www.irna.ir/rss',
     'https://www.isna.ir/rss',
     'https://snn.ir/fa/rss/allnews',
-    'https://www.varzesh3.com/rss/all',
+    'https://www.varzesh3.ir/rss/all',
     'https://www.tasnimnews.com/fa/rss/feed/0/8/0/%D9%85%D9%87%D9%85%D8%AA%D8%B1%DB%8C%D9%86-%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1'
 ]
 
@@ -622,7 +656,7 @@ HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/122.0
 TEAM_LOGO_FALLBACKS = {}
 TEAM_LOGO_FALLBACKS.update(NEW_TEAM_LOGOS)
 # ==========================================
-# ۵. مدیریت حافظه، ضدتکرار و همگام‌سازی گیت‌هاب
+# ۵. مدیریت حافظه، ضدتکرار چندلایه و همگام‌سازی ایمن گیت‌هاب
 # ==========================================
 first_run = not os.path.exists(DB_FILE) or os.path.getsize(DB_FILE) == 0
 
@@ -644,32 +678,59 @@ if os.path.exists(INSTA_TITLES_DB_FILE):
 for f_init in [
     DB_FILE, TITLES_DB_FILE, INSTA_TITLES_DB_FILE, DAILY_FILE,
     NIGHT_FILE, MATCHES_FILE, TOURISM_STATE_FILE, TITLES_FILE,
-    INSTA_LOG, INSTA_REEL_LOG
+    INSTA_LOG, INSTA_REEL_LOG, QUEUE_HASH_FILE
 ]:
     if not os.path.exists(f_init):
         with open(f_init, 'w', encoding='utf-8') as f:
             pass
 
+def _merge_lines_with_disk(filepath, mem_iterable, max_keep=800):
+    """ترکیب حافظه رم با فایل روی دیسک تا در هنگام git pull هیچ رکوردی پاک نشود"""
+    combined = []
+    seen = set()
+    if os.path.exists(filepath):
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                for line in f:
+                    s = line.strip()
+                    if s and s not in seen:
+                        seen.add(s)
+                        combined.append(s)
+        except Exception:
+            pass
+    for item in mem_iterable:
+        s = str(item).strip()
+        if s and s not in seen:
+            seen.add(s)
+            combined.append(s)
+    final_list = combined[-max_keep:]
+    with open(filepath, 'w', encoding='utf-8') as f:
+        for x in final_list:
+            f.write(x + '\n')
+    return final_list
+
 def save_memory_state(push_git=False):
+    global sent_links, sent_titles_list, insta_titles_list
     try:
-        with open(DB_FILE, 'w', encoding='utf-8') as f:
-            for l in list(sent_links)[-1000:]:
-                f.write(l + '\n')
-        with open(TITLES_DB_FILE, 'w', encoding='utf-8') as f:
-            for t in sent_titles_list[-500:]:
-                f.write(t + '\n')
-        with open(INSTA_TITLES_DB_FILE, 'w', encoding='utf-8') as f:
-            for t in insta_titles_list[-300:]:
-                f.write(t + '\n')
+        sent_links = set(_merge_lines_with_disk(DB_FILE, sent_links, max_keep=1200))
+        sent_titles_list = _merge_lines_with_disk(TITLES_DB_FILE, sent_titles_list, max_keep=600)
+        insta_titles_list = _merge_lines_with_disk(INSTA_TITLES_DB_FILE, insta_titles_list, max_keep=400)
+
         if push_git:
-            cmd = (
-                'git config --global user.name "Bot" && '
-                'git config --global user.email "bot@noreply.github.com" && '
-                'git add -f *.txt *.json *.jpg && '
-                '(git diff --staged --quiet || git commit -m "Live sync memory") && '
-                'git pull --rebase -X ours && git push'
-            )
-            subprocess.Popen(cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            # استفاده از -X theirs در rebase تا تغییرات جدید ربات هرگز توسط فایل قدیمی سرور بازنویسی نشود
+            cmds = [
+                'git config --global user.name "Bot"',
+                'git config --global user.email "bot@noreply.github.com"',
+                'git add -f *.txt *.json *.jpg drafts/insta_queue.json drafts/* || true',
+                'git diff --staged --quiet || git commit -m "Sync memory and queue"',
+                'git pull --rebase -X theirs || true',
+                'git push || true'
+            ]
+            subprocess.run(" && ".join(cmds), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=45)
+            # بازخوانی و ذخیره مجدد پس از pull برای اطمینان ۱۰۰٪
+            sent_links = set(_merge_lines_with_disk(DB_FILE, sent_links, max_keep=1200))
+            sent_titles_list = _merge_lines_with_disk(TITLES_DB_FILE, sent_titles_list, max_keep=600)
+            insta_titles_list = _merge_lines_with_disk(INSTA_TITLES_DB_FILE, insta_titles_list, max_keep=400)
     except Exception as e:
         print('Save memory error:', e)
 
@@ -691,7 +752,7 @@ def normalize_link(u):
     return re.sub(r'^https?://(www\.)?', '', u.lower())
 
 def extract_news_id_from_url(u):
-    m = re.search(r'/(?:news|fa/news|content)/(\d{5,12})', u)
+    m = re.search(r'/(?:news|fa/news|content|detail)/(\d{5,12})', u)
     if m:
         return m.group(1)
     m2 = re.search(r'/(\d{6,12})(?:/|$)', u)
@@ -717,7 +778,7 @@ def extract_core_tokens(text):
     words = [w for w in norm.split() if len(w) > 2 and w not in STOP_WORDS_FA]
     return set(words)
 
-def are_texts_similar(new_t, old_t, ratio_thresh=0.58, token_thresh=0.50):
+def are_texts_similar(new_t, old_t, ratio_thresh=0.46, token_thresh=0.38):
     if not new_t or not old_t:
         return False
     if new_t == old_t or new_t in old_t or old_t in new_t:
@@ -729,7 +790,7 @@ def are_texts_similar(new_t, old_t, ratio_thresh=0.58, token_thresh=0.50):
     if len(tok1) >= 3 and len(tok2) >= 3:
         common = tok1.intersection(tok2)
         overlap = len(common) / float(min(len(tok1), len(tok2)))
-        if overlap >= token_thresh or len(common) >= 4:
+        if overlap >= token_thresh or len(common) >= 3:
             return True
     return False
 
@@ -741,23 +802,29 @@ def is_duplicate_news(link, clean_t, clean_s=''):
     if nid and f'id:{nid}' in sent_links:
         return True
     norm_t = normalize_title(clean_t)
+    norm_s = normalize_title(clean_s[:140]) if clean_s else ''
     if not norm_t:
         return False
-    for old_t in sent_titles_list[-350:]:
-        if are_texts_similar(norm_t, old_t, ratio_thresh=0.58, token_thresh=0.50):
+    for old_t in sent_titles_list[-450:]:
+        if are_texts_similar(norm_t, old_t, ratio_thresh=0.46, token_thresh=0.38):
+            return True
+        if norm_s and are_texts_similar(norm_s, old_t, ratio_thresh=0.50, token_thresh=0.42):
             return True
     return False
 
-def is_duplicate_for_insta(clean_t):
+def is_duplicate_for_insta(clean_t, clean_s=''):
     norm_t = normalize_title(clean_t)
+    norm_s = normalize_title(clean_s[:140]) if clean_s else ''
     if not norm_t:
         return False
-    for old_t in insta_titles_list[-180:]:
-        if are_texts_similar(norm_t, old_t, ratio_thresh=0.52, token_thresh=0.45):
+    for old_t in insta_titles_list[-250:]:
+        if are_texts_similar(norm_t, old_t, ratio_thresh=0.44, token_thresh=0.36):
+            return True
+        if norm_s and are_texts_similar(norm_s, old_t, ratio_thresh=0.48, token_thresh=0.40):
             return True
     return False
 
-def record_sent_news(link, clean_t, sent_to_insta=False):
+def record_sent_news(link, clean_t, sent_to_insta=False, clean_s=''):
     norm_l = normalize_link(link)
     sent_links.add(norm_l)
     nid = extract_news_id_from_url(norm_l)
@@ -3064,7 +3131,7 @@ def get_raw_image(entry, url):
     return None
 
 # ==========================================
-# ۱۴. ارسال به تلگرام و اینستاگرام، پادکست شبانه و خبرخوان قطره‌چکانی
+# ۱۴. ارسال به تلگرام و اینستاگرام، پادکست شبانه (بدون استوری) و خبرخوان ضدتکرار
 # ==========================================
 def send_news_post(chat_id, img_bytes, caption, news_link=None, video_path=None, vid_w=None, vid_h=None):
     try:
@@ -3090,7 +3157,6 @@ def get_insta_client():
 def can_post_to_insta(is_video=False):
     iran_now = datetime.utcnow() + timedelta(hours=3, minutes=30)
     h_ir = iran_now.hour
-    # جلوگیری از سوختن پست‌ها در ساعات مرده شب (۱ تا ۷ صبح)
     if 1 <= h_ir < 7:
         return False
     if is_video:
@@ -3102,7 +3168,6 @@ def can_post_to_insta(is_video=False):
         txt = open(INSTA_LOG).read().strip()
         if not txt:
             return True
-        # در ساعات طلایی (۱۳ تا ۱۵ و ۲۰ تا ۲۳) فاصله پست‌ها ۲۰ دقیقه و در ساعات عادی ۳۰ دقیقه است
         cooldown = 1200 if ((13 <= h_ir <= 15) or (20 <= h_ir <= 23)) else 1800
         return (now_ts - int(txt)) >= cooldown
     except Exception:
@@ -3174,7 +3239,6 @@ def upload_story_with_native_poll(cl, story_jpg_path):
                 tallies=[StoryTallie(text='عالیه 👍', count=0), StoryTallie(text='انتقاد دارم 👎', count=0)]
             )
             cl.photo_upload_to_story(story_jpg_path, polls=[poll_sticker])
-            print('Published Story with Native Instagram Poll Sticker!')
             return True
         except Exception as e_p:
             print('Native poll fallback to standard story:', e_p)
@@ -3264,6 +3328,11 @@ def check_daily_morning_post():
         bot.send_message(TARGET_CHAT, msg, parse_mode='HTML', reply_markup=make_buttons(), disable_notification=is_silent_hours())
         save_memory_state(push_git=True)
 
+# ۱. لغو کامل استوری اول صبح بازی‌های امروز طبق درخواست شما
+def check_daily_matches_story(insta_cl):
+    return
+
+# ۲. ارسال فقط پادکست صوتی در ساعت ۲۱ (لغو کامل استوری شبانه بعد از پادکست)
 def send_night_podcast_and_story(latest_raw_img, latest_title, insta_cl=None):
     today_str, hour_now = get_iran_jalali_date()
     last_night = open(NIGHT_FILE, encoding='utf-8').read().strip() if os.path.exists(NIGHT_FILE) else ''
@@ -3293,26 +3362,81 @@ def send_night_podcast_and_story(latest_raw_img, latest_title, insta_cl=None):
                     bot.send_audio(TARGET_CHAT, af, caption=cap_pod, parse_mode='HTML', title='پادکست آخرین خبرهای شیراز', performer='@ShirazLastNews', thumb=thumb_io, reply_markup=make_buttons(), disable_notification=is_silent_hours())
             except Exception as e:
                 print('Podcast error:', e)
-            raw_img_to_use = latest_raw_img
-            title_to_use = latest_title
-            if not raw_img_to_use and os.path.exists(LAST_IMG_FILE):
-                with open(LAST_IMG_FILE, 'rb') as lf:
-                    raw_img_to_use = lf.read()
-            if not title_to_use and titles:
-                title_to_use = titles[-1]
-            if raw_img_to_use and title_to_use:
-                story_bytes = create_premium_news_story(
-                    raw_img_to_use,
-                    title_to_use,
-                    'خلاصه مهم‌ترین رویدادهای امروز شیراز و استان فارس را به صورت لحظه‌ای در کانال و پیج دنبال کنید.',
-                    'تحریریه آخرین خبرهای شیراز'
-                )
-                if story_bytes:
-                    s_file = io.BytesIO(story_bytes)
-                    s_file.name = 'story.jpg'
-                    safe_t = html.escape(title_to_use)
-                    bot.send_photo(TARGET_CHAT, s_file, caption=f'⭕️ <b>استوری ویژه (۹:۱۶) | آماده اشتراک‌گذاری ({today_str})</b>\n\n✅ <b>{safe_t}</b>\n\n🛑 <b>{CHANNEL_SIGN}</b>', parse_mode='HTML', reply_markup=make_buttons(), disable_notification=is_silent_hours())
-                    post_to_instagram(insta_cl, story_bytes, '', is_story=True)
+
+# ۳. ضدتکرار استوری زنده فوتبال (یکسان‌سازی نام تیم‌ها برای جلوگیری از استوری تکراری)
+def _canonical_iran_team(name):
+    s = normalize_persian_chars(name)
+    for w in ['شهید', 'تهران', 'اصفهان', 'شیراز', 'تبریز', 'خوزستان', 'مازندران', 'اراک', 'سیرجان', 'قزوین', 'اردکان', 'خرم آباد', 'بندرانزلی', 'رفسنجان']:
+        s = s.replace(w, '')
+    s = re.sub(r'\s+', '', s).strip()
+    if 'فجر' in s:
+        return 'فجرسپاسی'
+    return s
+
+def check_live_iran_league_stories(insta_cl):
+    today_str, _ = get_iran_jalali_date()
+    l_state = {'date': today_str, 'matches': {}}
+    if os.path.exists(LIVE_IRAN_STATE_FILE):
+        try:
+            loaded = json.load(open(LIVE_IRAN_STATE_FILE, encoding='utf-8'))
+            if loaded.get('date') == today_str:
+                l_state = loaded
+        except Exception:
+            pass
+    live_matches = fetch_live_iran_league_matches()
+    if not live_matches:
+        return
+    state_changed = False
+    for m in live_matches:
+        c_home = _canonical_iran_team(m['home'])
+        c_away = _canonical_iran_team(m['away'])
+        mk = f"{c_home}_{c_away}"
+        st_txt = str(m.get('status', '')).strip()
+        h_sc, a_sc = int(m.get('h_score', 0)), int(m.get('a_score', 0))
+        is_future = bool(re.search(r'^\d{1,2}:\d{2}$', normalize_persian_chars(st_txt)))
+        if is_future and h_sc == 0 and a_sc == 0:
+            continue
+        prev = l_state['matches'].get(mk)
+        event_banner = None
+        is_ht = any(w in st_txt for w in ['نیمه اول', 'بین دو نیمه', 'HT'])
+        is_ft = any(w in st_txt for w in ['پایان', 'نهایی', 'FT']) and not is_ht
+        if not prev:
+            l_state['matches'][mk] = {'h_score': h_sc, 'a_score': a_sc, 'ht_sent': is_ht, 'ft_sent': is_ft}
+            state_changed = True
+            if (h_sc + a_sc) > 0 and not is_ft:
+                event_banner = f"انفجار در ورزشگاه! ثبت گل در دیدار {m['home']} و {m['away']}"
+        else:
+            old_h, old_a = int(prev.get('h_score', 0)), int(prev.get('a_score', 0))
+            if (h_sc + a_sc) > (old_h + old_a) and (h_sc > old_h or a_sc > old_a):
+                scorer = m['home'] if h_sc > old_h else m['away']
+                min_part = f' در دقیقه {to_persian_num(st_txt)}' if re.search(r'[0-9۰-۹]', st_txt) else ''
+                event_banner = f'انفجار در ورزشگاه! ثبت گل برای {scorer}{min_part}'
+                prev['h_score'], prev['a_score'] = h_sc, a_sc
+                state_changed = True
+            elif is_ht and not prev.get('ht_sent'):
+                event_banner = f"پایان نیمه اول مسابقه | {m['home']} {to_persian_num(h_sc)} - {to_persian_num(a_sc)} {m['away']}"
+                prev['ht_sent'] = True
+                state_changed = True
+            elif is_ft and not prev.get('ft_sent'):
+                event_banner = f"سوت پایان بازی! نتیجه نهایی: {m['home']} {to_persian_num(h_sc)} - {to_persian_num(a_sc)} {m['away']}"
+                prev['ft_sent'] = True
+                state_changed = True
+        if event_banner:
+            st_bytes = create_3d_live_match_story(m, event_banner)
+            if st_bytes:
+                if insta_cl:
+                    post_to_instagram(insta_cl, st_bytes, '', is_story=True)
+                if ADMIN_ID:
+                    try:
+                        s_io = io.BytesIO(st_bytes)
+                        s_io.name = 'live_match_story.jpg'
+                        bot.send_photo(ADMIN_ID, s_io, caption=f'🔴 <b>استوری زنده لیگ برتر ایران منتشر شد:</b>\n⚽️ {event_banner}', parse_mode='HTML')
+                    except Exception:
+                        pass
+    if state_changed:
+        with open(LIVE_IRAN_STATE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(l_state, f, ensure_ascii=False)
+        save_memory_state(push_git=True)
 
 def clean_html(raw_html):
     if not raw_html:
@@ -3367,7 +3491,7 @@ def fetch_and_send_single_drip_news(insta_cl, current_iran_hour):
                 has_kw = any(k in full_txt for k in KEYWORDS)
                 if is_shiraz_fars_news or has_kw or is_vid_feed:
                     if first_run:
-                        record_sent_news(link, clean_t, sent_to_insta=is_shiraz_fars_news)
+                        record_sent_news(link, clean_t, sent_to_insta=is_shiraz_fars_news, clean_s=clean_s)
                         continue
                     src_name = get_source_name(link or u)
                     vid_url = get_video_url(entry, link)
@@ -3376,27 +3500,35 @@ def fetch_and_send_single_drip_news(insta_cl, current_iran_hour):
                         if vid_url else (None, None, None, None)
                     )
                     if is_vid_feed and not tg_vid_path and not is_shiraz_fars_news:
-                        record_sent_news(link, clean_t, sent_to_insta=False)
+                        record_sent_news(link, clean_t, sent_to_insta=False, clean_s=clean_s)
                         continue
                     raw_img = get_raw_image(entry, link)
+                    # بررسی ضدتکرار روی هش تصویر خبر
+                    if raw_img and not tg_vid_path:
+                        img_md5 = f"img:{hashlib.md5(raw_img).hexdigest()}"
+                        if img_md5 in sent_links:
+                            record_sent_news(link, clean_t, sent_to_insta=False, clean_s=clean_s)
+                            continue
+                        sent_links.add(img_md5)
                     framed_img = clean_and_apply_frame(raw_img, clean_t) if (raw_img and not tg_vid_path) else None
                     cap = format_caption(title, clean_s, is_shiraz_fars_news, link or u, is_video=bool(tg_vid_path))
+                    # ثبت فوری در حافظه قبل از ارسال برای جلوگیری از تکرار در صورت خطای شبکه
+                    record_sent_news(link, clean_t, sent_to_insta=False, clean_s=clean_s)
                     if send_news_post(TARGET_CHAT, framed_img, cap, link, video_path=tg_vid_path, vid_w=v_w, vid_h=v_h):
-                        record_sent_news(link, clean_t, sent_to_insta=False)
                         if is_shiraz_fars_news:
                             with open(TITLES_FILE, 'a', encoding='utf-8') as tf:
                                 tf.write(clean_t + '\n')
-                        if not is_duplicate_for_insta(clean_t):
+                        if not is_duplicate_for_insta(clean_t, clean_s):
                             is_even_h = (current_iran_hour % 2 == 0)
                             slot_now = get_active_reel_schedule_slot()
                             if reel_vid_path and slot_now and is_eligible_for_insta_reel(clean_t, clean_s, is_shiraz_fars_news):
+                                record_sent_news(link, clean_t, sent_to_insta=True, clean_s=clean_s)
                                 insta_cap = format_insta_caption(title, clean_s, is_shiraz_fars_news, link or u, is_even_hour=is_even_h, is_video=True)
-                                if post_video_to_insta(insta_cl, reel_vid_path, insta_cap, also_story=True, slot_id=slot_now):
-                                    record_sent_news(link, clean_t, sent_to_insta=True)
+                                post_video_to_insta(insta_cl, reel_vid_path, insta_cap, also_story=True, slot_id=slot_now)
                             elif raw_img and not reel_vid_path and is_shiraz_fars_news and can_post_to_insta(is_video=False):
+                                record_sent_news(link, clean_t, sent_to_insta=True, clean_s=clean_s)
                                 insta_cap = format_insta_caption(title, clean_s, True, link or u, is_even_hour=is_even_h, is_video=False)
                                 if post_to_instagram(insta_cl, raw_img, insta_cap, is_story=False, title=clean_t, summary=clean_s, source_name=src_name, hour_now=current_iran_hour):
-                                    record_sent_news(link, clean_t, sent_to_insta=True)
                                     story_b = create_premium_news_story(raw_img, clean_t, clean_s, src_name)
                                     if story_b:
                                         post_to_instagram(insta_cl, story_b, '', is_story=True)
@@ -3435,7 +3567,6 @@ while (time.time() - start_run_ts) < SESSION_DURATION_SECONDS:
     if (now_t - last_rss_check_ts) >= DRIP_INTERVAL_SECONDS:
         last_rss_check_ts = now_t
         check_daily_morning_post()
-        check_daily_matches_story(insta_cl)
         check_thursday_tourism_post(insta_cl)
         cnt, r_img, r_title = fetch_and_send_single_drip_news(insta_cl, current_iran_hour)
         total_sent_session += cnt
