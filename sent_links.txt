@@ -1019,3 +1019,6 @@ mehrnews.com/news/7004953/%d8%b0%d9%88%d8%a7%d9%84%d9%86%d9%88%d8%b1%db%8c-%db%b
 irna.ir/news/86316310/%d9%be%d8%a7%d8%b4%d9%86%d9%87-%d8%a2%d8%b4%db%8c%d9%84-%d8%ae%d8%b7-%d8%af%d9%81%d8%a7%d8%b9%db%8c-%d9%be%d8%b1%d8%b3%d9%be%d9%88%d9%84%db%8c%d8%b3-%da%a9%d8%a7%d9%be%db%8c%d8%aa%d8%a7%d9%86-%da%a9%d9%87-%d8%b1%d9%81%d8%aa-%d8%b3%d8%aa%d9%88%d9%86-%d9%87%d8%a7%db%8c-%d8%ae%d8%b7-%d8%af%d9%81%d8%a7%d8%b9
 id:86316310
 img:77b666a16ec5b38ff92b9ec24069be94
+img:50dd41ab6fb4b727ede594843bdcefb2
+id:86316439
+irna.ir/news/86316439/%d9%86%d8%b8%d8%a7%d9%85-%d9%be%d8%b1%d8%af%d8%a7%d8%ae%d8%aa-%da%a9%d8%a7%d8%b1%da%a9%d9%86%d8%a7%d9%86-%d8%af%d9%88%d9%84%d8%aa-%d9%86%db%8c%d8%a7%d8%b2%d9%85%d9%86%d8%af-%d8%a7%d9%86%d8%b3%d8%ac%d8%a7%d9%85-%d8%a7%d8%b3%d8%aa
