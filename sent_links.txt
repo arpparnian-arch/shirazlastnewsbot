@@ -1091,3 +1091,6 @@ mehrnews.com/news/7005256/%d8%b4%d8%b1%d8%b7-%d8%b3%d9%84%d8%a8-%d8%ad%d9%82-%d8
 img:2fd7db69097759f0e473f6f2db5e8470
 varzesh3.ir/news/2443162/تیم-منتخب-هفته-دوازدهم-لیگ-برتر
 id:2443162
+irna.ir/news/86315011/%d9%be%d9%86%d8%ac-%d8%b6%d9%84%d8%b9-%db%8c%da%a9-%d8%b5%d9%86%d8%af%d9%84%db%8c-%da%86%d9%87-%da%a9%d8%b3%db%8c-%d8%b3%da%a9%d8%a7%d9%86-%d8%af%d8%a7%d8%b1-%d9%be%d8%a7%d8%b1%d8%a7%d9%84%d9%85%d9%be%db%8c%da%a9-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d9%85%db%8c-%d8%b4%d9%88%d8%af
+id:86315011
+img:522cc182156d7178c33445fe828029e8
