@@ -1028,3 +1028,6 @@ id:7004020
 mehrnews.com/news/7004879/%d8%b2%d9%86-%d8%b9%d9%84%d9%85-%d8%a7%d9%81%d8%aa%d8%ae%d8%a7%d8%b1
 img:c2614bd936c6125df54252403078422f
 id:7004879
+img:362a1a1a02757b09c35739cdc129d114
+id:86316390
+irna.ir/news/86316390/%d8%aa%d8%b1%d8%a7%d9%85%d9%be-%d9%be%d8%b3-%d8%a7%d8%b2-%d8%a7%d9%86%d8%aa%d8%ae%d8%a7%d8%a8%d8%a7%d8%aa-%d8%a7%d8%b2-%d9%81%d8%b4%d8%a7%d8%b1-%d8%af%d8%a7%d8%ae%d9%84%db%8c-%d8%aa%d8%a7-%d9%86%da%af%d8%b1%d8%a7%d9%86%db%8c-%d8%a2%d8%b3%db%8c%d8%a7%db%8c%db%8c
