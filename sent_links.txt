@@ -1018,3 +1018,6 @@ img:990ab5c6c8944e26e587ec60998766b7
 id:86316387
 irna.ir/news/86316387/%d9%86%d8%b4%d8%a7%d9%86%d8%af%d9%86-%d9%86%d8%a7%d9%86%d9%88%d8%b0%d8%b1%d8%a7%d8%aa-%d9%81%d9%84%d8%b2%db%8c-%d8%b1%d9%88%db%8c-%d9%be%d9%84%d8%a7%d8%b3%d8%aa%db%8c%da%a9-%d8%b2%db%8c%d8%b3%d8%aa%db%8c-%d8%a7%d8%b3%d8%aa%d8%ad%da%a9%d8%a7%d9%85-%d8%a2%d9%86-%d8%b1%d8%a7-%d8%af%d9%88-%d8%a8%d8%b1%d8%a7%d8%a8%d8%b1
 img:ddb002f3a80dc522b7b2ab347b0d6633
+irna.ir/news/86316084/%d8%b1%d9%86%d8%ac-%d8%ac%d9%86%da%af-%d9%85%d8%af%d8%a7%d8%af%d8%b1%d9%86%da%af%db%8c-%d9%87%d8%a7%db%8c-%d8%b4%da%a9%d8%b3%d8%aa%d9%87
+img:aa40a852cedd6ea2bf83d8a9671d4c4b
+id:86316084
