@@ -1062,3 +1062,6 @@ irna.ir/news/86316305/%d8%af%d8%ba%d8%af%d8%ba%d9%87-%d8%a7%d9%85-%d8%a7%d8%b1%d
 irna.ir/news/86316563/%d9%81%d9%86%d9%88%d9%86%db%8c-%d8%b2%d8%a7%d8%af%d9%87-%d8%aa%d8%a7%d8%b1%d8%aa%d8%a7%d8%b1-%d8%a8%d8%a7%db%8c%d8%af-%d8%af%d8%b1-%da%a9%d8%a7%d8%af%d8%b1-%d8%ae%d9%88%d8%af-%d8%aa%d8%ba%db%8c%db%8c%d8%b1-%d8%a7%db%8c%d8%ac%d8%a7%d8%af-%da%a9%d9%86%d8%af-%d8%ad%db%8c%d9%81-%d8%a7%d8%b3%d8%aa
 id:86316563
 img:bff50576f15c5536e591c6cecae83b5e
+irna.ir/news/86316574/%d8%b3%d8%a7%db%8c%d9%87-%d8%ac%d9%86%da%af-%d8%a7%d9%88%da%a9%d8%b1%d8%a7%db%8c%d9%86-%d8%a8%d8%b1-%d8%b3%d8%b1-%d8%a7%d9%86%d8%aa%d8%ae%d8%a7%d8%a8%d8%a7%d8%aa-%d9%81%d8%b1%d8%a7%d9%86%d8%b3%d9%87-%d8%b1%d9%87%d8%a8%d8%b1-%d8%ad%d8%b2%d8%a8-%da%86%d9%be-%d8%a7%d9%81%d8%b1%d8%a7%d8%b7%db%8c-%d8%af%d8%b1
+img:b38975b9905d7146934ae914a03adfab
+id:86316574
