@@ -341,5 +341,15 @@
     "time": 1794225341.6744566,
     "vip": false,
     "sig": "story_photo:c10912d672e5fe8d2d27b627bf5405eb"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794225719_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794225719.021218,
+    "vip": false,
+    "sig": "story_photo:4492c919fcf33298f7abac34489da7c0"
   }
 ]
