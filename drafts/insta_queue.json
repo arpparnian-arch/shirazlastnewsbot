@@ -706,5 +706,15 @@
     "time": 1794245182.7238605,
     "vip": false,
     "sig": "reel:180fb97795be98a342b2a42cece41b20"
+  },
+  {
+    "type": "story_video",
+    "files": [
+      "drafts/ready_story_video_1794245186_0.mp4"
+    ],
+    "caption": "",
+    "time": 1794245186.205153,
+    "vip": false,
+    "sig": "story_video:180fb97795be98a342b2a42cece41b20"
   }
 ]
