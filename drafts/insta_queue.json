@@ -107,5 +107,15 @@
     "caption": "",
     "time": 1794195813.8877375,
     "vip": false
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794206328_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794206328.9346545,
+    "vip": false,
+    "sig": "story_photo:8325f38b30705902871694dd5a5f1c51"
   }
 ]
