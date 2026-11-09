@@ -1,5 +1,15 @@
 [
   {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794222296_0.jpg"
+    ],
+    "caption": "",
+    "time": 9999999999.0,
+    "vip": true,
+    "sig": "story_photo:24624e638c5cc9b91c562f530afe3788"
+  },
+  {
     "type": "album",
     "files": [
       "drafts/ready_album_1794222295_0.jpg",
