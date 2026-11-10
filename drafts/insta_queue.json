@@ -989,5 +989,15 @@
     "time": 1794303103.8929017,
     "vip": false,
     "sig": "reel:7ef321a78b60df0d38a17e0fcaaa1815"
+  },
+  {
+    "type": "story_video",
+    "files": [
+      "drafts/ready_story_video_1794303106_0.mp4"
+    ],
+    "caption": "",
+    "time": 1794303106.6903381,
+    "vip": false,
+    "sig": "story_video:7ef321a78b60df0d38a17e0fcaaa1815"
   }
 ]
