@@ -1,7 +1,3 @@
-id:1483644
-irib-news.ir/fa/news/5959800/افتخارآفرینی-بدمینتون-باز-جهرمی-در-مسابقات-رنکینگ-کشور
-irib-news.ir/fa/news/5960089/روند-سوخت-گیری-در-فارس-تسریع-شد-افزایش-دوبرابری-کارت-های-سوخت-جایگاه-ها
-irna.ir/news/86316199/%d9%81%db%8c%d9%84%d9%85-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86%d8%af%d8%a7%d8%b1-%da%a9%d9%87%da%af%db%8c%d9%84%d9%88%db%8c%d9%87-%d9%88-%d8%a8%d9%88%db%8c%d8%b1%d8%a7%d8%ad%d9%85%d8%af-%d8%af%d8%b3%d8%aa-%d9%85%d8%af%db%8c%d8%b1%d8%a7%d9%86-%d8%a8%d8%a7%d9%86%da%a9-%d8%af%d8%b1-%d9%be%d8%b1%d8%af%d8%a7%d8%ae%d8%aa
 mehrnews.com/news/6998146/%d9%88%d8%a7%da%a9%d9%86%d8%b4-%d8%aa%d8%b1%d8%a7%d9%85%d9%be-%d8%a8%d9%87-%d9%86%d8%aa%d8%a7%db%8c%d8%ac-%d9%86%d8%b8%d8%b1%d8%b3%d9%86%d8%ac%db%8c-%d9%87%d8%a7-%d8%af%d8%b1%d9%88%d8%ba-%d8%a7%d8%b3%d8%aa
 id:6996195
 isna.ir/news/1405081711611/%d8%b6%d8%b1%d9%88%d8%b1%d8%aa-%d8%a7%db%8c%d8%b3%d8%aa%d8%a7%d8%af%da%af%db%8c-%d8%a8%d8%b1-%d8%a8%d8%a7%d9%88%d8%b1%d9%87%d8%a7%db%8c-%d8%af%db%8c%d9%86%db%8c-%d9%88-%d8%ad%d9%81%d8%b8-%d8%a2%d9%85%d8%a7%d8%af%da%af%db%8c-%d8%af%d8%b1-%d8%a8%d8%b1%d8%a7%d8%a8%d8%b1-%d8%aa%d9%87%d8%af%db%8c%d8%af%d9%87%d8%a7
@@ -1198,3 +1194,7 @@ irib-news.ir/fa/news/5962491/خیابان-توحید-شیراز-دو-روز-آی
 id:5962491
 id:2443367
 varzesh3.ir/news/2443367/ماموریت-سخت-مهندس-و-شاگردان-شگفتی-سازش
+mehrnews.com/news/7005579/%d8%aa%d8%b9%d8%b2%db%8c%d8%b1%d8%a7%d8%aa-%d9%81%d8%b1%d9%88%d8%b4%d9%86%d8%af%da%af%d8%a7%d9%86-%d8%b3%da%a9%d9%87-%d9%88-%d8%b7%d9%84%d8%a7-%d9%85%d9%84%d8%b2%d9%85-%d8%a8%d9%87-%d8%b5%d8%af%d9%88%d8%b1-%d9%81%d8%a7%da%a9%d8%aa%d9%88%d8%b1-%d9%87%d8%b3%d8%aa%d9%86%d8%af
+id:7005579
+varzesh3.ir/news/2443368/پیام-غیرمنتظره-ژاوی-برای-سرمربی-بایرن
+id:2443368
