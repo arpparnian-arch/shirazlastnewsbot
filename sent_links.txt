@@ -1,5 +1,3 @@
-mehrnews.com/news/7001586/%d8%a2%d8%ba%d8%a7%d8%b2-%d9%86%d8%b8%d8%a7%d8%b1%d8%aa-%d8%ac%d8%af%db%8c-%d8%a8%d8%b1-%d8%aa%d8%a7%da%a9%d8%b3%db%8c-%d9%87%d8%a7%db%8c-%d8%a8%d8%b1%d9%82%db%8c
-varzesh3.com/news/2442585/پهلوان-پرسپولیس-را-واقعا-دوست-دارم
 id:7004840
 varzesh3.com/news/2442618/تیم-تپانچه-میکس-ایران-نایب-قهرمان-جهان-شد
 id:2441803
@@ -1198,3 +1196,5 @@ isna.ir/news/1405081913327/%d9%87%d9%85%da%a9%d8%a7%d8%b1%db%8c-%d9%81%d8%b1%d9%
 mehrnews.com/news/7006575/%d8%a8%d8%a7%d8%b1%d8%b4-%d9%87%d8%a7%db%8c-%d8%b4%d8%af%db%8c%d8%af-%d9%88-%d8%b3%db%8c%d9%84%d8%a7%d8%a8-%d9%87%d8%a7%db%8c-%d9%86%db%8c%d9%85%d9%87-%d8%a2%d8%a8%d8%a7%d9%86-%d8%b3%d9%86%da%af-%d9%85%d8%ad%da%a9-%d8%a2%d8%a8%d8%ae%db%8c%d8%b2%d8%af%d8%a7%d8%b1%db%8c-%d9%88-%d9%85%d8%af%db%8c%d8%b1%db%8c%d8%aa
 id:7006575
 id:140508191332
+varzesh3.ir/news/2443464/مدافع-جوان-پرسپولیس-در-جایی-که-انتظارش-را-نداشت
+id:2443464
