@@ -827,5 +827,15 @@
     "time": 1794290481.548137,
     "vip": false,
     "sig": "story_photo:7bf10e70cbd9460a4630c5b14bda45c2"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794293386_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794293386.3412213,
+    "vip": false,
+    "sig": "story_photo:2407341a7277313a07ce43b6a9fbe8b9"
   }
 ]
