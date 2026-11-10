@@ -1303,5 +1303,15 @@
     "time": 1794320684.3005338,
     "vip": false,
     "sig": "story_photo:83fdd16b3a659b5ab054486cd5b0ed7c"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794323033_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794323033.3491845,
+    "vip": false,
+    "sig": "story_photo:924de37d54c5a1a3022994eeed199ee4"
   }
 ]
