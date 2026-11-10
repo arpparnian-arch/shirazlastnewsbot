@@ -1,5 +1,3 @@
-irib-news.ir/fa/news/5959382/پیش-بینی-افزودن-40-مگاوات-نیروگاه-خورشیدی-تا-پایان-امسال-در-شیراز
-id:7003883
 irna.ir/news/86311795/%d8%aa%d9%84%d8%a7%d8%b4-%d9%87%d8%a7%db%8c-%d8%af%db%8c%d9%be%d9%84%d9%85%d8%a7%d8%aa%db%8c%da%a9-%d9%81%d8%b4%d8%b1%d8%af%d9%87-%d8%a8%d8%b1%d8%a7%db%8c-%da%a9%d8%a7%d9%87%d8%b4-%d8%aa%d9%86%d8%b4-%d9%87%d8%a7-%d9%88-%d8%ac%d9%84%d9%88%da%af%db%8c%d8%b1%db%8c-%d8%a7%d8%b2-%d8%b1%d9%88%db%8c%d8%a7%d8%b1%d9%88%db%8c%db%8c
 id:140508130855
 mehrnews.com/news/6982394/%d9%81%d9%88%d8%aa%d8%a8%d8%a7%d9%84-%d8%a7%d8%b2-%d9%85%d8%af%d8%b1%d8%b3%d9%87-%d8%aa%d8%a7-%d8%aa%db%8c%d9%85-%d9%85%d9%84%db%8c-%d9%88%d8%b9%d8%af%d9%87-%d8%aa%d8%a7%d8%b2%d9%87-%d8%a8%d8%b1%d8%a7%db%8c-%da%a9%d8%b4%d9%81-%d8%a7%d8%b3%d8%aa%d8%b9%d8%af%d8%a7%d8%af-%d8%af%d8%b1-%d8%af%d8%a7%d9%86%d8%b4-%d8%a2%d9%85%d9%88%d8%b2%d8%a7%d9%86
@@ -1198,3 +1196,5 @@ mehrnews.com/news/7006359/%d8%ae%d9%88%d8%af%d8%b1%d9%88%db%8c-%d8%b3%d8%b1%d9%8
 id:7006359
 isna.ir/news/1405081912930/%d9%85%d8%af%d8%a7%d9%84-%d8%b7%d9%84%d8%a7%db%8c-%d9%85%d8%b3%d8%a7%d8%a8%d9%82%d8%a7%d8%aa-%da%a9%d8%b4%d8%aa%db%8c-%d8%af%d8%a7%d9%86%d8%b4%d8%ac%d9%88%db%8c%d8%a7%d9%86-%d8%af%d8%a7%d9%86%d8%b4%da%af%d8%a7%d9%87-%d8%a2%d8%b2%d8%a7%d8%af-%da%a9%d8%b4%d9%88%d8%b1-%d8%a8%d8%b1-%da%af%d8%b1%d8%af%d9%86-%d8%ac%d9%88%d8%a7%d9%86
 id:140508191293
+id:7006393
+mehrnews.com/news/7006393/%d8%b6%d8%b1%d8%a8%d9%87-%d9%be%d9%84%db%8c%d8%b3-%d8%a8%d9%87-%d8%a8%d8%a7%d9%86%d8%af%d9%87%d8%a7%db%8c-%d8%b3%d8%b1%d9%82%d8%aa-%d9%88-%d8%ae%d8%b1%db%8c%d8%af%d8%a7%d8%b1%d8%a7%d9%86-%d8%a7%d9%85%d9%88%d8%a7%d9%84-%d9%85%d8%b3%d8%b1%d9%88%d9%82%d9%87-%d8%af%d8%b1-%d8%aa%d9%87%d8%b1%d8%a7%d9%86
