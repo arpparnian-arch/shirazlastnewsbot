@@ -3389,6 +3389,12 @@ def format_insta_caption(title, summary, is_fars_feed, source_url, is_even_hour=
     s = extract_complete_lead(summary, clean_title, min_chars=90, max_chars=600)
     source_name = 'اختصاصی آخرین خبرهای شیراز' if source_url == 'exclusive' else get_source_name(source_url)
     all_tags = build_viral_insta_hashtags(clean_title + ' ' + s, is_fars_feed)
+
+    # بررسی تولید کپشن جذاب توسط هوش مصنوعی
+    _, _, ai_cap = get_ai_viral_hook_and_caption(clean_title, s)
+    if ai_cap:
+        return f'⭕️ {clean_title}\n\n{ai_cap}\n\n✅ منبع خبر: {source_name}\n\n{all_tags}'
+
     if is_video:
         cta_top = '✅ تا آخر ببینید! نظر شما درباره این ویدیو چیست؟ حتماً کامنت بگذارید👇'
     elif is_even_hour:
