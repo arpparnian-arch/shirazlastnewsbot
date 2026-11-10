@@ -1080,5 +1080,15 @@
     "time": 1794307847.6260803,
     "vip": false,
     "sig": "album:4a922d95adcf4a2a8c074a8f477eee06"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794308214_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794308214.4996948,
+    "vip": false,
+    "sig": "story_photo:7a19ed01c92cfc24895ef261f6103b22"
   }
 ]
