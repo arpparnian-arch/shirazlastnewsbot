@@ -2913,6 +2913,169 @@ def get_video_dimensions(vid_path):
     except Exception:
         return 1080, 1920
 
+# ==========================================
+# موتور هوش مصنوعی سردبیر + طراحی بنر قلاب ۳ ثانیه اول (استایل کاغذ سوخته دوطبقه)
+# ==========================================
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
+_AI_VIRAL_CACHE = {}
+
+def build_fallback_hook_lines(title_text):
+    """ساخت خودکار قلاب ۲ سطری با جمله کامل فارسی در صورت عدم دسترسی به API"""
+    clean_t = clean_agency_prefix(title_text or "خبر مهم شیراز")
+    clean_t = re.sub(r'[.!؟،؛:«»"\']+', ' ', clean_t)
+    words = [w.strip() for w in clean_t.split() if w.strip()]
+    if len(words) < 3:
+        return "خبر فوری برای شیراز", "جزییات را حتما ببینید!"
+    if len(words) <= 6:
+        mid = max(2, len(words) // 2)
+        l1 = " ".join(words[:mid])
+        l2 = " ".join(words[mid:])
+        if not l2.endswith(("!", "؟")):
+            l2 += "!"
+        return l1, l2
+    # انتخاب ۴ تا ۶ کلمه اول + بستن جمله با عبارت کامل و جذاب
+    l1 = " ".join(words[:3])
+    l2_words = words[3:6]
+    verbs = ("شد", "می‌شود", "است", "رسید", "کرد", "دارد", "بود", "گشت")
+    if any(l2_words[-1].endswith(v) for v in verbs):
+        l2 = " ".join(l2_words) + "!"
+    else:
+        l2 = " ".join(words[3:5]) + " را ببینید!"
+    return l1, l2
+
+def get_ai_viral_hook_and_caption(title, summary):
+    """دریافت JSON استاندارد شامل hook و caption از هوش مصنوعی همراه با کش داخلی"""
+    cache_key = (title or "")[:50]
+    if cache_key in _AI_VIRAL_CACHE:
+        return _AI_VIRAL_CACHE[cache_key]
+
+    news_text = f"تیتر: {title}\nمتن خبر: {summary}".strip()
+    if not GEMINI_API_KEY or len(news_text) < 15:
+        l1, l2 = build_fallback_hook_lines(title)
+        return (l1, l2, None)
+
+    prompt = f"""تو یک سردبیر حرفه‌ای اخبار و متخصص وایرال کردن محتوا در اینستاگرام هستی.
+متن خبری که در ادامه می‌آید را بخوان و خروجی را فقط و فقط به شکل یک آبجکت JSON معتبر برگردان. هیچ متن، توضیح یا فرمت مارک‌داون قبل و بعد از خروجی قرار نده.
+
+ساختار JSON باید دقیقاً شامل این کلیدها باشد:
+1. "hook_line1": سطر اول قلاب (۲ تا ۳ کلمه، بیانگر موضوع اصلی خبر، بدون نقطه‌چین و کاملاً صحیح از نظر دستور زبان فارسی).
+2. "hook_line2": سطر دوم قلاب (۲ تا ۳ کلمه، ادامه و فعل کامل و هیجانی جمله که حتماً با ! یا ؟! تمام شود تا جمله کامل گردد).
+3. "caption": متن کامل و جذاب برای کپشن اینستاگرام (۳ تا ۴ پاراگراف کوتاه و روان با جملات کامل و یک سوال تعاملی در انتها). در پایان کپشن آیدی @shirazlastnews و ۵ هشتگ مرتبط (حتماً شامل #شیراز و #آخرین_خبرهای_شیراز) قرار بده.
+
+متن خبر:
+{news_text}"""
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0.65, "responseMimeType": "application/json"}
+    }
+    try:
+        r = requests.post(url, json=payload, timeout=12)
+        if r.status_code == 200:
+            raw_out = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+            m = re.search(r"\{.*\}", raw_out, re.DOTALL)
+            data = json.loads(m.group(0) if m else raw_out)
+            h1 = str(data.get("hook_line1", "")).strip().replace("...", "")
+            h2 = str(data.get("hook_line2", "")).strip().replace("...", "")
+            cap = str(data.get("caption", "")).strip()
+            if h1 and h2:
+                if not h2.endswith(("!", "؟")):
+                    h2 += "!"
+                res = (h1, h2, cap if len(cap) > 40 else None)
+                _AI_VIRAL_CACHE[cache_key] = res
+                return res
+    except Exception as e:
+        print("AI JSON Hook fallback to local:", e)
+
+    l1, l2 = build_fallback_hook_lines(title)
+    res = (l1, l2, None)
+    _AI_VIRAL_CACHE[cache_key] = res
+    return res
+
+def _make_torn_polygon(x1, y1, x2, y2, seed_val=10, step=14, jitter=9):
+    """ساخت مختصات لبه‌های مضرس و پاره‌شده کاغذ"""
+    rng = random.Random(seed_val)
+    pts = []
+    for x in range(x1, x2, step):
+        pts.append((x, y1 + rng.randint(-jitter, jitter)))
+    for y in range(y1, y2, step):
+        pts.append((x2 + rng.randint(-jitter, jitter), y))
+    for x in range(x2, x1, -step):
+        pts.append((x, y2 + rng.randint(-jitter, jitter)))
+    for y in range(y2, y1, -step):
+        pts.append((x1 + rng.randint(-jitter, jitter), y))
+    return pts
+
+def create_3s_hook_overlay(W, H, title_text, summary_text=""):
+    """
+    طراحی لایه شفاف (RGBA) بنر دوطبقه کاغذ سوخته برای ۳ ثانیه اول ویدیو:
+    - نوار اول: کاغذ کرم با لبه سوخته و فونت مشکی ضخیم
+    - نوار دوم: کاغذ قرمز با لبه سوخته و فونت زرد با دورخط مشکی
+    """
+    ensure_persian_font()
+    line1, line2, _ = get_ai_viral_hook_and_caption(title_text, summary_text)
+    sc = W / 1080.0
+    ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+
+    # فونت درشت و تنظیم خودکار اندازه برای جا شدن کامل در کادر
+    _, f1, sz1 = fit_wrapped_text(line1, base_font_size=int(64 * sc), min_font_size=int(42 * sc), base_width=22, max_lines=1)
+    _, f2, sz2 = fit_wrapped_text(line2, base_font_size=int(68 * sc), min_font_size=int(44 * sc), base_width=22, max_lines=1)
+
+    tmp_d = ImageDraw.Draw(ov)
+    b1 = tmp_d.textbbox((0, 0), line1, font=f1)
+    b2 = tmp_d.textbbox((0, 0), line2, font=f2)
+    w1, h1 = (b1[2] - b1[0]), (b1[3] - b1[1])
+    w2, h2 = (b2[2] - b2[0]), (b2[3] - b2[1])
+
+    pad_x = int(70 * sc)
+    box_w1 = min(W - int(90 * sc), max(w1 + pad_x * 2, int(560 * sc)))
+    box_w2 = min(W - int(80 * sc), max(w2 + pad_x * 2, int(600 * sc)))
+    box_h1 = int(142 * sc)
+    box_h2 = int(152 * sc)
+
+    cx = W // 2
+    top_y1 = int(H * 0.25) if H >= W else int(H * 0.22)
+    top_y2 = top_y1 + box_h1 - int(12 * sc)
+
+    # لایه سایه نرم زیر کاغذها
+    shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    sh_d = ImageDraw.Draw(shadow)
+
+    x1_l, x1_r = cx - box_w1 // 2, cx + box_w1 // 2
+    x2_l, x2_r = cx - box_w2 // 2, cx + box_w2 // 2
+
+    poly1_outer = _make_torn_polygon(x1_l - int(10*sc), top_y1 - int(8*sc), x1_r + int(10*sc), top_y1 + box_h1 + int(8*sc), seed_val=101, step=max(6, int(12*sc)), jitter=max(4, int(8*sc)))
+    poly1_inner = _make_torn_polygon(x1_l, top_y1, x1_r, top_y1 + box_h1, seed_val=102, step=max(6, int(12*sc)), jitter=max(3, int(6*sc)))
+
+    poly2_outer = _make_torn_polygon(x2_l - int(10*sc), top_y2 - int(8*sc), x2_r + int(10*sc), top_y2 + box_h2 + int(8*sc), seed_val=202, step=max(6, int(12*sc)), jitter=max(4, int(8*sc)))
+    poly2_inner = _make_torn_polygon(x2_l, top_y2, x2_r, top_y2 + box_h2, seed_val=203, step=max(6, int(12*sc)), jitter=max(3, int(6*sc)))
+
+    sh_d.polygon([(x + int(8*sc), y + int(12*sc)) for x, y in poly1_outer], fill=(0, 0, 0, 185))
+    sh_d.polygon([(x + int(8*sc), y + int(12*sc)) for x, y in poly2_outer], fill=(0, 0, 0, 195))
+    ov = Image.alpha_composite(ov, shadow.filter(ImageFilter.GaussianBlur(max(3, int(8 * sc)))))
+    draw = ImageDraw.Draw(ov)
+
+    # ۱. رسم نوار بالایی (لبه سوخته قهوه‌ای تیره + کاغذ کرم روشن)
+    draw.polygon(poly1_outer, fill=(58, 32, 14, 250))
+    draw.polygon(poly1_inner, fill=(242, 222, 186, 255), outline=(120, 72, 32, 255))
+
+    # ۲. رسم نوار پایینی (لبه سوخته زرشکی/مشکی + کاغذ قرمز تند)
+    draw.polygon(poly2_outer, fill=(45, 10, 10, 252))
+    draw.polygon(poly2_inner, fill=(192, 18, 24, 255), outline=(95, 12, 14, 255))
+
+    # نوشتن متن سطر اول (مشکی ضخیم با سایه ظریف سفید روی کاغذ کرم)
+    tx1 = cx - w1 // 2
+    ty1 = top_y1 + (box_h1 - h1) // 2 - int(12 * sc)
+    draw.text((tx1, ty1), line1, font=f1, fill=(18, 12, 8, 255), stroke_width=max(1, int(2 * sc)), stroke_fill=(255, 248, 230, 255))
+
+    # نوشتن متن سطر دوم (زرد درخشان با دورخط ضخیم مشکی روی کاغذ قرمز)
+    tx2 = cx - w2 // 2
+    ty2 = top_y2 + (box_h2 - h2) // 2 - int(12 * sc)
+    draw.text((tx2, ty2), line2, font=f2, fill=(255, 230, 25, 255), stroke_width=max(3, int(6 * sc)), stroke_fill=(10, 10, 10, 255))
+
+    return ov
+
 def find_watermark_file():
     for wm_name in ['watermark.mp4', 'Watermark.mp4', 'WATERMARK.MP4', 'watermark.mov']:
         if os.path.exists(wm_name) and os.path.getsize(wm_name) > 1000:
@@ -2927,6 +3090,10 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
         is_vertical = (vh >= vw)
         wm_file = find_watermark_file()
 
+        # ساخت بنر قلاب ۳ ثانیه اول (کاغذ سوخته دوطبقه)
+        hook_9_16 = create_3s_hook_overlay(1080, 1920, subtitle_text, subtitle_text)
+        hook_9_16.save('ov_hook_9_16.png', format='PNG')
+
         if is_vertical:
             ov_tg = create_9_16_video_overlay(1080, 1920, subtitle_text, source_name)
             ov_tg.save('ov_tg_9_16.png', format='PNG')
@@ -2935,7 +3102,8 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
                 '[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=24:4,eq=brightness=-0.22,setsar=1[bg];'
                 '[0:v]scale=1080:1920:force_original_aspect_ratio=decrease,setsar=1[fg];'
                 '[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1[base];'
-                '[base][1:v]overlay=0:0,setsar=1'
+                '[base][1:v]overlay=0:0,setsar=1[with_frame];'
+                "[with_frame][2:v]overlay=0:0:enable='between(t,0,3)',setsar=1"
             )
 
             done_vertical = False
@@ -2943,78 +3111,83 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
                 try:
                     flt_wm_9_16 = (
                         f'{flt_base_9_16},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
-                        '[2:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
+                        '[3:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
                         'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black,'
                         'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
                         'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
                         '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1'
                     )
                     cmd_tg_wm = [
-                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_9_16.png', '-i', wm_file,
+                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_9_16.png', '-i', 'ov_hook_9_16.png', '-i', wm_file,
                         '-filter_complex', flt_wm_9_16,
                         '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
                         '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
                         '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
                         '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
                     ]
-                    subprocess.run(cmd_tg_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120, check=True)
+                    subprocess.run(cmd_tg_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=125, check=True)
                     done_vertical = True
                 except Exception as e_wm:
-                    print('Watermark 9:16 fallback to standard:', e_wm)
+                    print('Watermark+Hook 9:16 fallback to Hook-only:', e_wm)
 
             if not done_vertical:
                 cmd_tg = [
-                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_9_16.png', '-filter_complex', flt_base_9_16,
+                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_9_16.png', '-i', 'ov_hook_9_16.png',
+                    '-filter_complex', flt_base_9_16,
                     '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
                     '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
                     '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
                     '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
                 ]
-                subprocess.run(cmd_tg, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
+                subprocess.run(cmd_tg, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=115, check=True)
 
             return tg_vid, tg_vid, 1080, 1920
 
         else:
             out_w, out_h = 1280, 720
+            hook_16_9 = create_3s_hook_overlay(1280, 720, subtitle_text, subtitle_text)
+            hook_16_9.save('ov_hook_16_9.png', format='PNG')
             frame = get_transparent_frame()
             if frame:
                 frame.save('ov_tg_16_9.png', format='PNG')
                 flt_base_16_9 = (
                     '[0:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=#0a101e,setsar=1[base];'
                     '[1:v]scale=1280:720,setsar=1[wm];'
-                    '[base][wm]overlay=0:0,setsar=1'
+                    '[base][wm]overlay=0:0,setsar=1[with_frame];'
+                    "[with_frame][2:v]overlay=0:0:enable='between(t,0,3)',setsar=1"
                 )
                 done_16_9 = False
                 if wm_file:
                     try:
                         flt_wm_16_9 = (
                             f'{flt_base_16_9},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
-                            '[2:v]fps=30,scale=1280:720:force_original_aspect_ratio=decrease,'
+                            '[3:v]fps=30,scale=1280:720:force_original_aspect_ratio=decrease,'
                             'pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black,'
                             'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
                             'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
                             '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1'
                         )
                         cmd_tg16_wm = [
-                            'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_16_9.png', '-i', wm_file,
+                            'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_16_9.png', '-i', 'ov_hook_16_9.png', '-i', wm_file,
                             '-filter_complex', flt_wm_16_9,
                             '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1700k', '-bufsize', '3400k',
                             '-profile:v', 'high', '-c:a', 'aac', '-b:a', '96k', '-pix_fmt', 'yuv420p',
                             '-movflags', '+faststart', '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
                         ]
-                        subprocess.run(cmd_tg16_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=115, check=True)
+                        subprocess.run(cmd_tg16_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120, check=True)
                         done_16_9 = True
                     except Exception as e_wm16:
-                        print('Watermark 16:9 fallback to standard:', e_wm16)
+                        print('Watermark+Hook 16:9 fallback:', e_wm16)
 
                 if not done_16_9:
                     cmd_tg16 = [
-                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_16_9.png', '-filter_complex', flt_base_16_9,
+                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_16_9.png', '-i', 'ov_hook_16_9.png',
+                        '-filter_complex', flt_base_16_9,
                         '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1700k', '-bufsize', '3400k',
                         '-profile:v', 'high', '-c:a', 'aac', '-b:a', '96k', '-pix_fmt', 'yuv420p',
                         '-movflags', '+faststart', '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
                     ]
-                    subprocess.run(cmd_tg16, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=105, check=True)
+                    subprocess.run(cmd_tg16, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
             else:
                 tg_vid = raw_vid
                 out_w, out_h = vw, vh
@@ -3025,7 +3198,8 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
                 '[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=25:5,eq=brightness=-0.25,setsar=1[bg];'
                 '[0:v]scale=1020:-2:force_original_aspect_ratio=decrease,setsar=1[fg];'
                 '[bg][fg]overlay=(W-w)/2:(H-h)/2-80,setsar=1[comp];'
-                '[comp][1:v]overlay=0:0,setsar=1'
+                '[comp][1:v]overlay=0:0,setsar=1[with_frame];'
+                "[with_frame][2:v]overlay=0:0:enable='between(t,0,3)',setsar=1"
             )
 
             done_reel = False
@@ -3033,34 +3207,35 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
                 try:
                     flt_wm_reel = (
                         f'{flt_base_reel},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
-                        '[2:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
+                        '[3:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
                         'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black,'
                         'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
                         'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
                         '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1'
                     )
                     cmd_reel_wm = [
-                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', wm_file,
+                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', 'ov_hook_9_16.png', '-i', wm_file,
                         '-filter_complex', flt_wm_reel,
                         '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
                         '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
                         '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
                         '-metadata:s:v:0', 'rotate=0', '-t', '58', reel_vid
                     ]
-                    subprocess.run(cmd_reel_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120, check=True)
+                    subprocess.run(cmd_reel_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=125, check=True)
                     done_reel = True
                 except Exception as e_wmr:
-                    print('Watermark reel fallback to standard:', e_wmr)
+                    print('Watermark+Hook reel fallback:', e_wmr)
 
             if not done_reel:
                 cmd_reel = [
-                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-filter_complex', flt_base_reel,
+                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', 'ov_hook_9_16.png',
+                    '-filter_complex', flt_base_reel,
                     '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
                     '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
                     '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
                     '-metadata:s:v:0', 'rotate=0', '-t', '58', reel_vid
                 ]
-                subprocess.run(cmd_reel, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
+                subprocess.run(cmd_reel, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=115, check=True)
 
             return (tg_vid if os.path.exists(tg_vid) else raw_vid), (reel_vid if os.path.exists(reel_vid) else tg_vid), out_w, out_h
     except Exception as e:
