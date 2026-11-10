@@ -908,5 +908,15 @@
     "time": 1794298934.8886836,
     "vip": false,
     "sig": "story_photo:79685e632c71462b131dc65e55ec04e2"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794299300_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794299300.5543287,
+    "vip": false,
+    "sig": "story_photo:f1a6fa072ecd9a75b8f2af7f963ba2c3"
   }
 ]
