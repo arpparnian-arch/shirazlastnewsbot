@@ -2590,7 +2590,7 @@ def process_bot_service(insta_cl=None, current_iran_hour=12):
         json.dump(s_data, f, ensure_ascii=False)
 
 # ==========================================
-# ۱۲. موتور گرافیکی قالب‌های پست، کاروسل و استوری خبری
+# ۱۲. موتور گرافیکی قالب‌های پست، کاروسل و استوری خبری (هویت بصری جدید)
 # ==========================================
 def get_transparent_frame():
     if not os.path.exists(FRAME_FILE):
@@ -2630,6 +2630,54 @@ def draw_post_corner_badge(draw, x_center, y_top, scale=1.0):
         draw.text((x_center - (bb[2] - bb[0]) / 2, yb), lb, font=f_b, fill=(135, 15, 20, 255))
         yb += int(34 * scale)
 
+def draw_quran_gate_logo(draw, x_center, y_top, size=110, line_color=(255, 255, 255, 255), bg_box_color=None):
+    """رسم وکتوری لوگوی مینیمال دروازه قرآن شیراز + نقطه قرمز خبری"""
+    if bg_box_color:
+        pad = int(size * 0.14)
+        draw.rounded_rectangle(
+            [x_center - size // 2 - pad, y_top - pad, x_center + size // 2 + pad, y_top + size + pad],
+            radius=int(size * 0.18),
+            fill=bg_box_color
+        )
+    lw = max(2, int(size * 0.032))
+    w = int(size * 0.88)
+    h = int(size * 0.82)
+    x1 = x_center - w // 2
+    x2 = x_center + w // 2
+    y_base = y_top + int(size * 0.90)
+    y_mid = y_top + int(size * 0.28)
+    y_crown = y_top + int(size * 0.08)
+
+    # پایه افقی و ستون‌های بیرونی دروازه قرآن
+    draw.line([(x1 - 4, y_base), (x2 + 4, y_base)], fill=line_color, width=lw)
+    col_w = int(w * 0.22)
+    # ستون چپ و راست
+    draw.rectangle([x1, y_mid, x1 + col_w, y_base], outline=line_color, width=lw)
+    draw.rectangle([x2 - col_w, y_mid, x2, y_base], outline=line_color, width=lw)
+    # طاق‌های کوچک داخل ستون‌های طرفین
+    s_arch_pad = max(3, int(col_w * 0.22))
+    draw.rounded_rectangle([x1 + s_arch_pad, y_mid + int(h * 0.22), x1 + col_w - s_arch_pad, y_base], radius=int(col_w * 0.3), outline=line_color, width=lw)
+    draw.rounded_rectangle([x2 - col_w + s_arch_pad, y_mid + int(h * 0.22), x2 - s_arch_pad, y_base], radius=int(col_w * 0.3), outline=line_color, width=lw)
+
+    # قاب مرکزی و طاق بزرگ میانی
+    cx1 = x1 + col_w
+    cx2 = x2 - col_w
+    draw.rectangle([cx1, y_mid - int(h * 0.10), cx2, y_base], outline=line_color, width=lw)
+    arch_m = max(4, int((cx2 - cx1) * 0.12))
+    draw.rounded_rectangle([cx1 + arch_m, y_mid + int(h * 0.06), cx2 - arch_m, y_base], radius=int((cx2 - cx1) * 0.38), outline=line_color, width=lw)
+
+    # اتاقک قرآن در بالای طاق مرکزی (امضای دروازه قرآن)
+    top_w = int((cx2 - cx1) * 0.72)
+    tx1 = x_center - top_w // 2
+    tx2 = x_center + top_w // 2
+    draw.rectangle([tx1, y_crown, tx2, y_mid - int(h * 0.10)], outline=line_color, width=lw)
+
+    # نقطه قرمز زنده (Red Dot) روی ستون سمت راست طاق مرکزی
+    dot_r = max(5, int(size * 0.085))
+    dot_x = cx2 - arch_m
+    dot_y = y_mid + int(h * 0.36)
+    draw.ellipse([dot_x - dot_r, dot_y - dot_r, dot_x + dot_r, dot_y + dot_r], fill=(220, 16, 26, 255))
+
 def clean_and_apply_frame(bg_bytes, title=''):
     try:
         frame = get_transparent_frame()
@@ -2647,66 +2695,101 @@ def clean_and_apply_frame(bg_bytes, title=''):
         return bg_bytes
 
 def add_bokeh_background(W, H):
-    canvas = Image.new('RGBA', (W, H), (10, 16, 30, 255))
-    bokeh = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    b_draw = ImageDraw.Draw(bokeh)
-    random.seed(42)
-    for _ in range(42):
-        bx = random.randint(30, W - 30)
-        by = random.randint(int(H * 0.42), H - 90)
-        br = random.randint(15, 62)
-        b_draw.ellipse([bx - br, by - br, bx + br, by + br], fill=(218, 165, 32, random.randint(18, 52)))
-    for _ in range(90):
-        dx = random.randint(20, W - 20)
-        dy = random.randint(int(H * 0.38), H - 70)
-        dr = random.randint(2, 5)
-        b_draw.ellipse([dx - dr, dy - dr, dx + dr, dy + dr], fill=(255, 225, 130, random.randint(85, 205)))
-    return Image.alpha_composite(canvas, bokeh.filter(ImageFilter.GaussianBlur(10)))
+    return Image.new('RGBA', (W, H), (14, 14, 16, 255))
+
+def _paste_center_cropped_photo(canvas, bg_bytes, box_x, box_y, box_w, box_h, radius=28):
+    bg = Image.open(io.BytesIO(bg_bytes)).convert('RGB')
+    bw, bh = bg.size
+    scale = max(box_w / float(bw), box_h / float(bh))
+    nw, nh = int(bw * scale), int(bh * scale)
+    bg_res = bg.resize((nw, nh), Image.Resampling.LANCZOS)
+    bg_crop = bg_res.crop(((nw - box_w) // 2, (nh - box_h) // 2, (nw - box_w) // 2 + box_w, (nh - box_h) // 2 + box_h))
+    mask = Image.new('L', (box_w, box_h), 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, box_w, box_h], radius=radius, fill=255)
+    canvas.paste(bg_crop, (box_x, box_y), mask)
 
 def create_premium_news_story(bg_bytes, title, summary='', source_name='خبرگزاری رسمی'):
+    """قالب جدید استوری خبر فوری ۹:۱۶ (مشکی، کارت سفید و بنر قرمز خبر فوری + تاریخ روز خودکار)"""
     try:
         ensure_persian_font()
         W, H = 1080, 1920
-        canvas = add_bokeh_background(W, H)
+        canvas = Image.new('RGBA', (W, H), (14, 14, 16, 255))
         draw = ImageDraw.Draw(canvas)
-        draw_luxury_brand_badge(draw, 495, 38, scale=1.08)
-        draw.ellipse([622, 92, 666, 136], fill=(215, 35, 40, 255))
-        f_top = load_font(54)
-        draw.text((685, 76), 'خبر فوری', font=f_top, fill=(242, 202, 100, 255))
-        img_box_x, img_box_y, img_box_w, img_box_h = 75, 225, W - 150, 595
-        draw.rounded_rectangle([img_box_x - 12, img_box_y - 12, img_box_x + img_box_w + 12, img_box_y + img_box_h + 12], radius=34, fill=(10, 16, 30, 255), outline=(218, 165, 32, 235), width=3)
-        draw.rounded_rectangle([img_box_x - 4, img_box_y - 4, img_box_x + img_box_w + 4, img_box_y + img_box_h + 4], radius=26, outline=(245, 205, 95, 255), width=2)
-        bg = Image.open(io.BytesIO(bg_bytes)).convert('RGB')
-        bw, bh = bg.size
-        scale = max(img_box_w / bw, img_box_h / bh)
-        nw, nh = int(bw * scale), int(bh * scale)
-        bg_res = bg.resize((nw, nh), Image.Resampling.LANCZOS)
-        bg_crop = bg_res.crop(((nw - img_box_w) // 2, (nh - img_box_h) // 2, (nw - img_box_w) // 2 + img_box_w, (nh - img_box_h) // 2 + img_box_h))
-        mask = Image.new('L', (img_box_w, img_box_h), 0)
-        ImageDraw.Draw(mask).rounded_rectangle([0, 0, img_box_w, img_box_h], radius=22, fill=255)
-        canvas.paste(bg_crop, (img_box_x, img_box_y), mask)
-        t_lines, f_title, sz_title = fit_wrapped_text(title, base_font_size=46, min_font_size=30, base_width=26, max_lines=3)
-        y_t = 865
+
+        # ۱. لوگوی دروازه قرآن و نشان LIVE در بالا سمت چپ
+        draw_quran_gate_logo(draw, x_center=155, y_top=68, size=115, line_color=(255, 255, 255, 255))
+        draw.rounded_rectangle([78, 212, 238, 268], radius=26, fill=(45, 12, 16, 240))
+        draw.ellipse([96, 228, 120, 252], fill=(225, 18, 28, 255))
+        f_live = load_font(32)
+        draw.text((134, 219), 'LIVE', font=f_live, fill=(225, 18, 28, 255))
+
+        # ۲. بنر زاویه‌دار قرمز «خبر فوری» در بالا سمت راست
+        banner_pts = [(575, 125), (W, 125), (W, 275), (505, 275)]
+        draw.polygon(banner_pts, fill=(210, 14, 24, 255))
+        f_brk = load_font(78)
+        brk_txt = 'خبر فوری'
+        bb_brk = draw.textbbox((0, 0), brk_txt, font=f_brk)
+        draw.text((560 + ((W - 560) - (bb_brk[2] - bb_brk[0])) / 2, 148), brk_txt, font=f_brk, fill=(255, 255, 255, 255))
+
+        # ۳. کادر عکس خبر در میانه استوری
+        img_x, img_y, img_w, img_h = 74, 345, W - 148, 860
+        draw.rounded_rectangle(
+            [img_x - 10, img_y - 10, img_x + img_w + 10, img_y + img_h + 40],
+            radius=36, fill=(22, 24, 28, 255), outline=(95, 98, 105, 255), width=3
+        )
+        if bg_bytes:
+            _paste_center_cropped_photo(canvas, bg_bytes, img_x, img_y, img_w, img_h, radius=28)
+
+        # ۴. کارت سفید متن خبر در پایین عکس
+        card_x1, card_y1, card_x2, card_y2 = 84, 1175, W - 84, 1735
+        draw.rounded_rectangle([card_x1, card_y1, card_x2, card_y2], radius=44, fill=(255, 255, 255, 255))
+
+        # تیتر خبر (راست‌چین، مشکی بولد)
+        t_lines, f_title, sz_title = fit_wrapped_text(title, base_font_size=46, min_font_size=30, base_width=27, max_lines=2)
+        y_t = card_y1 + 42
         for line in t_lines:
             bb = draw.textbbox((0, 0), line, font=f_title)
             tw = bb[2] - bb[0]
-            draw.text(((W - tw) / 2 + 2, y_t + 3), line, font=f_title, fill=(0, 0, 0, 215))
-            draw.text(((W - tw) / 2, y_t), line, font=f_title, fill=(242, 202, 100, 255))
-            y_t += int(sz_title * 1.52)
+            draw.text((card_x2 - 48 - tw, y_t), line, font=f_title, fill=(15, 15, 18, 255))
+            y_t += int(sz_title * 1.42)
+
+        # لید خبر (راست‌چین، خاکستری تیره)
         y_t += 16
-        clean_s = extract_complete_lead(summary, title, min_chars=80, max_chars=230)
-        s_lines, f_sum, sz_sum = fit_wrapped_text(clean_s, base_font_size=34, min_font_size=24, base_width=36, max_lines=5)
+        clean_s = extract_complete_lead(summary, title, min_chars=65, max_chars=165)
+        s_lines, f_sum, sz_sum = fit_wrapped_text(clean_s, base_font_size=32, min_font_size=24, base_width=38, max_lines=3)
         for sline in s_lines:
             bb = draw.textbbox((0, 0), sline, font=f_sum)
             tw = bb[2] - bb[0]
-            draw.text(((W - tw) / 2 + 2, y_t + 2), sline, font=f_sum, fill=(0, 0, 0, 205))
-            draw.text(((W - tw) / 2, y_t), sline, font=f_sum, fill=(255, 255, 255, 255))
-            y_t += int(sz_sum * 1.55)
-        draw.rectangle([0, 1810, W, 1920], fill=(222, 182, 78, 255))
-        f_bar = load_font(34)
-        bar_txt = f'@ShirazLastNews | منبع: {source_name}'
-        bb_bar = draw.textbbox((0, 0), bar_txt, font=f_bar)
-        draw.text(((W - (bb_bar[2] - bb_bar[0])) / 2, 1842), bar_txt, font=f_bar, fill=(10, 16, 30, 255))
+            draw.text((card_x2 - 48 - tw, y_t), sline, font=f_sum, fill=(45, 48, 55, 255))
+            y_t += int(sz_sum * 1.48)
+
+        # خط جداکننده افقی، بج قرمز و تاریخ روز خودکار در پایین کارت سفید
+        div_y = card_y2 - 98
+        draw.line([(card_x1 + 45, div_y), (card_x2 - 45, div_y)], fill=(222, 225, 230, 255), width=2)
+
+        # بج قرمز کوچک سمت راست پایین کارت سفید
+        pill_x1, pill_y1, pill_x2, pill_y2 = card_x2 - 205, div_y - 26, card_x2 - 48, div_y + 32
+        draw.rounded_rectangle([pill_x1, pill_y1, pill_x2, pill_y2], radius=18, fill=(215, 14, 24, 255))
+        f_tag = load_font(26)
+        tag_txt = 'فوری'
+        bb_tg = draw.textbbox((0, 0), tag_txt, font=f_tag)
+        draw.text((pill_x1 + ((pill_x2 - pill_x1) - (bb_tg[2] - bb_tg[0])) / 2, pill_y1 + 10), tag_txt, font=f_tag, fill=(255, 255, 255, 255))
+
+        # تاریخ روز خودکار شمسی + آیدی پیج در سمت چپ پایین کارت سفید
+        today_str, _ = get_iran_jalali_date()
+        f_meta = load_font(28)
+        meta_txt = f'{today_str} | @ShirazLastNews'
+        draw.text((card_x1 + 48, div_y + 22), meta_txt, font=f_meta, fill=(105, 110, 118, 255))
+
+        # ۵. نوار تیکر خبری در پایین‌ترین بخش استوری
+        tk_y1, tk_y2 = 1815, 1898
+        draw.rectangle([0, tk_y1, W, tk_y2], fill=(32, 34, 38, 255))
+        draw.polygon([(0, tk_y1), (285, tk_y1), (245, tk_y2), (0, tk_y2)], fill=(210, 14, 24, 255))
+        f_tk = load_font(28)
+        tk_txt = f'منبع: {source_name} | آخرین خبرهای شیراز و استان فارس'
+        bb_tk = draw.textbbox((0, 0), tk_txt, font=f_tk)
+        draw.text((W - 35 - (bb_tk[2] - bb_tk[0]), tk_y1 + 22), tk_txt, font=f_tk, fill=(245, 245, 248, 255))
+
         out = io.BytesIO()
         canvas.convert('RGB').save(out, format='JPEG', quality=95)
         return out.getvalue()
@@ -2715,53 +2798,68 @@ def create_premium_news_story(bg_bytes, title, summary='', source_name='خبرگ
         return None
 
 def create_approved_post_slide1(raw_img_bytes, title, summary, source_name, is_carousel=False):
+    """قالب جدید اسلاید اول پست ۴:۵ (کارت سفید، بج قرمز خبر فوری، لوگوی دروازه قرآن و خط قرمز زیر تیتر)"""
     try:
         ensure_persian_font()
         W, H = 1080, 1350
-        canvas = Image.new('RGBA', (W, H), (244, 245, 248, 255))
-        bg = Image.open(io.BytesIO(raw_img_bytes)).convert('RGB')
-        iw, ih = bg.size
-        top_h = 855
-        sc = max(W / iw, top_h / ih)
-        nw, nh = int(iw * sc), int(ih * sc)
-        bg_crop = bg.resize((nw, nh), Image.Resampling.LANCZOS).crop(((nw - W) // 2, (nh - top_h) // 2, (nw - W) // 2 + W, (nh - top_h) // 2 + top_h))
-        canvas.paste(bg_crop, (0, 0))
-        grad = Image.new('RGBA', (W, 240), (0, 0, 0, 0))
-        g_draw = ImageDraw.Draw(grad)
-        for y in range(240):
-            alpha = int(235 * (y / 240.0))
-            g_draw.line([(0, y), (W, y)], fill=(12, 22, 42, alpha))
-        canvas.alpha_composite(grad, (0, top_h - 220))
+        canvas = Image.new('RGBA', (W, H), (14, 14, 16, 255))
         draw = ImageDraw.Draw(canvas)
-        draw.rectangle([0, top_h, W, 1020], fill=(12, 22, 42, 255))
-        draw_post_corner_badge(draw, W - 115, 30, scale=1.0)
-        draw.rounded_rectangle([54, 738, W - 54, 1246], radius=36, fill=(210, 214, 222, 255))
-        draw.rounded_rectangle([50, 730, W - 50, 1238], radius=36, fill=(255, 255, 255, 255), outline=(228, 232, 238, 255), width=2)
-        draw.rounded_rectangle([W - 88, 768, W - 74, 1202], radius=6, fill=(190, 22, 30, 255))
-        t_lines, f_title, sz_title = fit_wrapped_text(title, base_font_size=42, min_font_size=28, base_width=28, max_lines=3)
-        y_t = 762
+
+        # ۱. کارت سفید اصلی وسط قاب مشکی
+        c_x1, c_y1, c_x2, c_y2 = 52, 68, W - 52, 1246
+        draw.rounded_rectangle([c_x1, c_y1, c_x2, c_y2], radius=48, fill=(255, 255, 255, 255))
+
+        # ۲. بج قرمز «خبر فوری» در بالا سمت چپ و لوگوی دروازه قرآن در بالا سمت راست
+        draw.rounded_rectangle([94, 108, 422, 212], radius=26, fill=(212, 12, 22, 255))
+        f_brk = load_font(56)
+        brk_txt = 'خبر فوری'
+        bb_b = draw.textbbox((0, 0), brk_txt, font=f_brk)
+        draw.text((94 + (328 - (bb_b[2] - bb_b[0])) / 2, 122), brk_txt, font=f_brk, fill=(255, 255, 255, 255))
+
+        draw_quran_gate_logo(
+            draw, x_center=916, y_top=108, size=98,
+            line_color=(255, 255, 255, 255), bg_box_color=(32, 32, 35, 255)
+        )
+
+        # ۳. عکس خبر با گوشه‌های گرد
+        img_x, img_y, img_w, img_h = 94, 246, W - 188, 548
+        draw.rounded_rectangle([img_x, img_y, img_x + img_w, img_y + img_h], radius=28, fill=(230, 234, 240, 255))
+        if raw_img_bytes:
+            _paste_center_cropped_photo(canvas, raw_img_bytes, img_x, img_y, img_w, img_h, radius=28)
+
+        # ۴. تیتر اصلی خبر (راست‌چین، فونت مشکی درشت)
+        t_lines, f_title, sz_title = fit_wrapped_text(title, base_font_size=46, min_font_size=30, base_width=27, max_lines=2)
+        y_t = 824
         for l in t_lines:
             bb = draw.textbbox((0, 0), l, font=f_title)
             tw = bb[2] - bb[0]
-            draw.text((W - 108 - tw, y_t), l, font=f_title, fill=(12, 24, 48, 255))
-            y_t += int(sz_title * 1.44)
-        y_t += 10
-        clean_s = extract_complete_lead(summary, title, min_chars=70, max_chars=185)
-        s_lines, f_sub, sz_sub = fit_wrapped_text(clean_s, base_font_size=30, min_font_size=22, base_width=39, max_lines=3)
+            draw.text((c_x2 - 44 - tw, y_t), l, font=f_title, fill=(16, 16, 18, 255))
+            y_t += int(sz_title * 1.40)
+
+        # ۵. خط کپسولی قرمز جداکننده در سمت راست زیر تیتر
+        bar_y = max(y_t + 10, 985)
+        draw.rounded_rectangle([c_x2 - 156, bar_y, c_x2 - 44, bar_y + 16], radius=8, fill=(212, 12, 22, 255))
+
+        # ۶. متن لید خبر در پایین خط قرمز
+        y_s = bar_y + 34
+        clean_s = extract_complete_lead(summary, title, min_chars=75, max_chars=185)
+        s_lines, f_sub, sz_sub = fit_wrapped_text(clean_s, base_font_size=30, min_font_size=22, base_width=38, max_lines=3)
         for sl in s_lines:
             bb = draw.textbbox((0, 0), sl, font=f_sub)
             tw = bb[2] - bb[0]
-            draw.text((W - 108 - tw, y_t), sl, font=f_sub, fill=(60, 70, 85, 255))
-            y_t += int(sz_sub * 1.46)
+            draw.text((c_x2 - 44 - tw, y_s), sl, font=f_sub, fill=(35, 38, 45, 255))
+            y_s += int(sz_sub * 1.46)
+
         if is_carousel:
-            draw.rounded_rectangle([75, 1172, 325, 1222], radius=16, fill=(190, 22, 30, 255))
             f_sw = load_font(22)
-            draw.text((97, 1181), '👈 ورق بزنید (مشروح)', font=f_sw, fill=(255, 255, 255, 255))
-        draw.rounded_rectangle([230, 1266, W - 230, 1334], radius=26, fill=(20, 26, 36, 255))
-        f_pill = load_font(28)
+            draw.text((c_x1 + 42, c_y2 - 48), '👈 ورق بزنید (مشروح خبر)', font=f_sw, fill=(212, 12, 22, 255))
+
+        # ۷. فوتر مشکی پایین پست
+        f_foot = load_font(30)
         p_txt = '@ShirazLastNews | آخرین خبرهای شیراز'
-        bb_p = draw.textbbox((0, 0), p_txt, font=f_pill)
-        draw.text(((W - (bb_p[2] - bb_p[0])) / 2, 1280), p_txt, font=f_pill, fill=(242, 202, 100, 255))
+        bb_p = draw.textbbox((0, 0), p_txt, font=f_foot)
+        draw.text(((W - (bb_p[2] - bb_p[0])) / 2, 1278), p_txt, font=f_foot, fill=(215, 218, 224, 255))
+
         out_p = 'approved_post_slide1.jpg'
         canvas.convert('RGB').save(out_p, format='JPEG', quality=95)
         return out_p
@@ -2770,44 +2868,84 @@ def create_approved_post_slide1(raw_img_bytes, title, summary, source_name, is_c
         return None
 
 def create_approved_carousel_slides(raw_img_bytes, title, summary, source_name):
+    """قالب جدید اسلاید دوم مشروح خبر ۴:۵ (زمینه سفید، بولت‌پوینت‌های خبری با خط عمودی قرمز و باکس جمع‌بندی)"""
     slides = []
     s1 = create_approved_post_slide1(raw_img_bytes, title, summary, source_name, is_carousel=True)
     if s1:
         slides.append(s1)
     try:
+        ensure_persian_font()
         W, H = 1080, 1350
-        c2 = Image.new('RGBA', (W, H), (244, 245, 248, 255))
+        c2 = Image.new('RGBA', (W, H), (255, 255, 255, 255))
         d2 = ImageDraw.Draw(c2)
-        d2.rectangle([0, 0, W, 240], fill=(12, 22, 42, 255))
-        draw_post_corner_badge(d2, W - 115, 30, scale=0.9)
-        f_h2 = load_font(40)
-        d2.text((80, 85), '📝 مشروح و جزئیات کامل خبر', font=f_h2, fill=(242, 202, 100, 255))
-        d2.rounded_rectangle([55, 200, W - 55, 1235], radius=36, fill=(255, 255, 255, 255), outline=(220, 225, 235, 255), width=3)
-        d2.rounded_rectangle([W - 92, 245, W - 78, 1190], radius=6, fill=(190, 22, 30, 255))
-        t_lines, f_t2, sz_t2 = fit_wrapped_text(title, base_font_size=38, min_font_size=28, base_width=30, max_lines=3)
-        y2 = 245
+
+        # ۱. نوار باریک قرمز بالای صفحه + لوگوی مشکی دروازه قرآن در بالا سمت راست
+        d2.rectangle([0, 0, W, 18], fill=(212, 12, 22, 255))
+        draw_quran_gate_logo(d2, x_center=955, y_top=46, size=102, line_color=(20, 20, 22, 255))
+
+        # ۲. تیتر مشروح خبر در بالا
+        t_lines, f_t2, sz_t2 = fit_wrapped_text(title, base_font_size=44, min_font_size=30, base_width=27, max_lines=2)
+        y2 = 215
         for tl in t_lines:
             bb = d2.textbbox((0, 0), tl, font=f_t2)
-            d2.text((W - 115 - (bb[2] - bb[0]), y2), tl, font=f_t2, fill=(12, 24, 48, 255))
-            y2 += int(sz_t2 * 1.48)
-        d2.line([(115, y2 + 15), (W - 115, y2 + 15)], fill=(220, 225, 235, 255), width=2)
-        y2 += 40
-        clean_full_s = extract_complete_lead(summary, title, min_chars=140, max_chars=480)
-        b_lines, f_b2, sz_b2 = fit_wrapped_text(clean_full_s, base_font_size=33, min_font_size=24, base_width=36, max_lines=10)
-        for bl in b_lines:
-            bb = d2.textbbox((0, 0), bl, font=f_b2)
-            d2.text((W - 115 - (bb[2] - bb[0]), y2), bl, font=f_b2, fill=(55, 65, 80, 255))
-            y2 += int(sz_b2 * 1.55)
-        f_src = load_font(27)
-        src_t = f'📌 منبع خبر: {source_name}'
-        bb_s = d2.textbbox((0, 0), src_t, font=f_src)
-        d2.text((W - 115 - (bb_s[2] - bb_s[0]), 1165), src_t, font=f_src, fill=(190, 22, 30, 255))
-        d2.rounded_rectangle([230, 1266, W - 230, 1334], radius=26, fill=(20, 26, 36, 255))
-        f_pill = load_font(28)
-        p_txt = '@ShirazLastNews | آخرین خبرهای شیراز'
-        bb_p = d2.textbbox((0, 0), p_txt, font=f_pill)
-        draw_x = (W - (bb_p[2] - bb_p[0])) / 2
-        d2.text((draw_x, 1280), p_txt, font=f_pill, fill=(242, 202, 100, 255))
+            d2.text((W - 88 - (bb[2] - bb[0]), y2), tl, font=f_t2, fill=(16, 16, 18, 255))
+            y2 += int(sz_t2 * 1.42)
+
+        # ۳. لید مقدماتی زیر تیتر
+        y2 += 18
+        clean_full_s = extract_complete_lead(summary, title, min_chars=120, max_chars=460)
+        clauses = [c.strip() for c in re.split(r'[\.!\؟؛،]+', clean_full_s) if len(c.strip()) > 12]
+        intro_txt = clauses[0] + '.' if clauses else clean_full_s[:120]
+        intro_lines, f_in, sz_in = fit_wrapped_text(intro_txt, base_font_size=31, min_font_size=24, base_width=38, max_lines=2)
+        for il in intro_lines:
+            bb = d2.textbbox((0, 0), il, font=f_in)
+            d2.text((W - 88 - (bb[2] - bb[0]), y2), il, font=f_in, fill=(55, 60, 68, 255))
+            y2 += int(sz_in * 1.48)
+
+        # ۴. آیکون نقل‌قول قرمز و خط عمودی قرمز در سمت راست + بولت‌پوینت‌های خبر
+        f_q = load_font(86)
+        d2.text((W - 155, 455), '”', font=f_q, fill=(212, 12, 22, 255))
+        d2.rounded_rectangle([W - 92, 545, W - 80, 865], radius=5, fill=(212, 12, 22, 255))
+
+        bullet_items = clauses[1:4] if len(clauses) > 1 else [clean_full_s]
+        y_b = 555
+        for b_item in bullet_items[:3]:
+            b_clean = b_item.strip().rstrip('.،؛')
+            b_lines, f_b, sz_b = fit_wrapped_text(f'• {b_clean}', base_font_size=34, min_font_size=25, base_width=32, max_lines=2)
+            for bl in b_lines:
+                bb = d2.textbbox((0, 0), bl, font=f_b)
+                d2.text((W - 118 - (bb[2] - bb[0]), y_b), bl, font=f_b, fill=(18, 18, 22, 255))
+                y_b += int(sz_b * 1.42)
+            y_b += 22
+
+        # ۵. باکس خاکستری روشن جمع‌بندی و منبع در پایین (همراه با خط عمودی قرمز در لبه راست)
+        bx1, by1, bx2, by2 = 88, 925, W - 88, 1125
+        d2.rounded_rectangle([bx1, by1, bx2, by2], radius=26, fill=(242, 243, 246, 255))
+        d2.rounded_rectangle([bx2 - 16, by1 + 26, bx2 - 6, by2 - 26], radius=4, fill=(212, 12, 22, 255))
+
+        tail_txt = clauses[-1] if len(clauses) > 3 else f'گزارش تکمیلی از {source_name} — رسانه آخرین خبرهای شیراز'
+        tail_lines, f_tl, sz_tl = fit_wrapped_text(tail_txt, base_font_size=32, min_font_size=24, base_width=34, max_lines=2)
+        y_box = by1 + 42
+        for tline in tail_lines:
+            bb = d2.textbbox((0, 0), tline, font=f_tl)
+            d2.text((bx2 - 42 - (bb[2] - bb[0]), y_box), tline, font=f_tl, fill=(25, 28, 34, 255))
+            y_box += int(sz_tl * 1.48)
+
+        # ۶. بج قرمز منبع و فوتر پایین اسلاید دوم
+        d2.rounded_rectangle([88, 1165, 285, 1225], radius=16, fill=(212, 12, 22, 255))
+        f_sm = load_font(24)
+        src_short = 'مشروح خبر'
+        bb_ss = d2.textbbox((0, 0), src_short, font=f_sm)
+        d2.text((88 + (197 - (bb_ss[2] - bb_ss[0])) / 2, 1179), src_short, font=f_sm, fill=(255, 255, 255, 255))
+
+        f_foot = load_font(30)
+        bb_id = d2.textbbox((0, 0), '@ShirazLastNews', font=f_foot)
+        d2.text(((W - (bb_id[2] - bb_id[0])) / 2, 1268), '@ShirazLastNews', font=f_foot, fill=(20, 20, 24, 255))
+        src_lbl = f'منبع: {source_name}'
+        bb_sr = d2.textbbox((0, 0), src_lbl, font=f_sm)
+        d2.text((W - 88 - (bb_sr[2] - bb_sr[0]), 1272), src_lbl, font=f_sm, fill=(90, 95, 105, 255))
+        d2.text((88, 1272), 'ورق بزنید', font=f_sm, fill=(20, 20, 24, 255))
+
         s2_path = 'approved_post_slide2.jpg'
         c2.convert('RGB').save(s2_path, format='JPEG', quality=95)
         slides.append(s2_path)
@@ -2818,33 +2956,58 @@ def create_approved_carousel_slides(raw_img_bytes, title, summary, source_name):
 # ۱۳. پردازشگر ویدیو (FFmpeg) برای تلگرام و ریلز
 # ==========================================
 def create_9_16_video_overlay(W, H, subtitle_text='', source_name='رسانه آخرین خبرهای شیراز'):
+    """واترمارک و قالب جدید ریلز ۹:۱۶ با پس‌زمینه شفاف، بج قرمز بالا و ۲ باکس تیره پایین"""
     ov = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(ov)
     sc = W / 1080.0
-    draw.rounded_rectangle([int(35 * sc), int(40 * sc), int(490 * sc), int(115 * sc)], radius=int(22 * sc), fill=(10, 16, 30, 215), outline=(218, 165, 32, 240), width=max(2, int(3 * sc)))
-    draw.ellipse([int(435 * sc), int(62 * sc), int(465 * sc), int(92 * sc)], fill=(215, 30, 40, 255))
-    f_top = load_font(int(30 * sc))
-    draw.text((int(60 * sc), int(53 * sc)), 'آخرین خبرهای شیراز', font=f_top, fill=(245, 205, 95, 255))
-    draw_luxury_brand_badge(draw, W - int(105 * sc), int(25 * sc), scale=0.85 * sc)
+
+    # ۱. بج قرمز بالا سمت چپ (مطابق قالب ۰۵_ریلز_ویدیویی_خام)
+    bx1, by1, bx2, by2 = int(80 * sc), int(145 * sc), int(380 * sc), int(242 * sc)
+    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=int(24 * sc), fill=(220, 8, 18, 245))
+    f_top = load_font(int(40 * sc))
+    top_txt = 'خبر فوری'
+    bb_top = draw.textbbox((0, 0), top_txt, font=f_top)
+    draw.text((bx1 + ((bx2 - bx1) - (bb_top[2] - bb_top[0])) / 2, by1 + int(18 * sc)), top_txt, font=f_top, fill=(255, 255, 255, 255))
+
+    # ۲. لوگوی دروازه قرآن در بالا سمت راست
+    draw_quran_gate_logo(
+        draw, x_center=W - int(140 * sc), y_top=int(142 * sc),
+        size=int(96 * sc), line_color=(255, 255, 255, 255),
+        bg_box_color=(22, 22, 26, 215)
+    )
+
+    # ۳. باکس تیره اول در پایین (دارای نوار عمودی قرمز در لبه سمت راست برای تیتر ویدیو)
+    b1_x1, b1_y1, b1_x2, b1_y2 = int(60 * sc), int(1280 * sc), W - int(60 * sc), int(1436 * sc)
+    draw.rounded_rectangle([b1_x1, b1_y1, b1_x2, b1_y2], radius=int(22 * sc), fill=(32, 32, 35, 235))
+    draw.rounded_rectangle([b1_x2 - int(22 * sc), b1_y1, b1_x2, b1_y2], radius=int(8 * sc), fill=(220, 8, 18, 255))
+
     if subtitle_text:
-        box_top = H - int(420 * sc)
-        box_bot = H - int(155 * sc)
-        draw.rounded_rectangle([int(40 * sc), box_top, W - int(40 * sc), box_bot], radius=int(26 * sc), fill=(10, 16, 30, 230), outline=(218, 165, 32, 245), width=max(2, int(3 * sc)))
-        draw.rounded_rectangle([W - int(310 * sc), box_top - int(28 * sc), W - int(75 * sc), box_top + int(26 * sc)], radius=int(12 * sc), fill=(200, 25, 35, 255))
-        f_b = load_font(int(26 * sc))
-        draw.text((W - int(285 * sc), box_top - int(22 * sc)), '🎬 گزارش ویدیویی', font=f_b, fill=(255, 255, 255, 255))
-        sub_lines, f_sub, sz_sub = fit_wrapped_text(subtitle_text, base_font_size=int(36 * sc), min_font_size=int(26 * sc), base_width=30, max_lines=3)
-        y_s = box_top + int(42 * sc)
+        sub_lines, f_sub, sz_sub = fit_wrapped_text(
+            subtitle_text, base_font_size=int(34 * sc), min_font_size=int(24 * sc), base_width=32, max_lines=2
+        )
+        y_s = b1_y1 + (int(48 * sc) if len(sub_lines) == 1 else int(24 * sc))
         for sl in sub_lines:
             bb = draw.textbbox((0, 0), sl, font=f_sub)
-            draw.text(((W - (bb[2] - bb[0])) / 2, y_s), sl, font=f_sub, fill=(255, 255, 255, 255))
-            y_s += int(sz_sub * 1.5)
-    bar_top = H - int(115 * sc)
-    draw.rectangle([0, bar_top, W, bar_top + int(62 * sc)], fill=(218, 175, 70, 250))
-    f_bar = load_font(int(28 * sc))
-    b_txt = f'@ShirazLastNews  |  📢 منبع: {source_name}'
-    bb_bar = draw.textbbox((0, 0), b_txt, font=f_bar)
-    draw.text(((W - (bb_bar[2] - bb_bar[0])) / 2, bar_top + int(10 * sc)), b_txt, font=f_bar, fill=(10, 16, 30, 255))
+            draw.text((b1_x2 - int(44 * sc) - (bb[2] - bb[0]), y_s), sl, font=f_sub, fill=(255, 255, 255, 255))
+            y_s += int(sz_sub * 1.42)
+
+    # ۴. باکس تیره دوم در پایین‌تر (منبع خبر، تاریخ روز خودکار و آیدی پیج)
+    b2_x1, b2_y1, b2_x2, b2_y2 = int(60 * sc), int(1465 * sc), W - int(60 * sc), int(1685 * sc)
+    draw.rounded_rectangle([b2_x1, b2_y1, b2_x2, b2_y2], radius=int(24 * sc), fill=(22, 22, 25, 240))
+
+    f_src = load_font(int(30 * sc))
+    src_line = f'📢 منبع خبر: {source_name} | رسانه آخرین خبرهای شیراز'
+    bb_s = draw.textbbox((0, 0), src_line, font=f_src)
+    draw.text((b2_x2 - int(38 * sc) - (bb_s[2] - bb_s[0]), b2_y1 + int(38 * sc)), src_line, font=f_src, fill=(242, 242, 245, 255))
+
+    draw.line([(b2_x1 + int(38 * sc), b2_y1 + int(118 * sc)), (b2_x2 - int(38 * sc), b2_y1 + int(118 * sc))], fill=(65, 68, 75, 220), width=max(1, int(2 * sc)))
+
+    today_str, _ = get_iran_jalali_date()
+    f_id = load_font(int(28 * sc))
+    footer_meta = f'{today_str}  |  @ShirazLastNews'
+    bb_m = draw.textbbox((0, 0), footer_meta, font=f_id)
+    draw.text(((W - (bb_m[2] - bb_m[0])) / 2, b2_y1 + int(142 * sc)), footer_meta, font=f_id, fill=(220, 18, 28, 255))
+
     return ov
 
 def get_video_url(entry, page_url):
