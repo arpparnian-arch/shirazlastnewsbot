@@ -1873,5 +1873,15 @@
     "time": 1794393963.2407506,
     "vip": false,
     "sig": "album:78767332c8af56de4dfe586e6f8d4b9c"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794395632_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794395632.6546433,
+    "vip": false,
+    "sig": "story_photo:fbac28f52cfc8531c6d6aa6721b07d59"
   }
 ]
