@@ -2025,5 +2025,15 @@
     "time": 1794401149.5190437,
     "vip": false,
     "sig": "story_photo:eadb42a7dc1cf7d1fe5f6d60a0e49845"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794405979_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794405979.1722314,
+    "vip": false,
+    "sig": "story_photo:0ad07541d7fcdecc19c57ef35f5b16cb"
   }
 ]
