@@ -2,8 +2,7 @@ name: Run News Bot
 
 on:
   schedule:
-    # اجرا در هر ۲۰ دقیقه، فقط در ساعات بیداری و پربازدید ایران (۷ صبح تا ۱۲:۳۰ شب به وقت ایران)
-    # معادل ساعت 03:30 تا 20:30 به وقت جهانی UTC
+    # اجرا در هر ۲۰ دقیقه در ساعات بیداری ایران
     - cron: '*/20 3-20 * * *'
   workflow_dispatch:
 
@@ -16,7 +15,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - name: Checkout repo
@@ -27,18 +26,24 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install FFmpeg, Fonts and Libraries
+      - name: Install FFmpeg, Fonts and Libraries (Fail-Safe Mode)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-vazirmatn fonts-dejavu-core libraqm0
-          pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts instagrapi moviepy
+          # اگر ffmpeg از قبل روی سرور گیت‌هاب نصب است، وقت را تلف نکن؛ وگرنه با تایم‌اوت کوتاه تلاش کن
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout="10" update || true
+            sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout="10" install -y ffmpeg fonts-vazirmatn fonts-dejavu-core libraqm0 || true
+          fi
+          # دانلود مستقیم فونت وزیرمتن در پوشه سیستم تا به apt نیازی نباشد
+          sudo mkdir -p /usr/share/fonts/truetype/vazirmatn
+          sudo curl -sL https://github.com/rastikerdar/vazirmatn/raw/master/fonts/ttf/Vazirmatn-Bold.ttf -o /usr/share/fonts/truetype/vazirmatn/Vazirmatn-Bold.ttf || true
+          pip install --upgrade pip
+          pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts instagrapi moviepy imageio-ffmpeg
 
       - name: Run bot (Continuous Drip-Feed Mode)
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           IG_SESSIONID: ${{ secrets.IG_SESSIONID }}
           GH_PAT_TOKEN: ${{ secrets.GH_PAT_TOKEN }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python bot.py
 
       - name: Save state
