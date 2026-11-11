@@ -1904,5 +1904,15 @@
     "time": 1794396374.089206,
     "vip": false,
     "sig": "story_photo:a3ed6f9415dd3c9ca894a1598d648225"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794396742_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794396742.1292148,
+    "vip": false,
+    "sig": "story_photo:fa53ac7d8afb157c7c04e2472e12efe9"
   }
 ]
