@@ -1563,21 +1563,11 @@
   {
     "type": "story_photo",
     "files": [
-      "drafts/ready_story_photo_1794379879_0.jpg"
+      "drafts/ready_story_photo_1794380713_0.jpg"
     ],
     "caption": "",
-    "time": 1794379879.822978,
+    "time": 1794380713.016302,
     "vip": false,
     "sig": "story_photo:317d63feddbb77828a7f644b0ceb60b2"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_1794380254_0.jpg"
-    ],
-    "caption": "",
-    "time": 1794380254.1432462,
-    "vip": false,
-    "sig": "story_photo:10f3860016f504fb98e3d374c9edb653"
   }
 ]
