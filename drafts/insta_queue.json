@@ -1944,5 +1944,15 @@
     "time": 1794397481.0284638,
     "vip": false,
     "sig": "story_photo:69b46a91eb152d5c0a9a6194761c20db"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794397848_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794397848.6599312,
+    "vip": false,
+    "sig": "story_photo:0f2aec049947758f9ab4b7a645bdc531"
   }
 ]
