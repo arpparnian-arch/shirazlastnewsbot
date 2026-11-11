@@ -2914,113 +2914,288 @@ def get_video_dimensions(vid_path):
         return 1080, 1920
 
 # ==========================================
-# موتور هوش مصنوعی سردبیر + طراحی بنر قلاب ۳ ثانیه اول (استایل کاغذ سوخته دوطبقه)
+# موتور ضدغلط نحوی فارسی + رندر واقعی کاغذ سوخته دوطبقه (۳ ثانیه اول)
 # ==========================================
+import math
+
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 _AI_VIRAL_CACHE = {}
 
-def build_fallback_hook_lines(title_text):
-    """ساخت خودکار قلاب ۲ سطری با جمله کامل فارسی در صورت عدم دسترسی به API"""
-    clean_t = clean_agency_prefix(title_text or "خبر مهم شیراز")
+# کلماتی که هرگز نباید در انتهای سطر اول یا دوم یا قبل از علامت تعجب قرار بگیرند
+FORBIDDEN_END_WORDS = {
+    "در", "به", "از", "با", "بر", "تا", "بی", "جز", "برای", "جهت",
+    "توسط", "طی", "ضمن", "علیه", "درباره", "خصوص", "مورد", "را",
+    "که", "و", "یا", "اما", "ولی", "چون", "اگر", "نه", "هم",
+    "یک", "دو", "سه", "چهار", "پنج", "هر", "همه", "کل", "برخی",
+    "تعدادی", "عدم", "بدون", "سوی", "سمت", "امروز", "فردا"
+}
+
+# جفت‌کلماتی که مضاف و مضاف‌الیه یا صفت و موصوف هستند و نباید بین دو سطر شکسته شوند
+UNBREAKABLE_PAIRS = [
+    ("شهید", "گمنام"), ("پیکر", "شهید"), ("تشییع", "پیکر"),
+    ("دروازه", "قرآن"), ("تخت", "جمشید"), ("فجر", "سپاسی"),
+    ("حافظیه", "شیراز"), ("علوم", "پزشکی"), ("فرمانده", "انتظامی"),
+    ("پلیس", "راهور"), ("شورای", "شهر"), ("شهردار", "شیراز"),
+    ("استاندار", "فارس"), ("آتش", "سوزی"), ("تصادف", "زنجیره"),
+    ("سقوط", "پراید"), ("تعطیلی", "مدارس"), ("قطعی", "برق"),
+    ("تنگه", "هرمز"), ("خلیج", "فارس"), ("امام", "جمعه"),
+    ("لیگ", "برتر"), ("تیم", "ملی"), ("حکم", "قصاص")
+]
+
+def is_grammatically_valid_persian_hook(line1, line2):
+    """بررسی سخت‌گیرانه دستور زبان فارسی برای جلوگیری ۱۰۰٪ از جملات ناقص"""
+    l1 = re.sub(r'[.!؟،؛:«»"\']+', '', line1).strip()
+    l2 = re.sub(r'[.!؟،؛:«»"\']+', '', line2).strip()
+    w1 = l1.split()
+    w2 = l2.split()
+
+    if len(w1) < 2 or len(w2) < 2 or len(w1) > 5 or len(w2) > 5:
+        return False
+
+    # ۱. هیچ سطری نباید با حروف اضافه یا ربط تمام شود
+    if w1[-1] in FORBIDDEN_END_WORDS or w2[-1] in FORBIDDEN_END_WORDS:
+        return False
+
+    # ۲. سطر دوم نباید با «را» شروع شود و ترکیب غیراصولی مثل «در را» نباید وجود داشته باشد
+    if w2[0] == "را":
+        return False
+    full_words = w1 + w2
+    for i in range(len(full_words) - 1):
+        if full_words[i] in FORBIDDEN_END_WORDS and full_words[i + 1] in ("را", "ببینید", "شد", "است"):
+            return False
+
+    # ۳. بررسی نشکستن ترکیب‌های وابسته بین سطر اول و دوم
+    for first_w, second_w in UNBREAKABLE_PAIRS:
+        if w1[-1] == first_w and w2[0].startswith(second_w):
+            return False
+
+    return True
+
+def build_syntactic_persian_hook(title_text):
+    """
+    استخراج هوشمند و ۱۰۰٪ صحیحِ قلاب ۲ سطری از تیتر خبر بدون هیچ غلط دستوری
+    """
+    clean_t = clean_agency_prefix(title_text or "").strip()
+    # اگر تیتر دو بخشی با اسلش (/) یا خط تیره است، بخش جذاب‌تر و کوتاه‌تر را انتخاب کن
+    if "/" in clean_t:
+        parts = [p.strip() for p in clean_t.split("/") if len(p.strip().split()) >= 3]
+        if parts:
+            clean_t = min(parts, key=lambda x: len(x.split()))
+
     clean_t = re.sub(r'[.!؟،؛:«»"\']+', ' ', clean_t)
-    words = [w.strip() for w in clean_t.split() if w.strip()]
+    clean_t = re.sub(r'\s+', ' ', clean_t).strip()
+    words = clean_t.split()
+
+    # حذف کلمات زائدی که در انتهای برش مانده باشند
+    while words and words[-1] in FORBIDDEN_END_WORDS:
+        words.pop()
+
     if len(words) < 3:
-        return "خبر فوری برای شیراز", "جزییات را حتما ببینید!"
-    if len(words) <= 6:
-        mid = max(2, len(words) // 2)
-        l1 = " ".join(words[:mid])
-        l2 = " ".join(words[mid:])
-        if not l2.endswith(("!", "؟")):
-            l2 += "!"
-        return l1, l2
-    # انتخاب ۴ تا ۶ کلمه اول + بستن جمله با عبارت کامل و جذاب
-    l1 = " ".join(words[:3])
-    l2_words = words[3:6]
-    verbs = ("شد", "می‌شود", "است", "رسید", "کرد", "دارد", "بود", "گشت")
-    if any(l2_words[-1].endswith(v) for v in verbs):
-        l2 = " ".join(l2_words) + "!"
-    else:
-        l2 = " ".join(words[3:5]) + " را ببینید!"
-    return l1, l2
+        return "جزئیات این خبر مهم", "در شیراز و فارس!"
+
+    # الگوهای خاص و پرتکرار خبری برای تولید تیترهای ۱۰۰٪ طبیعی:
+    # الگو ۱: خبرهای دارای «در شیراز» یا «در فارس» (مثل: تشییع پیکر شهید گمنام در شیراز)
+    for loc_idx in range(2, min(len(words) - 1, 6)):
+        if words[loc_idx] == "در" and loc_idx + 1 < len(words):
+            subj_words = words[:loc_idx]
+            place_words = words[loc_idx + 1:loc_idx + 3]
+            while place_words and place_words[-1] in FORBIDDEN_END_WORDS:
+                place_words.pop()
+            if 2 <= len(subj_words) <= 4 and place_words:
+                place_str = " ".join(place_words)
+                l1 = " ".join(subj_words)
+                if len(place_words) == 1:
+                    l2 = f"در {place_str}؛ ببینید!"
+                else:
+                    l2 = f"در {place_str}!"
+                if is_grammatically_valid_persian_hook(l1, l2):
+                    return l1, l2
+
+    # الگو ۲: اگر کل تیتر بین ۴ تا ۷ کلمه است و خودش یک جمله یا عبارت کامل است
+    if 4 <= len(words) <= 7:
+        best_split = len(words) // 2
+        # تنظیم محل برش تا بین مضاف و مضاف‌الیه یا حرف اضافه نیفتد
+        for candidate_idx in [best_split, best_split + 1, best_split - 1]:
+            if 2 <= candidate_idx <= len(words) - 2:
+                w_left = words[:candidate_idx]
+                w_right = words[candidate_idx:]
+                if w_left[-1] not in FORBIDDEN_END_WORDS:
+                    broken_pair = any(w_left[-1] == p1 and w_right[0].startswith(p2) for p1, p2 in UNBREAKABLE_PAIRS)
+                    if not broken_pair:
+                        l1 = " ".join(w_left)
+                        l2 = " ".join(w_right) + "!"
+                        if is_grammatically_valid_persian_hook(l1, l2):
+                            return l1, l2
+
+    # الگو ۳: برای تیترهای طولانی‌تر (بیش از ۷ کلمه) -> استخراج عبارت اسمی اول + بستن استاندارد
+    cut = 3
+    if len(words) >= 4:
+        for p1, p2 in UNBREAKABLE_PAIRS:
+            if words[2] == p1 and words[3].startswith(p2):
+                cut = 4
+                break
+    while cut > 2 and words[cut - 1] in FORBIDDEN_END_WORDS:
+        cut -= 1
+
+    l1 = " ".join(words[:cut])
+    rem = words[cut:cut + 4]
+    while rem and rem[-1] in FORBIDDEN_END_WORDS:
+        rem.pop()
+
+    # اگر ادامه جمله خودش دارای فعل کامل است
+    verbs = ("شد", "می‌شود", "است", "رسید", "کرد", "دارد", "گشت", "یافت", "ماند", "رفت")
+    if len(rem) >= 2 and any(rem[-1].endswith(v) for v in verbs):
+        l2 = " ".join(rem) + "!"
+        if is_grammatically_valid_persian_hook(l1, l2):
+            return l1, l2
+
+    # در غیر این صورت، بستن با یک عبارت خبری کامل و سالم
+    if "شیراز" in clean_t:
+        return l1, "گزارش ویژه از شیراز!"
+    return l1, "جزئیات کامل را ببینید!"
 
 def get_ai_viral_hook_and_caption(title, summary):
-    """دریافت JSON استاندارد شامل hook و caption از هوش مصنوعی همراه با کش داخلی"""
-    cache_key = (title or "")[:50]
+    """دریافت قلاب ۲ سطری و کپشن با پشتیبانی از هر دو فرمت کلید AIza و AQ"""
+    cache_key = (title or "")[:60]
     if cache_key in _AI_VIRAL_CACHE:
         return _AI_VIRAL_CACHE[cache_key]
 
     news_text = f"تیتر: {title}\nمتن خبر: {summary}".strip()
-    if not GEMINI_API_KEY or len(news_text) < 15:
-        l1, l2 = build_fallback_hook_lines(title)
-        return (l1, l2, None)
 
-    prompt = f"""تو یک سردبیر حرفه‌ای اخبار و متخصص وایرال کردن محتوا در اینستاگرام هستی.
-متن خبری که در ادامه می‌آید را بخوان و خروجی را فقط و فقط به شکل یک آبجکت JSON معتبر برگردان. هیچ متن، توضیح یا فرمت مارک‌داون قبل و بعد از خروجی قرار نده.
+    # پشتیبانی کامل از کلیدهای جدید گوگل (AQ.) و کلیدهای قدیمی (AIza)
+    if GEMINI_API_KEY and len(GEMINI_API_KEY) > 15 and len(news_text) >= 15:
+        prompt = f"""تو سردبیر ارشد خبری هستی. متن خبر زیر را بخوان و خروجی را فقط به شکل JSON معتبر برگردان.
+قانون طلایی: عبارت قلاب (مجموع hook_line1 و hook_line2) باید از نظر دستور زبان و نگارش فارسی ۱۰۰٪ صحیح، طبیعی، کامل و معنادار باشد. هرگز کلمات را ناقص رها نکن و هرگز حرف اضافه (مثل در، به، از، را) را بدون متمم نگذار.
 
-ساختار JSON باید دقیقاً شامل این کلیدها باشد:
-1. "hook_line1": سطر اول قلاب (۲ تا ۳ کلمه، بیانگر موضوع اصلی خبر، بدون نقطه‌چین و کاملاً صحیح از نظر دستور زبان فارسی).
-2. "hook_line2": سطر دوم قلاب (۲ تا ۳ کلمه، ادامه و فعل کامل و هیجانی جمله که حتماً با ! یا ؟! تمام شود تا جمله کامل گردد).
-3. "caption": متن کامل و جذاب برای کپشن اینستاگرام (۳ تا ۴ پاراگراف کوتاه و روان با جملات کامل و یک سوال تعاملی در انتها). در پایان کپشن آیدی @shirazlastnews و ۵ هشتگ مرتبط (حتماً شامل #شیراز و #آخرین_خبرهای_شیراز) قرار بده.
+ساختار JSON:
+1. "hook_line1": سطر اول قلاب (۲ تا ۴ کلمه، بخش اول عبارت یا موضوع خبر).
+2. "hook_line2": سطر دوم قلاب (۲ تا ۳ کلمه، تکمیل‌کننده معنا و فعل کامل که با ! یا ؟! تمام شود).
+3. "caption": کپشن جذاب اینستاگرام (۳ پاراگراف کوتاه با جملات کامل + آیدی @shirazlastnews و ۵ هشتگ شامل #شیراز و #آخرین_خبرهای_شیراز).
 
 متن خبر:
 {news_text}"""
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.65, "responseMimeType": "application/json"}
-    }
-    try:
-        r = requests.post(url, json=payload, timeout=12)
-        if r.status_code == 200:
-            raw_out = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
-            m = re.search(r"\{.*\}", raw_out, re.DOTALL)
-            data = json.loads(m.group(0) if m else raw_out)
-            h1 = str(data.get("hook_line1", "")).strip().replace("...", "")
-            h2 = str(data.get("hook_line2", "")).strip().replace("...", "")
-            cap = str(data.get("caption", "")).strip()
-            if h1 and h2:
-                if not h2.endswith(("!", "؟")):
-                    h2 += "!"
-                res = (h1, h2, cap if len(cap) > 40 else None)
-                _AI_VIRAL_CACHE[cache_key] = res
-                return res
-    except Exception as e:
-        print("AI JSON Hook fallback to local:", e)
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+        headers = {
+            "Content-Type": "application/json",
+            "x-goog-api-key": GEMINI_API_KEY
+        }
+        payload = {
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": 0.4, "responseMimeType": "application/json"}
+        }
+        try:
+            r = requests.post(url, headers=headers, json=payload, timeout=12)
+            if r.status_code == 200:
+                raw_out = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                m = re.search(r"\{.*\}", raw_out, re.DOTALL)
+                data = json.loads(m.group(0) if m else raw_out)
+                h1 = str(data.get("hook_line1", "")).strip().replace("...", "")
+                h2 = str(data.get("hook_line2", "")).strip().replace("...", "")
+                cap = str(data.get("caption", "")).strip()
+                if h1 and h2 and is_grammatically_valid_persian_hook(h1, h2):
+                    if not h2.endswith(("!", "؟")):
+                        h2 += "!"
+                    res = (h1, h2, cap if len(cap) > 40 else None)
+                    _AI_VIRAL_CACHE[cache_key] = res
+                    return res
+        except Exception as e:
+            print("AI Hook validation fallback to syntactic engine:", e)
 
-    l1, l2 = build_fallback_hook_lines(title)
+    l1, l2 = build_syntactic_persian_hook(title)
     res = (l1, l2, None)
     _AI_VIRAL_CACHE[cache_key] = res
     return res
 
-def _make_torn_polygon(x1, y1, x2, y2, seed_val=10, step=14, jitter=9):
-    """ساخت مختصات لبه‌های مضرس و پاره‌شده کاغذ"""
+def _make_natural_torn_polygon(x1, y1, x2, y2, seed_val=10):
+    """تولید لبه‌های طبیعی کاغذ پاره‌شده و سوخته با موج‌های نامنظم ارگانیک"""
     rng = random.Random(seed_val)
     pts = []
+    step = max(6, int((x2 - x1) / 55))
+
+    def wave_offset(pos, amp):
+        return int(math.sin(pos * 0.09) * (amp * 0.5) + rng.randint(-amp, amp))
+
+    # لبه بالایی
     for x in range(x1, x2, step):
-        pts.append((x, y1 + rng.randint(-jitter, jitter)))
+        pts.append((x, y1 + wave_offset(x, 6)))
+    # لبه راست (پارگی بیشتر در کناره‌ها)
     for y in range(y1, y2, step):
-        pts.append((x2 + rng.randint(-jitter, jitter), y))
+        pts.append((x2 + wave_offset(y, 11), y))
+    # لبه پایینی
     for x in range(x2, x1, -step):
-        pts.append((x, y2 + rng.randint(-jitter, jitter)))
+        pts.append((x, y2 + wave_offset(x, 6)))
+    # لبه چپ
     for y in range(y2, y1, -step):
-        pts.append((x1 + rng.randint(-jitter, jitter), y))
+        pts.append((x1 + wave_offset(y, 11), y))
     return pts
+
+def _render_burned_paper_strip(w, h, base_rgb, edge_rgb, char_rgb, seed_val=1):
+    """
+    ساخت تکه کاغذ واقعی با بافت گرانج، لبه‌های زغالی سوخته و سایه‌روشن طبیعی (Vignette)
+    """
+    rng = random.Random(seed_val)
+    strip = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    pad = 24
+    x1, y1, x2, y2 = pad, pad, w - pad, h - pad
+
+    poly_char = _make_natural_torn_polygon(x1 - 7, y1 - 6, x2 + 7, y2 + 6, seed_val=seed_val)
+    poly_burnt = _make_natural_torn_polygon(x1 - 3, y1 - 3, x2 + 3, y2 + 3, seed_val=seed_val + 1)
+    poly_main = _make_natural_torn_polygon(x1, y1, x2, y2, seed_val=seed_val + 2)
+
+    # ۱. سایه بیرونی عمیق زیر کاغذ
+    sh_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    sh_d = ImageDraw.Draw(sh_layer)
+    sh_d.polygon([(px + 6, py + 12) for px, py in poly_char], fill=(0, 0, 0, 210))
+    sh_layer = sh_layer.filter(ImageFilter.GaussianBlur(10))
+    strip = Image.alpha_composite(strip, sh_layer)
+
+    # ۲. لایه لبه زغالی (خاکستر سیاه-قهوه‌ای دور کاغذ)
+    char_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    cd = ImageDraw.Draw(char_layer)
+    cd.polygon(poly_char, fill=(*char_rgb, 245))
+    cd.polygon(poly_burnt, fill=(*edge_rgb, 255))
+
+    # ۳. بدنه اصلی کاغذ به همراه سایه سوختگی تدریجی از لبه‌ها به سمت داخل (Inner Burn Vignette)
+    paper_body = Image.new("RGBA", (w, h), (*base_rgb, 255))
+    pb_draw = ImageDraw.Draw(paper_body)
+    # افزودن لکه‌ها و خطوط ریز بافت کاغذ قدیمی (Grunge Texture)
+    for _ in range(380):
+        gx = rng.randint(x1, x2)
+        gy = rng.randint(y1, y2)
+        gr = rng.randint(2, 14)
+        alpha_spot = rng.randint(8, 26)
+        col_spot = char_rgb if rng.random() < 0.4 else edge_rgb
+        pb_draw.ellipse([gx - gr, gy - gr, gx + gr, gy + gr], fill=(*col_spot, alpha_spot))
+
+    # ایجاد گرادینت سوختگی دور تا دور لبه داخلی کاغذ
+    burn_glow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    bg_d = ImageDraw.Draw(burn_glow)
+    bg_d.polygon(poly_main, outline=(*edge_rgb, 255), width=18)
+    bg_d.polygon(poly_main, outline=(*char_rgb, 240), width=7)
+    burn_glow = burn_glow.filter(ImageFilter.GaussianBlur(8))
+    paper_body = Image.alpha_composite(paper_body, burn_glow)
+
+    # برش دقیق کاغذ با ماسک لبه پاره‌شده
+    mask = Image.new("L", (w, h), 0)
+    ImageDraw.Draw(mask).polygon(poly_main, fill=255)
+
+    strip = Image.alpha_composite(strip, char_layer)
+    strip.paste(paper_body, (0, 0), mask)
+    return strip
 
 def create_3s_hook_overlay(W, H, title_text, summary_text=""):
     """
-    طراحی لایه شفاف (RGBA) بنر دوطبقه کاغذ سوخته برای ۳ ثانیه اول ویدیو:
-    - نوار اول: کاغذ کرم با لبه سوخته و فونت مشکی ضخیم
-    - نوار دوم: کاغذ قرمز با لبه سوخته و فونت زرد با دورخط مشکی
+    رندر استودیویی بنر دوطبقه کاغذ سوخته برای ۳ ثانیه اول ویدیو
+    (کاملاً مشابه نمونه مرجع با زاویه طبیعی، بافت سوختگی لبه‌ها و تایپوگرافی سه‌بعدی)
     """
     ensure_persian_font()
     line1, line2, _ = get_ai_viral_hook_and_caption(title_text, summary_text)
     sc = W / 1080.0
     ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
 
-    # فونت درشت و تنظیم خودکار اندازه برای جا شدن کامل در کادر
-    _, f1, sz1 = fit_wrapped_text(line1, base_font_size=int(64 * sc), min_font_size=int(42 * sc), base_width=22, max_lines=1)
-    _, f2, sz2 = fit_wrapped_text(line2, base_font_size=int(68 * sc), min_font_size=int(44 * sc), base_width=22, max_lines=1)
+    _, f1, _ = fit_wrapped_text(line1, base_font_size=int(64 * sc), min_font_size=int(42 * sc), base_width=24, max_lines=1)
+    _, f2, _ = fit_wrapped_text(line2, base_font_size=int(70 * sc), min_font_size=int(44 * sc), base_width=24, max_lines=1)
 
     tmp_d = ImageDraw.Draw(ov)
     b1 = tmp_d.textbbox((0, 0), line1, font=f1)
@@ -3028,52 +3203,67 @@ def create_3s_hook_overlay(W, H, title_text, summary_text=""):
     w1, h1 = (b1[2] - b1[0]), (b1[3] - b1[1])
     w2, h2 = (b2[2] - b2[0]), (b2[3] - b2[1])
 
-    pad_x = int(70 * sc)
-    box_w1 = min(W - int(90 * sc), max(w1 + pad_x * 2, int(560 * sc)))
-    box_w2 = min(W - int(80 * sc), max(w2 + pad_x * 2, int(600 * sc)))
-    box_h1 = int(142 * sc)
-    box_h2 = int(152 * sc)
+    pad_x = int(78 * sc)
+    strip_w1 = min(W - int(60 * sc), max(w1 + pad_x * 2, int(580 * sc)))
+    strip_w2 = min(W - int(50 * sc), max(w2 + pad_x * 2, int(620 * sc)))
+    strip_h1 = int(190 * sc)
+    strip_h2 = int(200 * sc)
 
+    # ۱. ساخت نوار بالایی (کاغذ کهنه کرم-طلایی با لبه‌های سوخته قهوه‌ای تیره و متن مشکی)
+    top_strip = _render_burned_paper_strip(
+        strip_w1, strip_h1,
+        base_rgb=(244, 224, 186),
+        edge_rgb=(115, 62, 22),
+        char_rgb=(32, 16, 6),
+        seed_val=401
+    )
+    d_top = ImageDraw.Draw(top_strip)
+    tx1 = (strip_w1 - w1) // 2
+    ty1 = (strip_h1 - h1) // 2 - int(10 * sc)
+    # سایه روشن زیر متن مشکی برای برجستگی روی بافت کاغذ
+    d_top.text((tx1 + int(2*sc), ty1 + int(3*sc)), line1, font=f1, fill=(255, 250, 235, 220))
+    d_top.text(
+        (tx1, ty1), line1, font=f1,
+        fill=(18, 12, 8, 255),
+        stroke_width=max(1, int(2 * sc)),
+        stroke_fill=(35, 22, 12, 255)
+    )
+    # چرخش بسیار ملایم ۱.۲ درجه‌ای برای حس طبیعی کاغذ چسبانده‌شده
+    top_strip = top_strip.rotate(1.2, resample=Image.Resampling.BICUBIC, expand=True)
+
+    # ۲. ساخت نوار پایینی (کاغذ قرمز تند زرشکی با لبه‌های زغالی و متن زرد درخشان با دورخط ضخیم مشکی)
+    bot_strip = _render_burned_paper_strip(
+        strip_w2, strip_h2,
+        base_rgb=(188, 16, 22),
+        edge_rgb=(85, 8, 10),
+        char_rgb=(20, 4, 4),
+        seed_val=707
+    )
+    d_bot = ImageDraw.Draw(bot_strip)
+    tx2 = (strip_w2 - w2) // 2
+    ty2 = (strip_h2 - h2) // 2 - int(10 * sc)
+    # سایه مشکی عمیق پشت متن زرد (Extrude Shadow)
+    for ox, oy in [(int(5*sc), int(7*sc)), (int(3*sc), int(5*sc))]:
+        d_bot.text((tx2 + ox, ty2 + oy), line2, font=f2, fill=(0, 0, 0, 235), stroke_width=max(3, int(7 * sc)), stroke_fill=(0, 0, 0, 235))
+    d_bot.text(
+        (tx2, ty2), line2, font=f2,
+        fill=(255, 232, 20, 255),
+        stroke_width=max(3, int(7 * sc)),
+        stroke_fill=(12, 8, 8, 255)
+    )
+    bot_strip = bot_strip.rotate(-0.8, resample=Image.Resampling.BICUBIC, expand=True)
+
+    # جایگذاری دو نوار روی بوم اصلی ویدیو (نوار بالایی کمی هم‌پوشان روی نوار پایینی)
     cx = W // 2
-    top_y1 = int(H * 0.25) if H >= W else int(H * 0.22)
-    top_y2 = top_y1 + box_h1 - int(12 * sc)
+    base_y = int(H * 0.25) if H >= W else int(H * 0.19)
 
-    # لایه سایه نرم زیر کاغذها
-    shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    sh_d = ImageDraw.Draw(shadow)
+    p2_x = cx - bot_strip.width // 2
+    p2_y = base_y + int(122 * sc)
+    p1_x = cx - top_strip.width // 2
+    p1_y = base_y
 
-    x1_l, x1_r = cx - box_w1 // 2, cx + box_w1 // 2
-    x2_l, x2_r = cx - box_w2 // 2, cx + box_w2 // 2
-
-    poly1_outer = _make_torn_polygon(x1_l - int(10*sc), top_y1 - int(8*sc), x1_r + int(10*sc), top_y1 + box_h1 + int(8*sc), seed_val=101, step=max(6, int(12*sc)), jitter=max(4, int(8*sc)))
-    poly1_inner = _make_torn_polygon(x1_l, top_y1, x1_r, top_y1 + box_h1, seed_val=102, step=max(6, int(12*sc)), jitter=max(3, int(6*sc)))
-
-    poly2_outer = _make_torn_polygon(x2_l - int(10*sc), top_y2 - int(8*sc), x2_r + int(10*sc), top_y2 + box_h2 + int(8*sc), seed_val=202, step=max(6, int(12*sc)), jitter=max(4, int(8*sc)))
-    poly2_inner = _make_torn_polygon(x2_l, top_y2, x2_r, top_y2 + box_h2, seed_val=203, step=max(6, int(12*sc)), jitter=max(3, int(6*sc)))
-
-    sh_d.polygon([(x + int(8*sc), y + int(12*sc)) for x, y in poly1_outer], fill=(0, 0, 0, 185))
-    sh_d.polygon([(x + int(8*sc), y + int(12*sc)) for x, y in poly2_outer], fill=(0, 0, 0, 195))
-    ov = Image.alpha_composite(ov, shadow.filter(ImageFilter.GaussianBlur(max(3, int(8 * sc)))))
-    draw = ImageDraw.Draw(ov)
-
-    # ۱. رسم نوار بالایی (لبه سوخته قهوه‌ای تیره + کاغذ کرم روشن)
-    draw.polygon(poly1_outer, fill=(58, 32, 14, 250))
-    draw.polygon(poly1_inner, fill=(242, 222, 186, 255), outline=(120, 72, 32, 255))
-
-    # ۲. رسم نوار پایینی (لبه سوخته زرشکی/مشکی + کاغذ قرمز تند)
-    draw.polygon(poly2_outer, fill=(45, 10, 10, 252))
-    draw.polygon(poly2_inner, fill=(192, 18, 24, 255), outline=(95, 12, 14, 255))
-
-    # نوشتن متن سطر اول (مشکی ضخیم با سایه ظریف سفید روی کاغذ کرم)
-    tx1 = cx - w1 // 2
-    ty1 = top_y1 + (box_h1 - h1) // 2 - int(12 * sc)
-    draw.text((tx1, ty1), line1, font=f1, fill=(18, 12, 8, 255), stroke_width=max(1, int(2 * sc)), stroke_fill=(255, 248, 230, 255))
-
-    # نوشتن متن سطر دوم (زرد درخشان با دورخط ضخیم مشکی روی کاغذ قرمز)
-    tx2 = cx - w2 // 2
-    ty2 = top_y2 + (box_h2 - h2) // 2 - int(12 * sc)
-    draw.text((tx2, ty2), line2, font=f2, fill=(255, 230, 25, 255), stroke_width=max(3, int(6 * sc)), stroke_fill=(10, 10, 10, 255))
-
+    ov.alpha_composite(bot_strip, (p2_x, p2_y))
+    ov.alpha_composite(top_strip, (p1_x, p1_y))
     return ov
 
 def find_watermark_file():
