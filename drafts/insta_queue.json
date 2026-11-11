@@ -2197,5 +2197,15 @@
     "time": 1794423877.7379568,
     "vip": false,
     "sig": "story_photo:09b20094fe1fe790ec775e94693259cf"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794425379_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794425379.3323703,
+    "vip": false,
+    "sig": "story_photo:d023a369c11393b3c8f5244644d19e2f"
   }
 ]
