@@ -2015,5 +2015,15 @@
     "time": 1794400775.7192144,
     "vip": false,
     "sig": "album:ceb6b37e5a66769cf3e5ae6baab2ce8b"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794401149_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794401149.5190437,
+    "vip": false,
+    "sig": "story_photo:eadb42a7dc1cf7d1fe5f6d60a0e49845"
   }
 ]
