@@ -1,5 +1,3 @@
-mehrnews.com/news/7002752/%d8%af%d8%a7%d9%86%d8%b4-%d8%a2%d9%85%d9%88%d8%b2-%d8%b9%d8%b4%d8%a7%db%8c%d8%b1%db%8c-%d9%84%d8%b1%d8%b3%d8%aa%d8%a7%d9%86-%d8%a8%d9%87-%d8%a7%d8%b1%d8%af%d9%88%db%8c-%d8%aa%db%8c%d9%85-%d9%85%d9%84%db%8c-%d9%85%d9%88%db%8c-%d8%aa%d8%a7%db%8c-%d8%b1%d8%a7%d9%87-%db%8c%d8%a7%d9%81%d8%aa
-id:7003549
 id:6999261
 irib-news.ir/fa/news/5960559/بهره-مندی-جمعی-از-مردم-فیروزآباد-فارس-از-خدمات-رایگان-سلامت
 id:2442516
@@ -1198,3 +1196,5 @@ id:7007466
 id:140508201369
 mehrnews.com/news/7007484/%d8%b5%d8%af%d9%88%d8%b1-%d8%a7%d8%ad%da%a9%d8%a7%d9%85-%d9%82%d8%b6%d8%a7%db%8c%db%8c-%d8%a8%d8%b1%d8%a7%db%8c-%d8%b3%d9%87-%d9%be%d8%b1%d9%88%d9%86%d8%af%d9%87-%d9%85%d9%87%d9%85-%d8%aa%d8%ae%d9%84%d9%81%d8%a7%d8%aa-%d8%a7%d8%b1%d8%b2%db%8c-%d8%af%d8%b1-%d8%aa%d9%87%d8%b1%d8%a7%d9%86
 isna.ir/news/1405082013699/%d9%be%d8%a7%da%a9%d8%b3%d8%a7%d8%b2%db%8c-%d8%a8%d8%a7%d9%85-%d9%88-%d8%a8%d8%af%d9%86%d9%87-%d8%a8%d9%86%d8%a7%d9%87%d8%a7%db%8c-%d8%aa%d8%a7%d8%b1%db%8c%d8%ae%db%8c-%d9%85%d8%ac%d9%85%d9%88%d8%b9%d9%87-%d8%b2%d9%86%d8%af%db%8c%d9%87-%d8%a8%d8%b1%d8%a7%db%8c-%d9%be%db%8c%d8%b4%da%af%db%8c%d8%b1%db%8c-%d8%a7%d8%b2
+irna.ir/news/86317164/%d9%be%d8%b1%d9%88%d8%a7%d8%b2%d9%87%d8%a7%db%8c-%d9%81%d8%b1%d9%88%d8%af%da%af%d8%a7%d9%87-%d8%b4%d9%87%d8%af%d8%a7%db%8c-%d8%ac%d9%87%d8%b1%d9%85-%d9%be%d8%b3-%d8%a7%d8%b2-%d8%ad%d8%af%d9%88%d8%af-%db%b2-%d8%b3%d8%a7%d9%84-%d8%a7%d8%b2-%d8%b3%d8%b1-%da%af%d8%b1%d9%81%d8%aa%d9%87-%d9%85%db%8c-%d8%b4%d9%88%d8%af
+id:86317164
