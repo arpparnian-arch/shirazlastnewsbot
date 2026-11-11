@@ -1,5 +1,3 @@
-mehrnews.com/news/7002495/%d8%a2%d8%b1%db%8c%d8%a7%d9%86-%d9%be%d8%b1%d8%a8%d8%a7%d8%b1%d8%b4-%d8%aa%d8%b1%db%8c%d9%86-%d9%86%d9%82%d8%b7%d9%87-%d8%a7%d9%84%d8%a8%d8%b1%d8%b2-%d8%b4%d8%af
-irna.ir/news/86313083/%d9%85%d8%af%db%8c%d8%b1%da%a9%d9%84-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86%d8%af%d8%a7%d8%b1%d8%af-%d9%81%d8%a7%d8%b1%d8%b3-%da%af%d8%b0%d8%a7%d8%b1-%d8%a7%d8%b2-%d9%86%d8%b8%d8%a7%d9%85-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86%d8%af%d8%a7%d8%b1%d8%af%d9%87%d8%a7%db%8c-%d8%a7%d8%ac%d8%a8%d8%a7%d8%b1%db%8c-%d9%81%d8%b1%d8%a7%db%8c%d9%86%d8%af%db%8c
 id:86314892
 mehrnews.com/news/7003269/%d8%a7%d9%85%d8%af%d8%a7%d8%af%d8%b1%d8%b3%d8%a7%d9%86%db%8c-%d9%86%d8%ac%d8%a7%d8%aa%da%af%d8%b1%d8%a7%d9%86-%d9%87%d9%84%d8%a7%d9%84-%d8%a7%d8%ad%d9%85%d8%b1-%d8%a8%d9%87-%db%b4%db%b5%db%b8-%d9%86%d9%81%d8%b1-%d8%b7%db%8c-%d9%87%d9%81%d8%aa%d9%87-%da%af%d8%b0%d8%b4%d8%aa%d9%87
 id:86314241
@@ -1198,3 +1196,5 @@ id:140508201383
 isna.ir/news/1405082013835/%d9%85%d8%b1%d9%85%d8%aa-%d9%88-%d8%b3%d8%a7%d9%85%d8%a7%d9%86%d8%af%d9%87%db%8c-%d8%b5%d8%af%d9%87%d8%a7-%d8%a7%d8%ab%d8%b1-%d8%aa%d8%a7%d8%b1%db%8c%d8%ae%db%8c-%d8%af%d8%b1-%da%a9%d8%a7%d8%b1%da%af%d8%a7%d9%87-%d8%ad%d9%81%d8%a7%d8%b8%d8%aa-%d9%88-%d9%85%d8%b1%d9%85%d8%aa-%d9%81%d8%a7%d8%b1%d8%b3
 id:2443614
 varzesh3.ir/news/2443614/طوفان-ایرانی-ها-در-چلنج-کاپ-اروپا
+varzesh3.ir/news/2443613/کامبک-تیم-لژیونر-ایرانی-در-جام-حذفی-آلمان
+id:2443613
