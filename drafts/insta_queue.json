@@ -1954,5 +1954,15 @@
     "time": 1794397848.6599312,
     "vip": false,
     "sig": "story_photo:0f2aec049947758f9ab4b7a645bdc531"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794398228_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794398228.9154162,
+    "vip": false,
+    "sig": "story_photo:4d7f95bab7bf850041f4b7f0e6dd4846"
   }
 ]
