@@ -1994,5 +1994,15 @@
     "time": 1794399654.3155496,
     "vip": false,
     "sig": "story_photo:1ce3d78058b659fc036678bf2fc4ea08"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794400772_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794400772.151939,
+    "vip": false,
+    "sig": "story_photo:5e8dbe5c1b4de1a36b9e7cc654d685d4"
   }
 ]
