@@ -3881,20 +3881,42 @@ def make_buttons(news_link=None):
 # ==========================================
 # ۱۴.۵ ارتقای فیدهای ویدیویی، استخراج‌کننده MP4 و شکارچی اختصاصی ریلز
 # ==========================================
+FARS_FEEDS = [
+    'https://www.isna.ir/rss/tp/274',
+    'https://www.irna.ir/rss/tp/1023',
+    'https://www.mehrnews.com/rss/tp/93',
+    'https://www.irib-news.ir/fa/rss/27',
+    'https://www.mehrnews.com/rss/tp/649',
+    'https://www.isna.ir/rss/tp/414',
+    'https://www.isna.ir/rss/tp/274',
+    'https://www.varzesh3.ir/rss/domesticfootball'
+]
+
+FARS_TAGS = [
+    '/tp/274', '/tp/1023', '/tp/93', '/fa/rss/27',
+    '/tp/649', '/tp/414', 'fars.isna', '1262'
+]
+
 VIDEO_PRIORITY_FEEDS = [
+    'https://www.isna.ir/rss/tp/401',
+    'https://www.irna.ir/rss/tp/139',
+    'https://www.mehrnews.com/rss/tp/121',
+    'https://www.mashreghnews.ir/rss/tp/8',
+    'https://www.irib-news.ir/fa/rss/3',
+    'https://www.hamshahrionline.ir/rss/pl/9',
     'https://www.mehrnews.com/rss/pl/9',
-    'https://www.isna.ir/rss/pl/135',
+    'https://www.isna.ir/rss/tp/440',
     'https://www.isna.ir/rss/tp/14',
     'https://www.irna.ir/rss/pl/15',
     'https://www.mashreghnews.ir/rss/pl/11',
-    'https://www.hamshahrionline.ir/rss/pl/9',
-    'https://snn.ir/fa/rss/11',
-    'https://www.varzesh3.com/rss/videos'
+    'https://snn.ir/fa/rss/3',
+    'https://www.varzesh3.ir/rss/videos'
 ]
 
 VIDEO_FEED_TAGS = [
-    '/pl/9', '/pl/135', '/tp/14', '/pl/15',
-    '/pl/11', '/rss/11', 'rss/videos', '/7/89/'
+    '/tp/401', '/tp/139', '/tp/121', '/tp/8', '/fa/rss/3',
+    '/pl/9', '/pl/135', '/tp/14', '/pl/15', '/pl/11',
+    '/rss/11', 'rss/videos', '/7/89/'
 ]
 
 RSS_FEEDS = FARS_FEEDS + VIDEO_PRIORITY_FEEDS + [
@@ -3906,6 +3928,31 @@ RSS_FEEDS = FARS_FEEDS + VIDEO_PRIORITY_FEEDS + [
     'https://snn.ir/fa/rss/allnews',
     'https://www.varzesh3.com/rss/all'
 ]
+
+
+def get_source_name(url):
+    u = url.lower()
+    if 'irna.ir' in u:
+        return 'خبرگزاری ایرنا'
+    if 'mehrnews.com' in u:
+        return 'خبرگزاری مهر'
+    if 'tasnimnews.com' in u:
+        return 'خبرگزاری تسنیم'
+    if 'isna.ir' in u:
+        return 'خبرگزاری ایسنا'
+    if 'farsnews' in u:
+        return 'خبرگزاری فارس'
+    if 'irib-news' in u or 'iribnews' in u:
+        return 'خبرگزاری صدا و سیما'
+    if 'mashreghnews.ir' in u:
+        return 'مشرق نیوز'
+    if 'hamshahrionline.ir' in u:
+        return 'همشهری آنلاین'
+    if 'snn.ir' in u:
+        return 'خبرگزاری دانشجو'
+    if 'varzesh3' in u:
+        return 'ورزش سه'
+    return 'تحریریه آخرین خبرهای شیراز'
 
 
 def get_video_url(entry, page_url):
@@ -3931,7 +3978,7 @@ def get_video_url(entry, page_url):
         if not any(b in dm.lower() for b in bad_tokens):
             return ('https:' + dm) if dm.startswith('//') else dm
 
-    # ۳. اسکرپینگ صفحه خبر و پلیرهای ویدیویی (نستوه، ورزش سه، مهر، ایسنا، ایرنا، مشرق و...)
+    # ۳. اسکرپینگ صفحه خبر و پلیرهای ویدیویی (ایسنا، ایرنا، مهر، مشرق، صدا و سیما، همشهری و...)
     if page_url:
         try:
             r = requests.get(page_url, headers=HEADERS, timeout=10, verify=False)
