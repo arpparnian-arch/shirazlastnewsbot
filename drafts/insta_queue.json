@@ -2371,5 +2371,15 @@
     "time": 1794462268.4924343,
     "vip": false,
     "sig": "photo:86da9bff6ce7f663f9fff396a1e5d711"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794463769_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794463769.9746687,
+    "vip": false,
+    "sig": "story_photo:5b33005e2317a0f3daad4414abb277ab"
   }
 ]
