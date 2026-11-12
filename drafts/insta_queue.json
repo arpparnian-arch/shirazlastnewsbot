@@ -210,22 +210,12 @@
   {
     "type": "story_photo",
     "files": [
-      "drafts/ready_story_photo_cf536d7f4d.jpg"
+      "drafts/ready_story_photo_63c98ea0dc.jpg"
     ],
     "caption": "",
-    "time": 1794497098.165482,
+    "time": 1794497282.903139,
     "vip": false,
-    "sig": "story_photo:cf536d7f4d452ba6ea653d308a13f069"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_07cc04b9fd.jpg"
-    ],
-    "caption": "",
-    "time": 1794496717.7242925,
-    "vip": false,
-    "sig": "story_photo:07cc04b9fdebde2e700ff753c20a6b16"
+    "sig": "story_photo:63c98ea0dcf077a91a113ebbd304a566"
   },
   {
     "type": "story_video",
