@@ -1,7 +1,3 @@
-mehrnews.com/news/7004020/%da%a9%d9%84%d8%a7%da%a9%d9%84%db%8c-%d9%81%d8%a7%d8%b1%d8%b3-%d8%b1%d9%88%d8%b3%d8%aa%d8%a7%db%8c%db%8c-%da%a9%d9%87-%db%b1%db%b0-%d8%b3%d8%a7%d9%84-%d9%be%d8%a7%db%8c-%d8%b4%d8%b9%d8%b1-%d9%81%d8%a7%d8%b7%d9%85%db%8c-%d8%a7%db%8c%d8%b3%d8%aa%d8%a7%d8%af%d9%87-%d8%a7%d8%b3%d8%aa
-id:7004020
-isna.ir/news/1405081811943/%d8%ae%d9%84%d8%a7%d8%b5%d9%87-%d8%a8%d8%a7%d8%b2%db%8c-%d8%a8%d8%a7%d8%b1%d8%b3%d9%84%d9%88%d9%86%d8%a7-%d9%85%d9%82%d8%a7%d8%a8%d9%84-%d8%a7%d8%aa%d9%84%d8%aa%db%8c%da%a9%d9%88%d9%85%d8%a7%d8%af%d8%b1%db%8c%d8%af
-img:3b7df239c73b90b53281ea8e908be835
 id:140508181194
 mehrnews.com/news/7004991/%d8%a7%d9%81%d8%b2%d8%a7%db%8c%d8%b4-%d8%aa%d8%b9%d8%af%d8%a7%d8%af-%d8%a8%d8%a7%d8%b2%d8%b1%d8%b3%d8%a7%d9%86-%d9%86%d8%b8%d8%a7%d8%b1%d8%aa-%d8%a8%d8%b1-%d8%a8%d8%a7%d8%b2%d8%a7%d8%b1-%d8%aa%d9%87%d8%b1%d8%a7%d9%86
 id:7004991
@@ -1198,3 +1194,7 @@ mehrnews.com/news/7008210/%d8%a7%d8%b2-%d8%a7%d8%b6%d8%b7%d8%b1%d8%a7%d8%a8-%d9%
 id:7008210
 id:2443794
 varzesh3.ir/news/2443794/جدول-پخش-زنده-بازی-های-پنجشنبه-21-آبان
+id:86319539
+irna.ir/news/86319539/%d8%aa%d9%88%d8%b6%db%8c%d8%ad-%da%a9%d8%a7%d8%af%d8%b1-%d9%be%d8%b2%d8%b4%da%a9%db%8c-%d8%aa%db%8c%d9%85-%d9%85%d9%84%db%8c-%d9%81%d9%88%d8%aa%d8%a8%d8%a7%d9%84-%d8%af%d8%b1%d8%a8%d8%a7%d8%b1%d9%87-%d9%85%d8%b5%d8%af%d9%88%d9%85%db%8c%d8%aa-%d9%81%d8%a7%d8%b1%d8%b3%db%8c
+mehrnews.com/photo/7008434/%d8%b1%d9%88%d8%b2%d9%86%d8%a7%d9%85%d9%87-%d9%87%d8%a7%db%8c-%d8%a7%d9%82%d8%aa%d8%b5%d8%a7%d8%af%db%8c-%d9%be%d9%86%d8%ac-%d8%b4%d9%86%d8%a8%d9%87-%db%b2%db%b1-%d8%a2%d8%a8%d8%a7%d9%86-%db%b1%db%b4%db%b0%db%b5
+id:7008434
