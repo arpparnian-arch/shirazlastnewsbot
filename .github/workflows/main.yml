@@ -28,16 +28,12 @@ jobs:
 
       - name: Install FFmpeg, Fonts and Libraries (Fail-Safe Mode)
         run: |
-          # اگر ffmpeg از قبل روی سرور گیت‌هاب نصب است، وقت را تلف نکن؛ وگرنه با تایم‌اوت کوتاه تلاش کن
-          if ! command -v ffmpeg >/dev/null 2>&1; then
-            sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout="10" update || true
-            sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout="10" install -y ffmpeg fonts-vazirmatn fonts-dejavu-core libraqm0 || true
-          fi
-          # دانلود مستقیم فونت وزیرمتن در پوشه سیستم تا به apt نیازی نباشد
+          sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout="10" update || true
+          sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout="10" install -y ffmpeg fonts-vazirmatn fonts-dejavu-core libraqm0 || true
           sudo mkdir -p /usr/share/fonts/truetype/vazirmatn
           sudo curl -sL https://github.com/rastikerdar/vazirmatn/raw/master/fonts/ttf/Vazirmatn-Bold.ttf -o /usr/share/fonts/truetype/vazirmatn/Vazirmatn-Bold.ttf || true
           pip install --upgrade pip
-          pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts instagrapi moviepy imageio-ffmpeg
+          pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts instagrapi "moviepy==1.0.3" "decorator<5.0.0" imageio-ffmpeg
 
       - name: Run bot (Continuous Drip-Feed Mode)
         env:
