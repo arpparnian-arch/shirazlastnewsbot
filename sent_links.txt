@@ -1,5 +1,3 @@
-img:c1bfa87ec40a73af62b50cd1964e94dc
-id:1485937
 img:182977f1fd1d119ed4d263c9b57bfae7
 snn.ir/fa/news/1485937/فنلاند-و-نروژ-به-دنبال-گفت-وگوی-مستقیم-با-پوتین-برای-کاهش-نقش-ترامپ
 exclusive_draft_58
@@ -1198,3 +1196,5 @@ varzesh3.ir/news/2443760/رقیب-یک-دلاری-اینفانتینو-به-ای
 exclusive_draft_70
 id:7008467
 mehrnews.com/news/7008467/%d8%a7%d8%af%d8%b9%d8%a7%db%8c-%da%a9%d8%a7%d8%ae-%d8%b3%d9%81%db%8c%d8%af-%d8%aa%d8%b1%d8%a7%d9%85%d9%be-%da%a9%d9%86%d8%aa%d8%b1%d9%84-%d8%a7%d9%88%d8%b6%d8%a7%d8%b9-%d8%b1%d8%a7-%d8%af%d8%b1-%d8%af%d8%b3%d8%aa-%d8%af%d8%a7%d8%b1%d8%af
+mehrnews.com/news/7008385/%d9%87%d9%85%d8%b1%d8%a7%d9%87-%d8%a8%d8%a7-%d9%81%db%8c%d9%84%d9%85-%d9%87%d8%a7%db%8c-%d8%a2%d8%ae%d8%b1-%d9%87%d9%81%d8%aa%d9%87-%d8%aa%d9%84%d9%88%db%8c%d8%b2%db%8c%d9%88%d9%86-%d8%a7%d8%b2-%d8%a7%d8%b4%da%a9-%d9%87%d9%88%d8%b1-%d8%aa%d8%a7-%d8%a2%d9%88%d8%a7%db%8c-%d9%88%d8%ad%d8%b4
+id:7008385
