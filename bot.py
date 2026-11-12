@@ -307,7 +307,6 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
     if not paths:
         return False
 
-    # بررسی اثر انگشت فایل و کپشن برای جلوگیری ۱۰۰٪ از استوری و پست تکراری
     first_path = str(paths[0])
     media_hash = _compute_file_md5(first_path) if os.path.exists(first_path) else ""
     cap_head = caption.strip().split("\n")[0][:60] if caption else ""
@@ -334,13 +333,12 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
         except Exception:
             pass
 
-    # بررسی عدم وجود آیتم مشابه در صف فعلی
     if not is_vip:
         for existing in q:
             if existing.get("sig") == dedup_sig:
                 print(f"Already in queue, skipping: {dedup_sig}")
                 return False
-            if cap_head and existing.get("caption", "").startswith(cap_head):
+            if task_type == existing.get("type") and cap_head and existing.get("caption", "").startswith(cap_head):
                 print(f"Caption already in queue, skipping: {cap_head}")
                 return False
 
@@ -349,9 +347,15 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
         p_str = str(p)
         if os.path.exists(p_str):
             ext = os.path.splitext(p_str)[1] or ".jpg"
-            dest = f"drafts/ready_{task_type}_{int(time.time())}_{i}{ext}"
-            shutil.copy(p_str, dest)
+            # استفاده از هش فایل برای جلوگیری از کپی تکراری ویدیوهای حجیم در پوشه drafts
+            short_h = media_hash[:10] if media_hash else f"{int(time.time())}_{i}"
+            dest = f"drafts/ready_{task_type}_{short_h}{ext}"
+            if not os.path.exists(dest):
+                shutil.copy(p_str, dest)
             saved_paths.append(dest)
+
+    if not saved_paths:
+        return False
 
     new_item = {
         "type": task_type,
@@ -362,10 +366,21 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
         "sig": dedup_sig
     }
 
-    if is_vip:
-        q.insert(0, new_item)
-    else:
-        q.append(new_item)
+    q.append(new_item)
+
+    # قانون طلایی اولویت صف: ۱. VIP -> ۲. ریلز (reel) -> ۳. استوری (story) -> ۴. پست (photo/album)
+    def _queue_priority_key(item):
+        if item.get("vip"):
+            p_rank = 0
+        elif item.get("type") in ("reel", "video", "clip"):
+            p_rank = 1
+        elif str(item.get("type", "")).startswith("story"):
+            p_rank = 2
+        else:
+            p_rank = 3
+        return (p_rank, -float(item.get("time", 0)))
+
+    q.sort(key=_queue_priority_key)
 
     with open(queue_file, "w", encoding="utf-8") as f:
         json.dump(q, f, ensure_ascii=False, indent=2)
@@ -377,6 +392,11 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
                 hf.write(h_line + "\n")
 
     save_memory_state(push_git=True)
+
+    # اگر آیتم جدید ریلز است، بلافاصله ربات ناشر اینستاگرام را بیدار کن
+    if task_type in ("reel", "video"):
+        trigger_github_vip_workflow("shiraz-insta-publisher", "main.yml")
+
     return True
 
 class DummyMedia:
@@ -440,8 +460,11 @@ VIDEO_PRIORITY_FEEDS = [
     'https://www.mehrnews.com/rss/tp/6',
     'https://www.tasnimnews.com/fa/rss/feed/0/7/89/%D9%81%DB%8C%D9%84%D9%85',
     'https://www.irna.ir/rss/tp/15',
+    'https://www.isna.ir/rss/tp/14',
     'https://www.varzesh3.ir/rss/videos'
 ]
+
+VIDEO_FEED_TAGS = ['/tp/6', '/7/89/', '/tp/15', '/tp/14', 'rss/videos']
 
 RSS_FEEDS = FARS_FEEDS + VIDEO_PRIORITY_FEEDS + [
     'https://www.mehrnews.com/rss/pl/77',
@@ -717,17 +740,15 @@ def save_memory_state(push_git=False):
         insta_titles_list = _merge_lines_with_disk(INSTA_TITLES_DB_FILE, insta_titles_list, max_keep=400)
 
         if push_git:
-            # استفاده از -X theirs در rebase تا تغییرات جدید ربات هرگز توسط فایل قدیمی سرور بازنویسی نشود
             cmds = [
                 'git config --global user.name "Bot"',
                 'git config --global user.email "bot@noreply.github.com"',
-                'git add -f *.txt *.json *.jpg drafts/insta_queue.json drafts/* || true',
+                'git add -f *.txt *.json *.jpg drafts/insta_queue.json drafts/ready_* || true',
                 'git diff --staged --quiet || git commit -m "Sync memory and queue"',
-                'git pull --rebase -X theirs || true',
+                'git pull --rebase --autostash -X theirs || true',
                 'git push || true'
             ]
-            subprocess.run(" && ".join(cmds), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=45)
-            # بازخوانی و ذخیره مجدد پس از pull برای اطمینان ۱۰۰٪
+            subprocess.run(" && ".join(cmds), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=60)
             sent_links = set(_merge_lines_with_disk(DB_FILE, sent_links, max_keep=1200))
             sent_titles_list = _merge_lines_with_disk(TITLES_DB_FILE, sent_titles_list, max_keep=600)
             insta_titles_list = _merge_lines_with_disk(INSTA_TITLES_DB_FILE, insta_titles_list, max_keep=400)
@@ -860,7 +881,7 @@ def is_strictly_fars_shiraz_news(clean_t, clean_s, feed_url=''):
             return True
     return False
 
-def is_eligible_for_insta_reel(clean_t, clean_s, is_fars_news):
+def is_eligible_for_insta_reel(clean_t, clean_s, is_fars_news, is_from_video_feed=False):
     if is_duplicate_for_insta(clean_t):
         return False
     if is_fars_news:
@@ -870,9 +891,9 @@ def is_eligible_for_insta_reel(clean_t, clean_s, is_fars_news):
         return False
     for other_p in IRAN_PLACES:
         if other_p != 'تهران' and other_p in clean_t:
-            if not any(v in clean_t for v in ['تصادف', 'انفجار', 'آتش‌سوزی', 'زلزله', 'سیل', 'عجیب', 'وایرال', 'زورگیری', 'لحظه']):
+            if not any(v in clean_t for v in ['تصادف', 'انفجار', 'آتش‌سوزی', 'زلزله', 'سیل', 'عجیب', 'وایرال', 'زورگیری', 'لحظه', 'فوری']):
                 return False
-    if any(vk in full_t for vk in VIRAL_REEL_KEYWORDS):
+    if is_from_video_feed or any(vk in full_t for vk in VIRAL_REEL_KEYWORDS):
         return True
     return False
 
@@ -912,6 +933,8 @@ def get_active_reel_schedule_slot():
     iran_now = datetime.utcnow() + timedelta(hours=3, minutes=30)
     today_str, _ = get_iran_jalali_date()
     now_mins = iran_now.hour * 60 + iran_now.minute
+    if iran_now.hour < 7:
+        return None
     done_slots = []
     if os.path.exists(INSTA_REEL_LOG):
         try:
@@ -920,15 +943,16 @@ def get_active_reel_schedule_slot():
                 done_slots = [x for x in raw_l.split('|')[1].split(',') if x]
         except Exception:
             pass
-    if len(done_slots) >= 12:
+    if len(done_slots) >= 10:
         return None
+    # بررسی تمام اسلات‌های امروز که زمانشان فرا رسیده اما هنوز پر نشده‌اند
+    due_slots = []
     for sh, sm in REEL_SCHEDULE_SLOTS:
         slot_id = f'{sh:02d}:{sm:02d}'
         slot_mins = sh * 60 + sm
-        if slot_mins <= now_mins <= (slot_mins + 80):
-            if slot_id not in done_slots:
-                return slot_id
-    return None
+        if slot_mins <= now_mins and slot_id not in done_slots:
+            due_slots.append(slot_id)
+    return due_slots[-1] if due_slots else None
 
 def mark_reel_slot_completed(slot_id):
     if not slot_id:
@@ -3018,32 +3042,45 @@ def get_video_url(entry, page_url):
     for k_list in ['links', 'enclosures', 'media_content']:
         if k_list in entry:
             for item in entry.get(k_list, []):
-                u = item.get('href') or item.get('url') or ''
+                u = (item.get('href') or item.get('url') or '').strip()
                 if 'video' in item.get('type', '').lower() or '.mp4' in u.lower():
-                    return u.split('?')[0] if '.mp4' in u.lower() else u
+                    if u.startswith('//'):
+                        u = 'https:' + u
+                    return u
     if page_url:
         try:
-            r = requests.get(page_url, headers=HEADERS, timeout=9, verify=False)
+            r = requests.get(page_url, headers=HEADERS, timeout=10, verify=False)
             html_txt = html.unescape(r.text).replace('\\/', '/')
-            matches = re.findall(r'https?://[^"\'\s<>()\\]+\.mp4(?:\?[^"\'\s<>()\\]*)?', html_txt, re.IGNORECASE)
-            for m in matches:
-                if not any(bad in m.lower() for bad in ['ad_', '/ads/', 'banner', 'teaser', 'logo']):
-                    return m
-            rel_matches = re.findall(r'["\'](/[^"\'\s<>()\\]+\.mp4(?:\?[^"\'\s<>()\\]*)?)["\']', html_txt, re.IGNORECASE)
-            if rel_matches:
-                base = '/'.join(page_url.split('/')[:3])
-                return base + rel_matches[0]
             soup = BeautifulSoup(html_txt, 'html.parser')
-            for attr in ['data-src', 'data-video', 'data-file', 'data-mp4', 'src', 'content']:
-                for tag in soup.find_all(attrs={attr: True}):
-                    val = tag.get(attr, '')
-                    if '.mp4' in val.lower():
+
+            # ۱. بررسی متاتگ‌های استاندارد ویدیو و تگ‌های video/source
+            for meta_prop in ['og:video:secure_url', 'og:video:url', 'og:video', 'twitter:player:stream']:
+                m_tag = soup.find('meta', property=meta_prop) or soup.find('meta', attrs={'name': meta_prop})
+                if m_tag and m_tag.get('content') and '.mp4' in m_tag['content'].lower():
+                    u = m_tag['content'].strip()
+                    return ('https:' + u) if u.startswith('//') else u
+
+            for attr in ['src', 'data-src', 'data-video', 'data-file', 'data-mp4', 'content']:
+                for tag in soup.find_all(['video', 'source', 'div', 'a'], attrs={attr: True}):
+                    val = tag.get(attr, '').strip()
+                    if '.mp4' in val.lower() and not any(b in val.lower() for b in ['ad_', '/ads/', 'banner', 'teaser']):
                         if val.startswith('//'):
                             return 'https:' + val
                         if val.startswith('/'):
                             return '/'.join(page_url.split('/')[:3]) + val
                         if val.startswith('http'):
                             return val
+
+            # ۲. جستجوی مستقیم لینک mp4 در سورس صفحه و پلیرها
+            matches = re.findall(r'https?://[^"\'\s<>()\\]+\.mp4(?:\?[^"\'\s<>()\\]*)?', html_txt, re.IGNORECASE)
+            for m in matches:
+                if not any(bad in m.lower() for bad in ['ad_', '/ads/', 'banner', 'teaser', 'logo']):
+                    return m
+
+            rel_matches = re.findall(r'["\'](/[^"\'\s<>()\\]+\.mp4(?:\?[^"\'\s<>()\\]*)?)["\']', html_txt, re.IGNORECASE)
+            if rel_matches:
+                base = '/'.join(page_url.split('/')[:3])
+                return base + rel_matches[0]
         except Exception:
             pass
     return None
@@ -3365,160 +3402,82 @@ def find_watermark_file():
 
 def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه‌های خبری', out_prefix='vid'):
     try:
-        tg_vid = f'{out_prefix}_tg.mp4'
         reel_vid = f'{out_prefix}_reel.mp4'
+        if os.path.exists(reel_vid):
+            try:
+                os.remove(reel_vid)
+            except Exception:
+                pass
+
         vw, vh = get_video_dimensions(raw_vid)
         is_vertical = (vh >= vw)
         wm_file = find_watermark_file()
 
-        # ساخت بنر قلاب ۳ ثانیه اول (کاغذ سوخته دوطبقه)
+        # ۱. ساخت بنر قلاب ۳ ثانیه اول (کاغذ سوخته دوطبقه) و قالب ریلز ۹:۱۶
         hook_9_16 = create_3s_hook_overlay(1080, 1920, subtitle_text, subtitle_text)
         hook_9_16.save('ov_hook_9_16.png', format='PNG')
 
+        ov_reel = create_9_16_video_overlay(1080, 1920, subtitle_text, source_name)
+        ov_reel.save('ov_reel_9_16.png', format='PNG')
+
+        # ۲. فیلتر فوق‌سریع ۹:۱۶ (بلور مقیاس‌پذیر برای جلوگیری ۱۰۰٪ از Timeout در گیت‌هاب)
         if is_vertical:
-            ov_tg = create_9_16_video_overlay(1080, 1920, subtitle_text, source_name)
-            ov_tg.save('ov_tg_9_16.png', format='PNG')
-
-            flt_base_9_16 = (
-                '[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=24:4,eq=brightness=-0.22,setsar=1[bg];'
-                '[0:v]scale=1080:1920:force_original_aspect_ratio=decrease,setsar=1[fg];'
-                '[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1[base];'
-                '[base][1:v]overlay=0:0,setsar=1[with_frame];'
-                "[with_frame][2:v]overlay=0:0:enable='between(t,0,3)',setsar=1"
-            )
-
-            done_vertical = False
-            if wm_file:
-                try:
-                    flt_wm_9_16 = (
-                        f'{flt_base_9_16},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
-                        '[3:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
-                        'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black,'
-                        'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
-                        'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
-                        '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1'
-                    )
-                    cmd_tg_wm = [
-                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_9_16.png', '-i', 'ov_hook_9_16.png', '-i', wm_file,
-                        '-filter_complex', flt_wm_9_16,
-                        '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
-                        '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
-                        '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
-                        '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
-                    ]
-                    subprocess.run(cmd_tg_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=125, check=True)
-                    done_vertical = True
-                except Exception as e_wm:
-                    print('Watermark+Hook 9:16 fallback to Hook-only:', e_wm)
-
-            if not done_vertical:
-                cmd_tg = [
-                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_9_16.png', '-i', 'ov_hook_9_16.png',
-                    '-filter_complex', flt_base_9_16,
-                    '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
-                    '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
-                    '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
-                    '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
-                ]
-                subprocess.run(cmd_tg, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=115, check=True)
-
-            return tg_vid, tg_vid, 1080, 1920
-
+            fg_Filter = '[v_fg_in]scale=1080:1920:force_original_aspect_ratio=decrease,setsar=1[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1[comp];'
         else:
-            out_w, out_h = 1280, 720
-            hook_16_9 = create_3s_hook_overlay(1280, 720, subtitle_text, subtitle_text)
-            hook_16_9.save('ov_hook_16_9.png', format='PNG')
-            frame = get_transparent_frame()
-            if frame:
-                frame.save('ov_tg_16_9.png', format='PNG')
-                flt_base_16_9 = (
-                    '[0:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=#0a101e,setsar=1[base];'
-                    '[1:v]scale=1280:720,setsar=1[wm];'
-                    '[base][wm]overlay=0:0,setsar=1[with_frame];'
-                    "[with_frame][2:v]overlay=0:0:enable='between(t,0,3)',setsar=1"
+            fg_Filter = '[v_fg_in]scale=1020:-2:force_original_aspect_ratio=decrease,setsar=1[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2-80,setsar=1[comp];'
+
+        flt_base_reel = (
+            '[0:v]split=2[v_bg_in][v_fg_in];'
+            '[v_bg_in]scale=180:320:force_original_aspect_ratio=increase,crop=180:320,'
+            'boxblur=10:2,eq=brightness=-0.24,scale=1080:1920,setsar=1[bg];'
+            + fg_Filter +
+            '[comp][1:v]overlay=0:0,setsar=1[with_frame];'
+            "[with_frame][2:v]overlay=0:0:enable='between(t,0,3)',setsar=1"
+        )
+
+        done_reel = False
+        if wm_file:
+            try:
+                flt_wm_reel = (
+                    f'{flt_base_reel},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
+                    '[3:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
+                    'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black,'
+                    'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
+                    'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
+                    '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1[outv]'
                 )
-                done_16_9 = False
-                if wm_file:
-                    try:
-                        flt_wm_16_9 = (
-                            f'{flt_base_16_9},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
-                            '[3:v]fps=30,scale=1280:720:force_original_aspect_ratio=decrease,'
-                            'pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black,'
-                            'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
-                            'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
-                            '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1'
-                        )
-                        cmd_tg16_wm = [
-                            'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_16_9.png', '-i', 'ov_hook_16_9.png', '-i', wm_file,
-                            '-filter_complex', flt_wm_16_9,
-                            '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1700k', '-bufsize', '3400k',
-                            '-profile:v', 'high', '-c:a', 'aac', '-b:a', '96k', '-pix_fmt', 'yuv420p',
-                            '-movflags', '+faststart', '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
-                        ]
-                        subprocess.run(cmd_tg16_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120, check=True)
-                        done_16_9 = True
-                    except Exception as e_wm16:
-                        print('Watermark+Hook 16:9 fallback:', e_wm16)
-
-                if not done_16_9:
-                    cmd_tg16 = [
-                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_tg_16_9.png', '-i', 'ov_hook_16_9.png',
-                        '-filter_complex', flt_base_16_9,
-                        '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1700k', '-bufsize', '3400k',
-                        '-profile:v', 'high', '-c:a', 'aac', '-b:a', '96k', '-pix_fmt', 'yuv420p',
-                        '-movflags', '+faststart', '-metadata:s:v:0', 'rotate=0', '-t', '58', tg_vid
-                    ]
-                    subprocess.run(cmd_tg16, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
-            else:
-                tg_vid = raw_vid
-                out_w, out_h = vw, vh
-
-            ov_reel = create_9_16_video_overlay(1080, 1920, subtitle_text, source_name)
-            ov_reel.save('ov_reel_9_16.png', format='PNG')
-            flt_base_reel = (
-                '[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=25:5,eq=brightness=-0.25,setsar=1[bg];'
-                '[0:v]scale=1020:-2:force_original_aspect_ratio=decrease,setsar=1[fg];'
-                '[bg][fg]overlay=(W-w)/2:(H-h)/2-80,setsar=1[comp];'
-                '[comp][1:v]overlay=0:0,setsar=1[with_frame];'
-                "[with_frame][2:v]overlay=0:0:enable='between(t,0,3)',setsar=1"
-            )
-
-            done_reel = False
-            if wm_file:
-                try:
-                    flt_wm_reel = (
-                        f'{flt_base_reel},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
-                        '[3:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
-                        'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black,'
-                        'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
-                        'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
-                        '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1'
-                    )
-                    cmd_reel_wm = [
-                        'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', 'ov_hook_9_16.png', '-i', wm_file,
-                        '-filter_complex', flt_wm_reel,
-                        '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
-                        '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
-                        '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
-                        '-metadata:s:v:0', 'rotate=0', '-t', '58', reel_vid
-                    ]
-                    subprocess.run(cmd_reel_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=125, check=True)
-                    done_reel = True
-                except Exception as e_wmr:
-                    print('Watermark+Hook reel fallback:', e_wmr)
-
-            if not done_reel:
-                cmd_reel = [
-                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', 'ov_hook_9_16.png',
-                    '-filter_complex', flt_base_reel,
-                    '-c:v', 'libx264', '-preset', 'fast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
+                cmd_reel_wm = [
+                    'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', 'ov_hook_9_16.png', '-i', wm_file,
+                    '-filter_complex', flt_wm_reel,
+                    '-map', '[outv]', '-map', '0:a?',
+                    '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
                     '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
                     '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
                     '-metadata:s:v:0', 'rotate=0', '-t', '58', reel_vid
                 ]
-                subprocess.run(cmd_reel, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=115, check=True)
+                subprocess.run(cmd_reel_wm, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120, check=True)
+                if os.path.exists(reel_vid) and os.path.getsize(reel_vid) > 40000:
+                    done_reel = True
+            except Exception as e_wmr:
+                print('Watermark+Hook reel fallback:', e_wmr)
 
-            return (tg_vid if os.path.exists(tg_vid) else raw_vid), (reel_vid if os.path.exists(reel_vid) else tg_vid), out_w, out_h
+        if not done_reel:
+            flt_no_wm = f'{flt_base_reel},format=yuv420p,setsar=1[outv]'
+            cmd_reel = [
+                'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', 'ov_hook_9_16.png',
+                '-filter_complex', flt_no_wm,
+                '-map', '[outv]', '-map', '0:a?',
+                '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
+                '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
+                '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+                '-metadata:s:v:0', 'rotate=0', '-t', '58', reel_vid
+            ]
+            subprocess.run(cmd_reel, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
+
+        if os.path.exists(reel_vid) and os.path.getsize(reel_vid) > 40000:
+            # برگرداندن فایل ریلز ۹:۱۶ هم برای کانال تلگرام و هم برای پیج اینستاگرام
+            return reel_vid, reel_vid, 1080, 1920
+        return None, None, 1080, 1920
     except Exception as e:
         print('Local video process error:', e)
         return None, None, 1080, 1920
