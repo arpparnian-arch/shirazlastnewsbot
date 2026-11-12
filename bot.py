@@ -3878,13 +3878,179 @@ def make_buttons(news_link=None):
     markup.add(InlineKeyboardButton('📢 عضویت در آخرین خبرهای شیراز', url=CHANNEL_LINK))
     return markup
 
+# ==========================================
+# ۱۴.۵ ارتقای فیدهای ویدیویی، استخراج‌کننده MP4 و شکارچی اختصاصی ریلز
+# ==========================================
+VIDEO_PRIORITY_FEEDS = [
+    'https://www.mehrnews.com/rss/pl/9',
+    'https://www.isna.ir/rss/pl/135',
+    'https://www.isna.ir/rss/tp/14',
+    'https://www.irna.ir/rss/pl/15',
+    'https://www.mashreghnews.ir/rss/pl/11',
+    'https://www.hamshahrionline.ir/rss/pl/9',
+    'https://snn.ir/fa/rss/11',
+    'https://www.varzesh3.com/rss/videos'
+]
+
+VIDEO_FEED_TAGS = [
+    '/pl/9', '/pl/135', '/tp/14', '/pl/15',
+    '/pl/11', '/rss/11', 'rss/videos', '/7/89/'
+]
+
+RSS_FEEDS = FARS_FEEDS + VIDEO_PRIORITY_FEEDS + [
+    'https://www.mehrnews.com/rss/pl/77',
+    'https://www.mehrnews.com/rss/pl/224',
+    'https://www.mehrnews.com/rss',
+    'https://www.irna.ir/rss',
+    'https://www.isna.ir/rss',
+    'https://snn.ir/fa/rss/allnews',
+    'https://www.varzesh3.com/rss/all'
+]
+
+
+def get_video_url(entry, page_url):
+    """استخراج پیشرفته لینک مستقیم ویدیو (.mp4) از فید RSS و پلیر خبرگزاری‌های ایران"""
+    bad_tokens = ['ad_', '/ads/', 'banner', 'teaser', 'logo', 'preroll', 'sponsor', 'gif']
+
+    # ۱. بررسی پیوست‌های مستقیم داخل RSS
+    for k_list in ['links', 'enclosures', 'media_content']:
+        if k_list in entry:
+            for item in entry.get(k_list, []):
+                u = (item.get('href') or item.get('url') or '').strip()
+                t_mime = (item.get('type') or '').lower()
+                if ('video' in t_mime or '.mp4' in u.lower()) and not any(b in u.lower() for b in bad_tokens):
+                    if u.startswith('//'):
+                        return 'https:' + u
+                    if u.startswith('http'):
+                        return u
+
+    # ۲. بررسی متن توضیحات RSS برای لینک‌های مستقیم mp4
+    raw_desc = str(entry.get('summary', '') or '') + ' ' + str(entry.get('description', '') or '')
+    desc_matches = re.findall(r'(?:https?:)?//[^"\'\s<>()\\]+\.mp4(?:\?[^"\'\s<>()\\]*)?', raw_desc, re.IGNORECASE)
+    for dm in desc_matches:
+        if not any(b in dm.lower() for b in bad_tokens):
+            return ('https:' + dm) if dm.startswith('//') else dm
+
+    # ۳. اسکرپینگ صفحه خبر و پلیرهای ویدیویی (نستوه، ورزش سه، مهر، ایسنا، ایرنا، مشرق و...)
+    if page_url:
+        try:
+            r = requests.get(page_url, headers=HEADERS, timeout=10, verify=False)
+            html_txt = html.unescape(r.text).replace('\\/', '/')
+            soup = BeautifulSoup(html_txt, 'html.parser')
+            base_domain = '/'.join(page_url.split('/')[:3])
+
+            for meta_prop in ['og:video:secure_url', 'og:video:url', 'og:video', 'twitter:player:stream']:
+                m_tag = soup.find('meta', property=meta_prop) or soup.find('meta', attrs={'name': meta_prop})
+                if m_tag and m_tag.get('content') and '.mp4' in m_tag['content'].lower():
+                    u = m_tag['content'].strip()
+                    if not any(b in u.lower() for b in bad_tokens):
+                        if u.startswith('//'):
+                            return 'https:' + u
+                        if u.startswith('/'):
+                            return base_domain + u
+                        return u
+
+            for attr in ['src', 'data-src', 'data-video', 'data-file', 'data-mp4', 'href', 'content']:
+                for tag in soup.find_all(['video', 'source', 'a', 'div'], attrs={attr: True}):
+                    val = tag.get(attr, '').strip()
+                    if '.mp4' in val.lower() and not any(b in val.lower() for b in bad_tokens):
+                        if val.startswith('//'):
+                            return 'https:' + val
+                        if val.startswith('/'):
+                            return base_domain + val
+                        if val.startswith('http'):
+                            return val
+
+            matches = re.findall(r'(?:https?:)?//[^"\'\s<>()\\]+\.mp4(?:\?[^"\'\s<>()\\]*)?', html_txt, re.IGNORECASE)
+            for m in matches:
+                if not any(b in m.lower() for b in bad_tokens):
+                    return ('https:' + m) if m.startswith('//') else m
+
+            rel_matches = re.findall(r'["\'](/[^"\'\s<>()\\]+\.mp4(?:\?[^"\'\s<>()\\]*)?)["\']', html_txt, re.IGNORECASE)
+            for rm in rel_matches:
+                if not any(b in rm.lower() for b in bad_tokens):
+                    return base_domain + rm
+        except Exception as e:
+            print('get_video_url scrape notice:', e)
+    return None
+
+
+def hunt_and_publish_scheduled_reel(insta_cl, current_iran_hour):
+    """
+    شکارچی اختصاصی ریلز:
+    وقتی نوبت یکی از ۱۰ اسلات ریلز روزانه فرا رسیده باشد، بدون اینکه توسط خبرهای عکسی متوقف شود،
+    فیدهای ویدیویی و خبری را می‌گردد تا یک ویدیوی واقعی پیدا و منتشر کند.
+    """
+    slot_now = get_active_reel_schedule_slot()
+    if not slot_now:
+        return 0
+
+    print(f'Active Reel Slot [{slot_now}] detected! Hunting for a fresh news video...')
+    search_feeds = VIDEO_PRIORITY_FEEDS + FARS_FEEDS
+    for u in search_feeds:
+        try:
+            resp = requests.get(u, headers=HEADERS, timeout=9, verify=False)
+            feed = feedparser.parse(resp.content)
+            is_vid_feed = any(vt in u for vt in VIDEO_FEED_TAGS)
+
+            for entry in feed.entries[:10]:
+                link = (entry.get('link') or '').strip()
+                if not link:
+                    continue
+                title = clean_html(entry.get('title', ''))
+                clean_t = clean_agency_prefix(title)
+                raw_rss_sum = clean_html(entry.get('summary', entry.get('description', '')))
+
+                if is_duplicate_news(link, clean_t, raw_rss_sum) or is_duplicate_for_insta(clean_t):
+                    continue
+
+                is_shiraz_fars = is_strictly_fars_shiraz_news(clean_t, raw_rss_sum, u)
+                if not is_eligible_for_insta_reel(clean_t, raw_rss_sum, is_shiraz_fars, is_from_video_feed=is_vid_feed):
+                    continue
+
+                vid_url = get_video_url(entry, link)
+                if not vid_url:
+                    continue
+
+                clean_s = fetch_full_lead_from_page(link, raw_rss_sum)
+                if is_duplicate_news(link, clean_t, clean_s):
+                    continue
+
+                src_name = get_source_name(link or u)
+                print(f'Found candidate Reel video for slot {slot_now}: {vid_url}')
+                tg_vid_path, reel_vid_path, v_w, v_h = process_video_for_telegram_and_reels(vid_url, clean_t, src_name)
+                if not reel_vid_path or not os.path.exists(reel_vid_path):
+                    continue
+
+                is_even_h = (current_iran_hour % 2 == 0)
+                tg_cap = format_caption(title, clean_s, is_shiraz_fars, link or u, is_video=True)
+                insta_cap = format_insta_caption(title, clean_s, is_shiraz_fars, link or u, is_even_hour=is_even_h, is_video=True)
+
+                record_sent_news(link, clean_t, sent_to_insta=True, clean_s=clean_s)
+                send_news_post(TARGET_CHAT, None, tg_cap, link, video_path=tg_vid_path, vid_w=v_w, vid_h=v_h)
+                post_video_to_insta(insta_cl, reel_vid_path, insta_cap, also_story=True, slot_id=slot_now)
+
+                if is_shiraz_fars:
+                    with open(TITLES_FILE, 'a', encoding='utf-8') as tf:
+                        tf.write(clean_t + '\n')
+
+                save_memory_state(push_git=True)
+                print(f'Successfully hunted and queued Reel for slot {slot_now}!')
+                return 1
+        except Exception as e:
+            print('Reel hunter feed notice:', e)
+    return 0
+
+
 def fetch_and_send_single_drip_news(insta_cl, current_iran_hour):
     global first_run
-    active_reel_slot = get_active_reel_schedule_slot()
-    ordered_feeds = (
-        VIDEO_PRIORITY_FEEDS + FARS_FEEDS + [f for f in RSS_FEEDS if f not in VIDEO_PRIORITY_FEEDS and f not in FARS_FEEDS]
-    ) if active_reel_slot else RSS_FEEDS
-    for u in ordered_feeds:
+    # ۱. اگر نوبت ریلز رسیده است، ابتدا شکارچی اختصاصی ریلز را اجرا کن
+    if not first_run and get_active_reel_schedule_slot():
+        if hunt_and_publish_scheduled_reel(insta_cl, current_iran_hour) > 0:
+            return 1, None, None
+
+    # ۲. پایش عادی خبرهای شیراز، استان فارس و اخبار مهم کشور
+    for u in RSS_FEEDS:
         try:
             resp = requests.get(u, headers=HEADERS, timeout=8, verify=False)
             feed = feedparser.parse(resp.content)
@@ -3928,19 +4094,17 @@ def fetch_and_send_single_drip_news(insta_cl, current_iran_hour):
                         if not is_duplicate_for_insta(clean_t, clean_s):
                             is_even_h = (current_iran_hour % 2 == 0)
                             slot_now = get_active_reel_schedule_slot()
-                            if reel_vid_path and slot_now and is_eligible_for_insta_reel(clean_t, clean_s, is_shiraz_fars_news):
+                            if reel_vid_path and slot_now and is_eligible_for_insta_reel(clean_t, clean_s, is_shiraz_fars_news, is_from_video_feed=is_vid_feed):
                                 record_sent_news(link, clean_t, sent_to_insta=True, clean_s=clean_s)
                                 insta_cap = format_insta_caption(title, clean_s, is_shiraz_fars_news, link or u, is_even_hour=is_even_h, is_video=True)
                                 post_video_to_insta(insta_cl, reel_vid_path, insta_cap, also_story=True, slot_id=slot_now)
                             elif raw_img and not reel_vid_path and is_shiraz_fars_news:
                                 record_sent_news(link, clean_t, sent_to_insta=True, clean_s=clean_s)
-                                # ۱. استوری ۹:۱۶ برای تمام خبرهای جدید شیراز و فارس ساخته و در صف قرار می‌گیرد
                                 iran_now = datetime.utcnow() + timedelta(hours=3, minutes=30)
                                 if not (1 <= iran_now.hour < 7):
                                     story_b = create_premium_news_story(raw_img, clean_t, clean_s, src_name)
                                     if story_b:
                                         post_to_instagram(insta_cl, story_b, '', is_story=True)
-                                # ۲. پست ۴:۵ طبق فاصله زمانی استاندارد (۲۰ تا ۳۰ دقیقه) منتشر می‌شود
                                 if can_post_to_insta(is_video=False):
                                     insta_cap = format_insta_caption(title, clean_s, True, link or u, is_even_hour=is_even_h, is_video=False)
                                     post_to_instagram(insta_cl, raw_img, insta_cap, is_story=False, title=clean_t, summary=clean_s, source_name=src_name, hour_now=current_iran_hour)
@@ -3952,6 +4116,7 @@ def fetch_and_send_single_drip_news(insta_cl, current_iran_hour):
         first_run = False
         save_memory_state(push_git=True)
     return 0, None, None
+
 
 # ==========================================
 # ۱۵. حلقه اصلی اجرای ۵۰ دقیقه‌ای ربات (Main Loop)
@@ -3968,7 +4133,7 @@ total_sent_session = 0
 last_raw_img = None
 last_title = None
 
-print('Starting Continuous 50-Minute Drip-Feed + Live Iran League Runner...')
+print('Starting Continuous 50-Minute Drip-Feed + Dedicated Reel Hunter Runner...')
 while (time.time() - start_run_ts) < SESSION_DURATION_SECONDS:
     _, current_iran_hour = get_iran_jalali_date()
     process_bot_service(insta_cl=insta_cl, current_iran_hour=current_iran_hour)
