@@ -2402,5 +2402,15 @@
     "time": 1794465844.1218255,
     "vip": false,
     "sig": "album:83374150092b9b2dfea5a11a2a70bd9e"
+  },
+  {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_1794466587_0.jpg"
+    ],
+    "caption": "",
+    "time": 1794466587.5341299,
+    "vip": false,
+    "sig": "story_photo:525c9fe594644326856d0fd9e5e565dc"
   }
 ]
