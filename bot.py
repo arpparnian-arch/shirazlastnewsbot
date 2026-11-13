@@ -4022,25 +4022,78 @@ def get_video_url(entry, page_url):
     return None
 
 
+def _get_last_reel_source():
+    """خواندن نام آخرین خبرگزاری منتشرکننده ریلز از داخل فایل insta_reel_log.txt"""
+    if os.path.exists(INSTA_REEL_LOG):
+        try:
+            raw_l = open(INSTA_REEL_LOG, encoding='utf-8').read().strip()
+            parts = raw_l.split('|')
+            if len(parts) >= 3:
+                return parts[2].strip()
+        except Exception:
+            pass
+    return ''
+
+
+def _save_last_reel_source(src_name):
+    """ذخیره نام آخرین منبع ریلز در انتهای insta_reel_log.txt بدون تداخل با اسلات‌ها"""
+    if not src_name or not os.path.exists(INSTA_REEL_LOG):
+        return
+    try:
+        raw_l = open(INSTA_REEL_LOG, encoding='utf-8').read().strip()
+        parts = raw_l.split('|')
+        base_str = f"{parts[0]}|{parts[1]}" if len(parts) >= 2 else raw_l
+        with open(INSTA_REEL_LOG, 'w', encoding='utf-8') as f:
+            f.write(f"{base_str}|{src_name}")
+    except Exception:
+        pass
+
+
 def hunt_and_publish_scheduled_reel(insta_cl, current_iran_hour):
     """
-    شکارچی اختصاصی ریلز:
-    وقتی نوبت یکی از ۱۰ اسلات ریلز روزانه فرا رسیده باشد، بدون اینکه توسط خبرهای عکسی متوقف شود،
-    فیدهای ویدیویی و خبری را می‌گردد تا یک ویدیوی واقعی پیدا و منتشر کند.
+    شکارچی اختصاصی ریلز با ۲ قابلیت جدید:
+    ۱. بُر زدن تصادفی فیدهای ویدیویی (Random Shuffle) با حفظ اولویت اخبار شیراز و فارس
+    ۲. سیستم چرخشی ضدتکرار منبع (جلوگیری از انتشار دو ریلز پیاپی از یک خبرگزاری)
     """
     slot_now = get_active_reel_schedule_slot()
     if not slot_now:
         return 0
 
-    print(f'Active Reel Slot [{slot_now}] detected! Hunting for a fresh news video...')
-    search_feeds = VIDEO_PRIORITY_FEEDS + FARS_FEEDS
+    last_src = _get_last_reel_source()
+    print(f'Active Reel Slot [{slot_now}] detected! Last source was: [{last_src or "None"}]')
+
+    # ۱. بُر زدن تصادفی لیست فیدها در هر نوبت
+    fars_shuffled = list(FARS_FEEDS)
+    vid_shuffled = list(VIDEO_PRIORITY_FEEDS)
+    random.shuffle(fars_shuffled)
+    random.shuffle(vid_shuffled)
+
+    # اولویت اول با فیدهای استان فارس و سپس فیدهای ویدیویی بُرخورده
+    all_feeds = fars_shuffled + [f for f in vid_shuffled if f not in fars_shuffled]
+
+    # ۲. انتقال فیدهای مربوط به «آخرین منبع استفاده‌شده» به انتهای صف (نوبت چرخشی)
+    fresh_source_feeds = []
+    repeated_source_feeds = []
+    for f_url in all_feeds:
+        if last_src and get_source_name(f_url) == last_src:
+            repeated_source_feeds.append(f_url)
+        else:
+            fresh_source_feeds.append(f_url)
+
+    search_feeds = fresh_source_feeds + repeated_source_feeds
+
     for u in search_feeds:
         try:
             resp = requests.get(u, headers=HEADERS, timeout=9, verify=False)
             feed = feedparser.parse(resp.content)
             is_vid_feed = any(vt in u for vt in VIDEO_FEED_TAGS)
 
-            for entry in feed.entries[:10]:
+            entries_list = list(feed.entries[:10])
+            # اگر فید ویدیویی عمومی است، ترتیب خبرهای داخل آن هم بُر بخورد تا همیشه خبر اول انتخاب نشود
+            if is_vid_feed:
+                random.shuffle(entries_list)
+
+            for entry in entries_list:
                 link = (entry.get('link') or '').strip()
                 if not link:
                     continue
@@ -4052,6 +4105,12 @@ def hunt_and_publish_scheduled_reel(insta_cl, current_iran_hour):
                     continue
 
                 is_shiraz_fars = is_strictly_fars_shiraz_news(clean_t, raw_rss_sum, u)
+                src_name = get_source_name(link or u)
+
+                # اگر ویدیو از منبع تکراریِ نوبت قبل است و مربوط به شیراز/فارس نیست، از آن رد شو تا زمانی که همه منابع جدید بررسی شوند
+                if last_src and src_name == last_src and not is_shiraz_fars and u in fresh_source_feeds:
+                    continue
+
                 if not is_eligible_for_insta_reel(clean_t, raw_rss_sum, is_shiraz_fars, is_from_video_feed=is_vid_feed):
                     continue
 
@@ -4063,8 +4122,7 @@ def hunt_and_publish_scheduled_reel(insta_cl, current_iran_hour):
                 if is_duplicate_news(link, clean_t, clean_s):
                     continue
 
-                src_name = get_source_name(link or u)
-                print(f'Found candidate Reel video for slot {slot_now}: {vid_url}')
+                print(f'Found diverse Reel video for slot {slot_now} from [{src_name}]: {vid_url}')
                 tg_vid_path, reel_vid_path, v_w, v_h = process_video_for_telegram_and_reels(vid_url, clean_t, src_name)
                 if not reel_vid_path or not os.path.exists(reel_vid_path):
                     continue
@@ -4077,12 +4135,15 @@ def hunt_and_publish_scheduled_reel(insta_cl, current_iran_hour):
                 send_news_post(TARGET_CHAT, None, tg_cap, link, video_path=tg_vid_path, vid_w=v_w, vid_h=v_h)
                 post_video_to_insta(insta_cl, reel_vid_path, insta_cap, also_story=True, slot_id=slot_now)
 
+                # ثبت نام منبع این ریلز تا در نوبت بعدی از خبرگزاری دیگری ویدیو برداشته شود
+                _save_last_reel_source(src_name)
+
                 if is_shiraz_fars:
                     with open(TITLES_FILE, 'a', encoding='utf-8') as tf:
                         tf.write(clean_t + '\n')
 
                 save_memory_state(push_git=True)
-                print(f'Successfully hunted and queued Reel for slot {slot_now}!')
+                print(f'Successfully hunted and queued Reel for slot {slot_now} from {src_name}!')
                 return 1
         except Exception as e:
             print('Reel hunter feed notice:', e)
