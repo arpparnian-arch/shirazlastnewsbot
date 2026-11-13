@@ -1,9 +1,3 @@
-mehrnews.com/live/6920509/%d9%85%d8%b1%d8%a7%d8%b3%d9%85-%d8%a8%d8%b2%d8%b1%da%af%d8%af%d8%a7%d8%b4%d8%aa-%da%86%d9%87%d9%84%d9%85-%d8%a2%d9%82%d8%a7%db%8c-%d8%b4%d9%87%db%8c%d8%af-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%af%d8%b1-%d9%85%d8%b5%d9%84%db%8c-%d8%aa%d9%87%d8%b1%d8%a7%d9%86-%d8%a2%d8%ba%d8%a7%d8%b2-%d8%b4%d8%af
-id:6920509
-mehrnews.com/news/7007295/%d9%87%d8%b4%d8%af%d8%a7%d8%b1-%d9%86%d8%b3%d8%a8%d8%aa-%d8%a8%d9%87-%d8%ad%d8%b6%d9%88%d8%b1-%d8%ac%d8%a7%d9%86%d9%88%d8%b1%d8%a7%d9%86-%d8%b3%d9%85%db%8c-%d8%af%d8%b1-%d9%85%d8%ad%db%8c%d8%b7-%d9%87%d8%a7%db%8c-%d8%b4%d9%87%d8%b1%db%8c
-id:7007295
-id:7006778
-mehrnews.com/news/7006778/%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%ac%d9%86%da%af-%d8%a7%d8%ad%d8%aa%d9%85%d8%a7%d9%84%db%8c-%d9%88-%d8%a7%d9%82%d8%aa%d8%b5%d8%a7%d8%af-%d8%b3%db%8c%d8%a7%d8%b3%db%8c-%d8%b4%d8%b1%db%8c%d8%a7%d9%86-%d9%87%d8%a7%db%8c-%d8%af%db%8c%d8%ac%db%8c%d8%aa%d8%a7%d9%84-%d8%ae%d9%84%db%8c%d8%ac-%d9%81%d8%a7%d8%b1%d8%b3
 id:7006479
 mehrnews.com/news/7006479/%d8%aa%d8%b1%d8%a7%d9%85%d9%be-%d9%85%db%8c%d8%a7%d9%86-%d9%85%db%8c%d8%b2-%d9%85%d8%b0%d8%a7%da%a9%d8%b1%d9%87-%d9%88-%d8%a2%d8%b1%d8%a7%db%8c%d8%b4-%d8%ac%d9%86%da%af%db%8c-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%a2%d9%85%d8%a7%d8%af%d9%87-%d9%87%d8%b1-%d8%b3%d9%86%d8%a7%d8%b1%db%8c%d9%88%db%8c%db%8c-%d8%a7%d8%b3%d8%aa
 mehrnews.com/news/7007290/%d9%88%d8%ac%d9%88%d8%af-%d8%b3%db%8c%d8%a7%d9%86%d9%88%d8%b1-%d8%af%d8%b1-%d8%a8%d8%af%d9%86-%d9%85%d8%a7%d8%b1%d9%85%d9%88%d9%84%da%a9-%d9%be%d8%a7%d8%b3%d8%ae-%db%8c%da%a9-%d8%b3%d9%85-%d8%b4%d9%86%d8%a7%d8%b3
@@ -1198,3 +1192,9 @@ varzesh3.ir/news/2444098/سرمربی-پرسپولیس-یک-زوج-جدید-مح
 id:2444098
 varzesh3.ir/news/2444103/مهدوی-کیا-و-توصیه-دیرهنگام-به-سرمربی-پرسپولیس
 id:2444103
+mashreghnews.ir/news/1852459/%d9%81%db%8c%d9%84%d9%85-%d8%b9%d8%b2%db%8c%d8%b2%d9%85-%d8%b1%d9%81%d8%aa%d9%87-%da%86%d9%86%d8%af-%d9%85%d8%a7%d9%87%d9%87-%d8%af%d9%84-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d9%be%d8%b1-%d8%a7%d8%b2-%d8%af%d8%b1%d8%af%d9%87
+id:1852459
+id:5965712
+id:1852463
+irib-news.ir/fa/news/5965712/سیاست-ها-و-ضوابط-تولید-در-شبکه-نمایش-خانگی-همچنان-در-انتظار-ابلاغ
+mashreghnews.ir/photo/1852463/%d8%aa%d8%b5%d9%88%db%8c%d8%b1-%d8%b4%d9%87%db%8c%d8%af-%d9%85%d8%ad%d9%85%d8%af%d8%a7%d9%85%db%8c%d9%86-%da%a9%d9%86%d8%af%db%8c-%d9%85%d9%86%d8%aa%d8%b4%d8%b1-%d8%b4%d8%af
