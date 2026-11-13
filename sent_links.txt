@@ -1,5 +1,3 @@
-id:86318659
-id:7007484
 mehrnews.com/news/7007451/%d8%a7%d9%86%d8%aa%d8%b5%d8%a7%d8%a8-%d8%b3%d8%b1%d9%be%d8%b1%d8%b3%d8%aa-%d9%85%d8%af%d8%a7%d8%b1%d8%b3-%d8%ac%d9%85%d9%87%d9%88%d8%b1%db%8c-%d8%a7%d8%b3%d9%84%d8%a7%d9%85%db%8c-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%af%d8%b1-%d8%b4%d8%a8%d9%87-%d9%82%d8%a7%d8%b1%d9%87-%d9%87%d9%86%d8%af-%d9%88-%d8%a2%d8%b3%db%8c%d8%a7%db%8c
 mehrnews.com/news/7007466/%d8%a2%d9%85%d8%a7%d8%af%da%af%db%8c-%d9%87%d9%84%d8%a7%d9%84-%d8%a7%d8%ad%d9%85%d8%b1-%d8%a8%d8%b1%d8%a7%db%8c-%d8%a7%d8%ac%d8%b1%d8%a7%db%8c-%d8%b7%d8%b1%d8%ad-%d8%b2%d9%85%d8%b3%d8%aa%d8%a7%d9%86%db%8c-%d8%a8%d8%a7-%db%b1%db%b4%db%b4%db%b7-%d9%be%d8%a7%db%8c%da%af%d8%a7%d9%87-%d9%88-%d9%85%d8%b1%da%a9%d8%b2
 id:7007451
@@ -1198,3 +1196,5 @@ id:86320814
 id:86320820
 id:86320810
 irna.ir/news/86320821/%d8%aa%d9%88%d8%a7%d9%81%d9%82-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d9%88-%d8%a7%d8%b2%d8%a8%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d8%a8%d8%b1%d8%a7%db%8c-%d8%aa%d8%b3%d9%87%db%8c%d9%84-%d8%aa%d8%b1%d8%a7%d9%86%d8%b2%db%8c%d8%aa-%d9%88-%d8%a7%d8%ad%db%8c%d8%a7%db%8c-%da%a9%d8%b1%db%8c%d8%af%d9%88%d8%b1%d9%87%d8%a7%db%8c-%d9%85%d9%86%d8%b7%d9%82%d9%87-%d8%a7%db%8c
+id:2444116
+varzesh3.ir/news/2444116/زیدان-کلافه-شد-این-چه-وضع-تیم-ملیه
