@@ -280,6 +280,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_c70de79b06.jpg"
+    ],
+    "caption": "",
+    "time": 1794563803.831725,
+    "vip": false,
+    "sig": "story_photo:c70de79b069471fcae38cb0fe23c6d9b"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_46a9a8b816.jpg"
     ],
     "caption": "",
