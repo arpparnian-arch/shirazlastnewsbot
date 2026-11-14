@@ -390,52 +390,12 @@
   {
     "type": "story_photo",
     "files": [
-      "drafts/ready_story_photo_9bbd7d0571.jpg"
+      "drafts/ready_story_photo_e74c3d03d7.jpg"
     ],
     "caption": "",
-    "time": 1794657435.0258772,
+    "time": 1794658014.0252554,
     "vip": false,
-    "sig": "story_photo:9bbd7d05712464bb19cbec914d007384"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_9879a5fddf.jpg"
-    ],
-    "caption": "",
-    "time": 1794657059.9019358,
-    "vip": false,
-    "sig": "story_photo:9879a5fddf843c3363ceb42da424d908"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_4482c81975.jpg"
-    ],
-    "caption": "",
-    "time": 1794656682.309581,
-    "vip": false,
-    "sig": "story_photo:4482c81975f4c70ae18279caf80ded3c"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_111dca1ebb.jpg"
-    ],
-    "caption": "",
-    "time": 1794656313.8292665,
-    "vip": false,
-    "sig": "story_photo:111dca1ebb7db0571e8ab005f6263812"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_3fde796720.jpg"
-    ],
-    "caption": "",
-    "time": 1794655944.047122,
-    "vip": false,
-    "sig": "story_photo:3fde79672036aebe3a6d412818cc075b"
+    "sig": "story_photo:e74c3d03d759e72ada5a89ef21177ae3"
   },
   {
     "type": "story_photo",
