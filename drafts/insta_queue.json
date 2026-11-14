@@ -390,6 +390,16 @@
   {
     "type": "story_video",
     "files": [
+      "drafts/ready_story_video_91aa5a3ae5.mp4"
+    ],
+    "caption": "",
+    "time": 1794654918.0224354,
+    "vip": false,
+    "sig": "story_video:91aa5a3ae54b02ecf42018b8b010fa1f"
+  },
+  {
+    "type": "story_video",
+    "files": [
       "drafts/ready_story_video_2631cfca7f.mp4"
     ],
     "caption": "",
