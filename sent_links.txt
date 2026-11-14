@@ -1,5 +1,3 @@
-id:140508211450
-isna.ir/news/1405082114509/%d8%b4%d9%86%d8%a7%d8%b3%d8%a7%db%8c%db%8c-%d8%a8%db%8c%d8%b4-%d8%a7%d8%b2-%db%b1%db%b0-%d9%85%db%8c%d9%84%db%8c%d8%a7%d8%b1%d8%af-%d8%b1%db%8c%d8%a7%d9%84-%d8%aa%d8%ae%d9%84%d9%81-%d8%af%d8%b1-%d8%a8%d8%a7%d8%b2%d8%a7%d8%b1-%d9%81%d8%b1%d9%88%d8%b4-%d8%a7%d9%82%d8%b3%d8%a7%d8%b7%db%8c-%da%a9%d8%a7%d9%84%d8%a7
 id:140508211456
 isna.ir/news/1405082114568/%d8%a7%d8%ae%d8%aa%d8%b5%d8%a7%d8%b5-%db%b2%db%b0%db%b0-%d9%85%db%8c%d9%84%db%8c%d8%a7%d8%b1%d8%af-%d8%b1%db%8c%d8%a7%d9%84-%d8%a8%d8%b1%d8%a7%db%8c-%d8%ad%d9%81%d8%a7%d8%b8%d8%aa-%d9%88-%d9%85%d8%b1%d9%85%d8%aa-%d8%aa%d8%ae%d8%aa-%d8%ac%d9%85%d8%b4%db%8c%d8%af-%d9%88-%d9%be%d8%a7%d8%b3%d8%a7%d8%b1%da%af%d8%a7%d8%af
 irna.ir/news/86319724/%d9%82%d9%88%d8%a7%d9%86%db%8c%d9%86-%d8%b3%d8%ae%d8%aa%da%af%db%8c%d8%b1%d8%a7%d9%86%d9%87-%da%86%db%8c%d9%86-%d8%a8%d8%b1%d8%a7%db%8c-%d9%81%d9%88%d8%aa%d8%a8%d8%a7%d9%84%db%8c%d8%b3%d8%aa-%d9%87%d8%a7
@@ -1198,3 +1196,5 @@ irna.ir/news/86320886/%d9%85%d8%b1%d9%88%d8%b1-%d8%b1%d9%88%d8%b2%d9%86%d8%a7%d9
 id:86321593
 id:2444348
 varzesh3.ir/news/2444348/تکذیب-شایعات-توسط-مجتبی-محرمی-خوبِ-خوبِ-خوبم
+varzesh3.ir/news/2444346/حمایت-از-سرمربی-حریف-بعدی-ایران-با-انتقادی-نرم
+id:2444346
