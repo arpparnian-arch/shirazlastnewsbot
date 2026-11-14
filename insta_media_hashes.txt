@@ -1,4 +1,3 @@
-story_photo:fbac28f52cfc8531c6d6aa6721b07d59
 story_photo:3f7c7515a81a772cd57934513d4aec88
 photo:03ddbaf76121dd6d21d6ac7a3f0e3cb4
 story_photo:9448142fdcbfa34d7e568e62776d11af
@@ -193,6 +192,7 @@ story_photo:bc07683898472765c8dec0efb79e972e
 story_photo:fc6b05b02ede43d36b0e1eedef193018
 album:f0db62efdf42f38ff89b8f55e5faf61d
 album:08d15affc2d3ee78aa5dee311d0a7bfd
+story_photo:bdb99a421f92f4c40ad4124803475537
 album:e7106b0d525b3b278098e4aabae7dd9b
 story_photo:9c45a3c5ab807b6e7331cf9641c030fb
 story_photo:7bf10e70cbd9460a4630c5b14bda45c2
