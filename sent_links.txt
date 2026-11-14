@@ -1,5 +1,3 @@
-mehrnews.com/news/7007969/%d9%87%d8%b4%d8%af%d8%a7%d8%b1-%d8%a7%d9%88%d8%b1%da%98%d8%a7%d9%86%d8%b3-%d8%af%d8%b1%d8%a8%d8%a7%d8%b1%d9%87-%d8%a7%d9%81%d8%b2%d8%a7%db%8c%d8%b4-%d8%ae%d8%b7%d8%b1-%da%af%d8%a7%d8%b2%da%af%d8%b1%d9%81%d8%aa%da%af%db%8c-%d8%af%d8%b1-%d8%b1%d9%88%d8%b2%d9%87%d8%a7%db%8c-%d8%b3%d8%b1%d8%af
-mehrnews.com/news/7008476/%d9%81%d8%a7%d8%b1%d8%b3%db%8c-%d8%af%d9%88%d9%85%db%8c%d9%86-%d9%85%d8%b5%d8%af%d9%88%d9%85-%d8%aa%db%8c%d9%85-%d9%85%d9%84%db%8c-%d9%81%d9%88%d8%aa%d8%a8%d8%a7%d9%84-%d8%af%d9%88%d8%b1%db%8c-%d8%b3%d9%87-%d9%87%d9%81%d8%aa%d9%87-%d8%a7%db%8c-%d8%a7%d8%b2-%d9%85%db%8c%d8%a7%d8%af%db%8c%d9%86
 irib-news.ir/fa/news/5964401/اکسپو-شیراز-ویترین-ظرفیت-های-اقتصادی-فارس-و-موتور-محرک-سرمایه-گذاری-شهرستان-ها
 mehrnews.com/news/7008464/%d8%a8%db%8c%d8%b4-%d8%a7%d8%b2-%db%b6%db%b0-%d8%af%d8%b1%d8%b5%d8%af-%d9%85%d8%af%d8%a7%d8%b1%d8%b3-%da%a9%d8%b4%d9%88%d8%b1-%d8%b1%d8%a7-%d8%ae%db%8c%d8%b1%db%8c%d9%86-%d8%b3%d8%a7%d8%ae%d8%aa%d9%86%d8%af
 id:7008464
@@ -1198,3 +1196,5 @@ irib-news.ir/fa/news/5966221/اجرای-سایت-الگویی-کشاورزی-ح�
 id:5966221
 id:140508231584
 isna.ir/news/1405082315841/%da%86%d8%b1%d8%a7-%d8%a7%d8%b9%d8%aa%d8%b1%d8%a7%d8%b6%d8%a7%d8%aa-%d8%af%d8%b1-%d8%a7%d8%b1%d9%88%d9%be%d8%a7-%d9%81%d8%b1%d8%a7%da%af%db%8c%d8%b1-%d8%b4%d8%af
+id:2444270
+varzesh3.ir/news/2444270/قلعه-نویی-قرار-بود-فیفادی-قبل-جوانگرایی-کنم
