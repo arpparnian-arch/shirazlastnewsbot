@@ -500,22 +500,12 @@
   {
     "type": "story_photo",
     "files": [
-      "drafts/ready_story_photo_977f5cce31.jpg"
+      "drafts/ready_story_photo_9b42836de0.jpg"
     ],
     "caption": "",
-    "time": 1794750389.4861705,
+    "time": 1794750978.9088118,
     "vip": false,
-    "sig": "story_photo:977f5cce3108af9491aa3c6d5c9b0f06"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_ceb06661a3.jpg"
-    ],
-    "caption": "",
-    "time": 1794749648.0136359,
-    "vip": false,
-    "sig": "story_photo:ceb06661a316e664dd25f0b3c984f6c0"
+    "sig": "story_photo:9b42836de0cadc31297bc4977b1fc274"
   },
   {
     "type": "story_photo",
