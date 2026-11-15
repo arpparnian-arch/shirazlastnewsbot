@@ -3420,16 +3420,26 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
         ov_reel = create_9_16_video_overlay(1080, 1920, subtitle_text, source_name)
         ov_reel.save('ov_reel_9_16.png', format='PNG')
 
-        # ۲. فیلتر فوق‌سریع ۹:۱۶ (بلور مقیاس‌پذیر برای جلوگیری ۱۰۰٪ از Timeout در گیت‌هاب)
+        # ۲. فیلتر فوق‌سریع ۹:۱۶ + زوم نامحسوس ۳٪ + تغییر Visual Hash + سرعت ۱.۰۳x تصویر
         if is_vertical:
-            fg_Filter = '[v_fg_in]scale=1080:1920:force_original_aspect_ratio=decrease,setsar=1[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1[comp];'
+            fg_Filter = (
+                '[v_fg_in]scale=iw*1.03:ih*1.03,crop=iw/1.03:ih/1.03,'
+                'scale=1080:1920:force_original_aspect_ratio=decrease,'
+                'eq=contrast=1.04:saturation=1.05:brightness=0.01,setsar=1[fg];'
+                '[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1[comp];'
+            )
         else:
-            fg_Filter = '[v_fg_in]scale=1020:-2:force_original_aspect_ratio=decrease,setsar=1[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2-80,setsar=1[comp];'
+            fg_Filter = (
+                '[v_fg_in]scale=iw*1.03:ih*1.03,crop=iw/1.03:ih/1.03,'
+                'scale=1020:-2:force_original_aspect_ratio=decrease,'
+                'eq=contrast=1.04:saturation=1.05:brightness=0.01,setsar=1[fg];'
+                '[bg][fg]overlay=(W-w)/2:(H-h)/2-80,setsar=1[comp];'
+            )
 
         flt_base_reel = (
-            '[0:v]split=2[v_bg_in][v_fg_in];'
+            '[0:v]setpts=PTS/1.03,split=2[v_bg_in][v_fg_in];'
             '[v_bg_in]scale=180:320:force_original_aspect_ratio=increase,crop=180:320,'
-            'boxblur=10:2,eq=brightness=-0.24,scale=1080:1920,setsar=1[bg];'
+            'boxblur=10:2,eq=brightness=-0.24:contrast=1.04,scale=1080:1920,setsar=1[bg];'
             + fg_Filter +
             '[comp][1:v]overlay=0:0,setsar=1[with_frame];'
             "[with_frame][2:v]overlay=0:0:enable='between(t,0,3)',setsar=1"
@@ -3450,6 +3460,8 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
                     'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', 'ov_hook_9_16.png', '-i', wm_file,
                     '-filter_complex', flt_wm_reel,
                     '-map', '[outv]', '-map', '0:a?',
+                    '-af', 'atempo=1.03',
+                    '-map_metadata', '-1',
                     '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
                     '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
                     '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
@@ -3467,6 +3479,8 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
                 'ffmpeg', '-y', '-i', raw_vid, '-i', 'ov_reel_9_16.png', '-i', 'ov_hook_9_16.png',
                 '-filter_complex', flt_no_wm,
                 '-map', '[outv]', '-map', '0:a?',
+                '-af', 'atempo=1.03',
+                '-map_metadata', '-1',
                 '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '26', '-maxrate', '1900k', '-bufsize', '3800k',
                 '-profile:v', 'high', '-level', '4.1', '-r', '30', '-c:a', 'aac', '-b:a', '96k',
                 '-ar', '44100', '-ac', '2', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
