@@ -3613,36 +3613,174 @@ def build_smart_hashtags(full_txt, is_fars_feed):
             seen.append(t)
     return ' '.join(seen[:5])
 
+def _build_insta_curiosity_hook(clean_title, full_txt):
+    """ساخت خط اول کنجکاوبرانگیز و ناتمام (بدون لو دادن انتهای ماجرا) برای افزایش Watch Time"""
+    t = re.sub(r'[.!؟…]+$', '', clean_title or '').strip()
+    if '/' in t:
+        parts = [p.strip() for p in t.split('/') if len(p.strip().split()) >= 3]
+        if parts:
+            t = parts[0]
+    if ':' in t and len(t.split(':', 1)[0].split()) <= 4:
+        t = t.split(':', 1)[1].strip()
+
+    # حذف افعال و کلمات پایانی که نتیجه خبر را لو می‌دهند
+    spoiler_endings = [
+        r'\s+اعلام شد$', r'\s+مشخص شد$', r'\s+منتشر شد$', r'\s+رونمایی شد$',
+        r'\s+آغاز شد$', r'\s+متوقف شد$', r'\s+کاهش یافت$', r'\s+افزایش یافت$',
+        r'\s+بازداشت شد$', r'\s+دستگیر شد$', r'\s+تعطیل شد$', r'\s+تغییر کرد$',
+        r'\s+خبر داد$', r'\s+توضیح داد$', r'\s+واکنش نشان داد$',
+        r'\s+شد$', r'\s+است$', r'\s+بود$', r'\s+کرد$', r'\s+داد$'
+    ]
+    for pat in spoiler_endings:
+        t = re.sub(pat, '', t).strip()
+
+    words = t.split()
+    if len(words) > 8:
+        cut_idx = 7
+        while cut_idx > 4 and words[cut_idx - 1] in FORBIDDEN_END_WORDS:
+            cut_idx -= 1
+        core_phrase = ' '.join(words[:cut_idx])
+    else:
+        while len(words) > 3 and words[-1] in FORBIDDEN_END_WORDS:
+            words.pop()
+        core_phrase = ' '.join(words)
+
+    core_phrase = core_phrase.rstrip('،؛:- ')
+
+    if any(k in full_txt for k in ['تصادف', 'آتش‌سوزی', 'انفجار', 'اورژانس', 'حادثه', 'واژگونی', 'سقوط']):
+        hook = f'{core_phrase}؛ اما جزئیات تکان‌دهنده ماجرا نشان می‌دهد که'
+    elif any(k in full_txt for k in ['طلا', 'دلار', 'سکه', 'خودرو', 'قیمت', 'یارانه', 'کالابرگ', 'وام', 'حقوق']):
+        hook = f'{core_phrase}؛ تغییری که از همین حالا باعث شده'
+    elif any(k in full_txt for k in ['تعطیل', 'مدارس', 'ادارات', 'ساعت کاری', 'هشدار', 'بارش', 'هواشناسی']):
+        hook = f'{core_phrase}؛ تصمیمی که همه را غافلگیر کرد و قرار است'
+    else:
+        hook = f'{core_phrase}؛ اما واقعیت ماجرا از جایی شروع شد که'
+
+    return f'⭕️ {hook}... (جزئیات در کپشن 👇)'
+
+
+def _build_insta_challenge_question(full_txt, is_local):
+    """تولید سوال دوگزینه‌ای، چالشی یا احساسی مرتبط با موضوع خبر برای افزایش کامنت"""
+    if any(k in full_txt for k in ['تصادف', 'واژگونی', 'ترافیک', 'بزرگراه', 'جاده', 'رانندگی']):
+        return '💬 به نظرتون مقصر اصلی این حوادث، بی‌احتیاطی راننده‌هاست یا وضعیت غیراستاندارد جاده و خودروها؟'
+    if any(k in full_txt for k in ['طلا', 'دلار', 'سکه', 'بورس', 'تورم', 'گرانی', 'قیمت', 'خودرو', 'مسکن']):
+        return '💬 فکر می‌کنید با این وضعیت، قیمت‌ها در روزهای آینده افزایشی می‌شه یا کاهشی؟ به نظرتون الان وقت خریده یا صبر؟'
+    if any(k in full_txt for k in ['سرقت', 'زورگیری', 'پلیس', 'بازداشت', 'دستگیری', 'کلاهبرداری', 'قضایی']):
+        return '💬 به نظر شما برای ریشه‌کن شدن این اتفاقات، برخوردهای شدیدتر قضایی مؤثرتره یا ریشه‌یابی اقتصادی؟'
+    if any(k in full_txt for k in ['تعطیل', 'مدارس', 'آلودگی', 'بارش', 'باران', 'برف', 'ساعت کاری', 'برق', 'آب']):
+        return '💬 شما با این نحوه مدیریت و تصمیم‌گیری موافقید یا مخالف؟ وضعیت در محله و منطقه شما الان چطوره؟'
+    if any(k in full_txt for k in SPORT_KW):
+        return '💬 به نظرتون ستاره یا مقصر اصلی این ماجرا چه کسیه؟ نتیجه رو چطور پیش‌بینی می‌کنید؟'
+    if is_local and any(k in full_txt for k in ['شهرداری', 'مترو', 'شیراز', 'شورای شهر', 'پروژه', 'عمرانی']):
+        return '💬 به عنوان یک شهروند شیرازی، فکر می‌کنید اولویت اصلی شهرمون الان این موضوعه یا مشکلات ترافیک و معیشت؟'
+    if is_local:
+        return '💬 نظر شما همشهریان عزیز درباره این اتفاق چیه؟ شما موافق این روند هستید یا منتقد؟'
+    return '💬 واکنش شما به این خبر چیه؟ به نظرتون مقصر کیه و نتیجه این ماجرا چی می‌شه؟'
+
+
 def build_viral_insta_hashtags(full_txt, is_fars_feed):
-    topic_tags = build_smart_hashtags(full_txt, is_fars_feed)
-    shiraz_tags = '#شیراز #شیرازی #اخبار_شیراز #فارس #شهر_راز #shiraz'
-    viral_pool = random.choice(TRENDING_UNRELATED_TAGS)
-    all_t = (topic_tags + ' ' + shiraz_tags + ' ' + viral_pool).split()
+    """ساخت ۵ تا ۶ هشتگ کاملاً هدفمند و مرتبط با موضوع خبر (بدون هشتگ‌های اسپم و ثابت)"""
+    tags = []
+
+    topic_map = [
+        (['طلا', 'سکه'], '#طلا'),
+        (['دلار', 'ارز'], '#دلار'),
+        (['خودرو', 'ایران خودرو', 'سایپا'], '#خودرو'),
+        (['تورم', 'گرانی', 'معیشت', 'اقتصاد', 'یارانه', 'کالابرگ'], '#اقتصاد'),
+        (['تصادف', 'آتش‌سوزی', 'انفجار', 'اورژانس', 'حادثه'], '#حوادث'),
+        (['پلیس', 'انتظامی', 'دستگیری', 'بازداشت', 'سرقت'], '#پلیس'),
+        (['هواشناسی', 'باران', 'برف', 'دما', 'طوفان'], '#هواشناسی'),
+        (['تعطیل', 'مدارس', 'دانشگاه', 'آموزش'], '#تعطیلی_مدارس'),
+        (['ترافیک', 'مترو', 'شهرداری', 'عمران'], '#مدیریت_شهری'),
+        (['فجر سپاسی', 'فجرسپاسی'], '#فجر_سپاسی'),
+        (['پرسپولیس'], '#پرسپولیس'),
+        (['استقلال'], '#استقلال'),
+        (['تیم ملی', 'فوتبال', 'لیگ برتر', 'ورزش'], '#فوتبال'),
+        (['حافظیه', 'تخت جمشید', 'سعدیه', 'گردشگری', 'میراث'], '#گردشگری'),
+        (['پزشکی', 'سلامت', 'بیمارستان', 'دارو'], '#سلامت'),
+        (['دولت', 'مجلس', 'رئیس جمهور', 'وزیر', 'سیاسی'], '#سیاست')
+    ]
+
+    if is_fars_feed:
+        # ۱. هشتگ‌های محلی شیراز و فارس
+        tags.append('#شیراز')
+        for c in FARS_37_COUNTIES_UNAMBIGUOUS:
+            if c != 'شیراز' and c in full_txt:
+                tags.append('#' + c.replace(' ', '_').replace('‌', '_'))
+                break
+        tags.append('#استان_فارس')
+        tags.append('#اخبار_شیراز')
+
+        # ۲. افزودن هشتگ‌های موضوعی مرتبط با خبر
+        for kw_list, h_tag in topic_map:
+            if any(k in full_txt for k in kw_list) and h_tag not in tags:
+                tags.append(h_tag)
+        if len(tags) < 5:
+            tags.append('#شیرازگردی' if 'گردشگری' in full_txt else '#خبر_شیراز')
+    else:
+        # ۱. هشتگ‌های موضوعی و مکانی دقیق خبر سراسری
+        for p in IRAN_PLACES:
+            if p in full_txt:
+                tags.append('#' + p.replace(' ', '_').replace('‌', '_'))
+                break
+        for kw_list, h_tag in topic_map:
+            if any(k in full_txt for k in kw_list) and h_tag not in tags:
+                tags.append(h_tag)
+
+        # ۲. افزودن هشتگ‌های خبری استاندارد ایران
+        for base_nat_tag in ['#خبر_فوری', '#اخبار_ایران', '#ایران', '#اخبار_روز']:
+            if len(tags) < 6 and base_nat_tag not in tags:
+                tags.append(base_nat_tag)
+
     seen = []
-    for t in all_t:
+    for t in tags:
         if t not in seen:
             seen.append(t)
-    return ' '.join(seen[:18])
+    return ' '.join(seen[:6])
+
 
 def format_insta_caption(title, summary, is_fars_feed, source_url, is_even_hour=True, is_video=False):
     clean_title = clean_agency_prefix(title)
-    s = extract_complete_lead(summary, clean_title, min_chars=90, max_chars=600)
+    raw_lead = extract_complete_lead(summary, clean_title, min_chars=110, max_chars=360)
+    # حذف هرگونه ایموجی کلیشه‌ای ✅ از ابتدای متن خبر
+    clean_body = re.sub(r'^[✅⭕️🛑•\-–—\s]+', '', raw_lead).strip()
+    full_txt = clean_title + ' ' + clean_body
+
+    # ۱. تشخیص هوشمند موضوع (محلی شیراز/فارس یا سراسری ایران)
+    is_local = bool(is_fars_feed or is_strictly_fars_shiraz_news(clean_title, clean_body))
     source_name = 'اختصاصی آخرین خبرهای شیراز' if source_url == 'exclusive' else get_source_name(source_url)
-    all_tags = build_viral_insta_hashtags(clean_title + ' ' + s, is_fars_feed)
 
-    # بررسی تولید کپشن جذاب توسط هوش مصنوعی
-    _, _, ai_cap = get_ai_viral_hook_and_caption(clean_title, s)
-    if ai_cap:
-        return f'⭕️ {clean_title}\n\n{ai_cap}\n\n✅ منبع خبر: {source_name}\n\n{all_tags}'
+    # ۲. خط اول کنجکاوبرانگیز (قلاب کپشن برای افزایش Watch Time)
+    hook_line = _build_insta_curiosity_hook(clean_title, full_txt)
 
-    if is_video:
-        cta_top = '✅ تا آخر ببینید! نظر شما درباره این ویدیو چیست؟ حتماً کامنت بگذارید👇'
-    elif is_even_hour:
-        cta_top = '✅ ورق بزنید 👈 نظر شما همشهریان عزیز درباره این خبر چیست؟ در کامنت‌ها بنویسید👇'
+    # ۳. سوال چالشی / دوگزینه‌ای مرتبط با خبر
+    question_line = _build_insta_challenge_question(full_txt, is_local)
+
+    # ۴. دعوت به فالو (CTA) هوشمند و دوگانه
+    if is_local:
+        cta_block = (
+            '🔔 اگر ساکن شیراز و فارس هستید، برای دریافت فوری خبرهای شهرمان همین الان پیج را فالو کنید:\n'
+            '👉 @shirazlastnews\n'
+            '👉 @shirazlastnews'
+        )
     else:
-        cta_top = '✅ نظر شما همشهریان عزیز درباره این خبر چیست؟ در کامنت‌ها بنویسید👇'
-    cta_bot = f'✅ برای دریافت فوری‌ترین خبرهای شیراز و فارس، پیج ما را دنبال کنید:\n🛑 @{INSTA_USER.replace("@", "")}'
-    return f'⭕️ {clean_title}\n\n{cta_top}\n\n✅ {s}\n\n✅ منبع خبر: {source_name}\n\n{cta_bot}\n\n{all_tags}'
+        cta_block = (
+            '🔥 فوری‌ترین ویدیوهای خبری ایران در ریلزها + پوشش لحظه‌ای شیراز در استوری‌ها؛ همین الان فالو کنید:\n'
+            '👉 @shirazlastnews\n'
+            '👉 @shirazlastnews'
+        )
+
+    # ۵. منبع کوتاه و ۵ تا ۶ هشتگ هدفمند بدون اسپم
+    targeted_tags = build_viral_insta_hashtags(full_txt, is_local)
+
+    return (
+        f'{hook_line}\n\n'
+        f'{clean_body}\n\n'
+        f'{question_line}\n\n'
+        f'{cta_block}\n\n'
+        f'📌 منبع: {source_name}\n'
+        f'{targeted_tags}'
+    )
 
 def upload_story_with_native_poll(cl, story_jpg_path):
     cl = cl or DummyInstaClient()
