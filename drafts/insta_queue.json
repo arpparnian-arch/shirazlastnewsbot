@@ -560,6 +560,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_8f9ebd4461.jpg"
+    ],
+    "caption": "",
+    "time": 1794813661.5339346,
+    "vip": false,
+    "sig": "story_photo:8f9ebd4461d8c447603a6d5386abb188"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_3c8456378a.jpg"
     ],
     "caption": "",
