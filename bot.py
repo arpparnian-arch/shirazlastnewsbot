@@ -3010,7 +3010,7 @@ COLOR_CRISP_WHITE = (248, 250, 252, 255)   # #F8FAFC
 
 
 def shape_persian_text(text):
-    """رندر صحیح متن فارسی با arabic_reshaper و python-bidi (همراه با محافظت از دو بار برعکس شدن در صورت فعال بودن libraqm)"""
+    """رندر صحیح متن فارسی با arabic_reshaper و python-bidi"""
     if not text:
         return ""
     s = str(text).strip()
@@ -3044,7 +3044,7 @@ def load_brand_font(size=44, weight="extrabold"):
 
 
 def _fit_single_line_brand_font(text, base_size, min_size, max_width_px, weight="extrabold"):
-    """تنظیم خودکار سایز فونت تا متن دقیقاً در عرض مجاز (مثلاً 860px) جا بگیرد"""
+    """تنظیم خودکار سایز فونت تا متن بدون بیرون‌زدگی در عرض مجاز جا بگیرد"""
     dummy_img = Image.new("RGBA", (1080, 200), (0, 0, 0, 0))
     d = ImageDraw.Draw(dummy_img)
     shaped = shape_persian_text(text)
@@ -3057,7 +3057,7 @@ def _fit_single_line_brand_font(text, base_size, min_size, max_width_px, weight=
 
 
 def split_reel_title_two_lines(title_text):
-    """شکستن هوشمند و متوازن تیتر ریلز به دو خط خوانا (خط اول: موضوع اصلی، خط دوم: بخش کلیدی)"""
+    """شکستن هوشمند و متوازن تیتر ریلز به دو خط کامل و خوانا"""
     clean_t = clean_agency_prefix(title_text or "").strip()
     clean_t = re.sub(r"\s+", " ", clean_t).strip()
     if not clean_t:
@@ -3075,9 +3075,8 @@ def split_reel_title_two_lines(title_text):
 
     words = clean_t.split()
     if len(words) <= 3:
-        return clean_t, "گزارش ویدیویی"
+        return clean_t, "تماشا کنید!"
 
-    # اگر تیتر خیلی طولانی است، به ۱۴ کلمه اول محدود شود تا در دو سطر با عرض 860px کاملاً خوانا بماند
     if len(words) > 14:
         cut_len = 14
         while cut_len > 8 and words[cut_len - 1] in FORBIDDEN_END_WORDS:
@@ -3099,12 +3098,37 @@ def split_reel_title_two_lines(title_text):
     return " ".join(words[:mid]), " ".join(words[mid:])
 
 
+def _detect_navy_box_y(ov_img, sc=1.0):
+    """پیدا کردن خودکار موقعیت عمودی مستطیل سورمه‌ای پایین در فایل reel_overlay.png"""
+    W, H = ov_img.size
+    px = ov_img.load()
+    navy_rows = []
+    for y in range(int(1150 * sc), int(1750 * sc), 4):
+        dark_count = 0
+        sample_points = range(int(260 * sc), int(780 * sc), int(40 * sc))
+        for x in sample_points:
+            r, g, b, a = px[x, y]
+            if a > 130 and r < 55 and g < 65 and b < 85:
+                dark_count += 1
+        if dark_count >= len(sample_points) * 0.75:
+            navy_rows.append(y)
+
+    if len(navy_rows) >= 20:
+        box_top = min(navy_rows)
+        box_bot = max(navy_rows)
+        # کسر ۷۵ پیکسل انتهایی مستطیل سورمه‌ای که محل درج @shirazlastnews است
+        usable_bot = box_bot - int(75 * sc)
+        center_y = (box_top + usable_bot) // 2
+        return center_y - int(42 * sc), center_y + int(44 * sc)
+
+    return int(1385 * sc), int(1475 * sc)
+
+
 def create_9_16_video_overlay(W, H, subtitle_text='', source_name='رسانه آخرین خبرهای شیراز'):
     """
     قالب اصلی ریلز (assets/brand/reel_overlay.png):
-    - حذف کامل باکس قرمز قدیمی، کادر مشکی تکراری پایین و نوار منبع پایین
-    - درج لایه شفاف reel_overlay.png با Image.alpha_composite
-    - رندر دو خط تیتر در مرکز افقی x=525 و ارتفاع‌های y=509 (#F8FAFC) و y=593 (#FFD56B)
+    - قرار دادن لایه شفاف reel_overlay.png
+    - رندر دو خط تیتر دقیقاً در مرکز مستطیل سورمه‌ای پایین (سمت چپ نوار طلایی)
     """
     ov = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     sc = W / 1080.0
@@ -3122,33 +3146,36 @@ def create_9_16_video_overlay(W, H, subtitle_text='', source_name='رسانه آ
         draw = ImageDraw.Draw(ov)
         line1, line2 = split_reel_title_two_lines(subtitle_text)
 
-        max_w = int(860 * sc)
-        base_sz = int(44 * sc)
-        min_sz = int(26 * sc)
+        max_w = int(820 * sc)
+        base_sz = int(46 * sc)
+        min_sz = int(28 * sc)
 
         f1 = _fit_single_line_brand_font(line1, base_size=base_sz, min_size=min_sz, max_width_px=max_w, weight="extrabold")
         f2 = _fit_single_line_brand_font(line2, base_size=base_sz, min_size=min_sz, max_width_px=max_w, weight="extrabold")
 
-        text_cx = int(525 * sc)
-        y_line1 = int(509 * sc)
-        y_line2 = int(593 * sc)
+        text_cx = int(515 * sc)
+        y_line1, y_line2 = _detect_navy_box_y(ov, sc=sc)
 
-        # خط اول تیتر (موضوع اصلی) در y=509 با رنگ سفید #F8FAFC
+        # خط اول تیتر (موضوع اصلی) با رنگ سفید #F8FAFC و سایه نرم برای خوانایی حداکثری
         draw.text(
             (text_cx, y_line1),
             shape_persian_text(line1),
             font=f1,
             fill=COLOR_CRISP_WHITE,
-            anchor="mm"
+            anchor="mm",
+            stroke_width=max(1, int(2 * sc)),
+            stroke_fill=(0, 0, 0, 200)
         )
 
-        # خط دوم تیتر (بخش کلیدی/شوکه‌کننده) در y=593 با رنگ طلایی روشن #FFD56B
+        # خط دوم تیتر (بخش کلیدی/شوکه‌کننده) با رنگ طلایی روشن #FFD56B
         draw.text(
             (text_cx, y_line2),
             shape_persian_text(line2),
             font=f2,
             fill=COLOR_LUMINOUS_GOLD,
-            anchor="mm"
+            anchor="mm",
+            stroke_width=max(1, int(2 * sc)),
+            stroke_fill=(0, 0, 0, 220)
         )
 
     return ov
@@ -3234,7 +3261,7 @@ def get_video_dimensions(vid_path):
 
 
 # ==========================================
-# موتور قلاب اول ویدیو (assets/brand/video_hook_overlay.png)
+# موتور قلاب ۲ خطی جذاب و مفهومی روی براش طلایی و سرمه‌ای (video_hook_overlay.png)
 # ==========================================
 import math
 
@@ -3257,56 +3284,95 @@ UNBREAKABLE_PAIRS = [
     ("پلیس", "راهور"), ("شورای", "شهر"), ("شهردار", "شیراز"),
     ("استاندار", "فارس"), ("آتش", "سوزی"), ("تصادف", "زنجیره"),
     ("تعطیلی", "مدارس"), ("قطعی", "برق"), ("تنگه", "هرمز"),
-    ("خلیج", "فارس"), ("امام", "جمعه"), ("لیگ", "برتر"), ("تیم", "ملی")
+    ("خلیج", "فارس"), ("امام", "جمعه"), ("لیگ", "برتر"),
+    ("تیم", "ملی"), ("امیر", "المومنین"), ("امیرالمومنین", "علی")
 ]
 
 
-def build_short_hook_phrase(title_text):
-    """استخراج ۲ تا ۴ کلمه کلیدی و شوکه‌کننده از تیتر خبر برای مرکز براش قلاب"""
+def is_grammatically_valid_persian_hook(line1, line2):
+    """بررسی کامل بودن، طبیعی بودن و جذابیت عبارت دوخطی قلاب"""
+    l1 = re.sub(r'[.!؟،؛:«»"\']+', '', line1 or '').strip()
+    l2 = re.sub(r'[.!؟،؛:«»"\']+', '', line2 or '').strip()
+    w1, w2 = l1.split(), l2.split()
+
+    if len(w1) < 2 or len(w2) < 2 or len(w1) > 6 or len(w2) > 6:
+        return False
+    if w1[-1] in FORBIDDEN_END_WORDS or w2[-1] in FORBIDDEN_END_WORDS:
+        return False
+    if w2[0] == "را":
+        return False
+    for first_w, second_w in UNBREAKABLE_PAIRS:
+        if w1[-1] == first_w and w2[0].startswith(second_w):
+            return False
+    return True
+
+
+def build_syntactic_persian_hook(title_text, summary_text=""):
+    """
+    تولید هوشمند قلاب ۲ خطی کامل، مفهومی و کنجکاوبرانگیز:
+    - خط اول (روی براش طلایی بالا): موضوع یا سوژه اصلی (۳ تا ۵ کلمه)
+    - خط دوم (روی براش سرمه‌ای وسط): بخش اوج یا تکمیل‌کننده معنا (۳ تا ۵ کلمه با ! یا ؟!)
+    """
     clean_t = clean_agency_prefix(title_text or "").strip()
     if "/" in clean_t:
         parts = [p.strip() for p in clean_t.split("/") if len(p.strip().split()) >= 2]
-        if parts:
+        if len(parts) >= 2 and 2 <= len(parts[0].split()) <= 5 and 2 <= len(parts[1].split()) <= 5:
+            p2 = parts[1].rstrip(".!؟ ") + "!"
+            return parts[0], p2
+        elif parts:
             clean_t = parts[0]
-    if ":" in clean_t and len(clean_t.split(":", 1)[0].split()) <= 3:
-        clean_t = clean_t.split(":", 1)[1].strip()
+
+    if "؛" in clean_t:
+        parts = [p.strip() for p in clean_t.split("؛", 1) if len(p.strip().split()) >= 2]
+        if len(parts) == 2 and len(parts[0].split()) <= 5 and len(parts[1].split()) <= 5:
+            return parts[0], parts[1].rstrip(".!؟ ") + "!"
 
     clean_t = re.sub(r'[.!؟،؛:«»"\']+', ' ', clean_t)
     clean_t = re.sub(r'\s+', ' ', clean_t).strip()
     words = clean_t.split()
 
-    # حذف کلمات کم‌اهمیت ابتدایی برای رسیدن سریع به کلمات کلیدی
-    lead_fluff = {"برگزاری", "آغاز", "ادامه", "گزارش", "جزئیات", "تشریح", "اعلام", "تصاویر", "فیلم", "ویدیو"}
-    while len(words) > 3 and words[0] in lead_fluff:
-        words.pop(0)
+    while words and words[-1] in FORBIDDEN_END_WORDS:
+        words.pop()
 
-    if len(words) > 4:
-        cut_len = 4
-        while cut_len > 2 and words[cut_len - 1] in FORBIDDEN_END_WORDS:
+    # اگر تیتر کوتاه است (۲ تا ۴ کلمه)، خط اول را تیتر کامل و خط دوم را یک عبارت جذاب مرتبط قرار می‌دهیم
+    if len(words) <= 4:
+        line1 = " ".join(words) if words else "خبر فوری شیراز"
+        full_ctx = (clean_t + " " + (summary_text or "")).strip()
+        if any(k in full_ctx for k in ["تصادف", "آتش", "انفجار", "حادثه", "اورژانس", "سقوط", "واژگونی"]):
+            line2 = "لحظه‌ای که همه را شوکه کرد!"
+        elif any(k in full_ctx for k in ["قهرمان", "فرخی", "کشتی", "فجر", "فوتبال", "تیم ملی", "مدال", "ورزش"]):
+            line2 = "صحنه‌ای که در ایران وایرال شد!"
+        elif any(k in full_ctx for k in ["شیراز", "فارس", "حافظیه", "دروازه قرآن", "تخت جمشید"]):
+            line2 = "اتفاقی ویژه در قلب شیراز!"
+        else:
+            line2 = "ماجرایی که باید ببینید!"
+        return line1, line2
+
+    # برای تیترهای ۵ تا ۱۰ کلمه‌ای، کل عبارت معنادار را در ۲ سطر متوازن تقسیم می‌کنیم
+    if len(words) > 10:
+        cut_len = 9
+        while cut_len > 5 and words[cut_len - 1] in FORBIDDEN_END_WORDS:
             cut_len -= 1
         words = words[:cut_len]
-    else:
-        while len(words) > 2 and words[-1] in FORBIDDEN_END_WORDS:
-            words.pop()
 
-    if not words:
-        return "خبر فوری!"
+    mid = len(words) // 2
+    for idx in [mid, mid + 1, mid - 1, 3, 4]:
+        if 2 <= idx <= len(words) - 2:
+            w1 = words[:idx]
+            w2 = words[idx:]
+            if w1[-1] in FORBIDDEN_END_WORDS:
+                continue
+            broken = any(w1[-1] == p1 and w2[0].startswith(p2) for p1, p2 in UNBREAKABLE_PAIRS)
+            if not broken:
+                l1 = " ".join(w1)
+                l2 = " ".join(w2).rstrip(".!؟ ") + "!"
+                return l1, l2
 
-    # حفظ جفت‌کلمات جدانشدنی در پایان قلاب
-    phrase = " ".join(words)
-    if not phrase.endswith(("!", "؟")):
-        phrase += "!"
-    return phrase
-
-
-def build_syntactic_persian_hook(title_text):
-    short_h = build_short_hook_phrase(title_text)
-    l1, l2 = split_reel_title_two_lines(title_text)
-    return short_h, l2
+    return " ".join(words[:mid]), " ".join(words[mid:]).rstrip(".!؟ ") + "!"
 
 
 def get_ai_viral_hook_and_caption(title, summary):
-    """دریافت قلاب کوتاه ۲ تا ۴ کلمه‌ای و کپشن استاندارد از جمنای یا موتور نحوی داخلی"""
+    """دریافت قلاب ۲ خطی مفهومی و جذاب (برای براش طلایی و سرمه‌ای) به همراه کپشن از جمنای یا موتور نحوی"""
     cache_key = (title or "")[:60]
     if cache_key in _AI_VIRAL_CACHE:
         return _AI_VIRAL_CACHE[cache_key]
@@ -3314,14 +3380,16 @@ def get_ai_viral_hook_and_caption(title, summary):
     news_text = f"تیتر: {title}\nمتن خبر: {summary}".strip()
 
     if GEMINI_API_KEY and len(GEMINI_API_KEY) > 15 and len(news_text) >= 15:
-        prompt = f"""تو سردبیر ارشد خبری پیج @shirazlastnews هستی. متن خبر زیر را بخوان و خروجی را فقط به شکل JSON معتبر برگردان.
+        prompt = f"""تو سردبیر ارشد و متخصص وایرال‌سازی ریلز در پیج @shirazlastnews هستی. متن خبر زیر را بخوان و خروجی را فقط به شکل JSON معتبر برگردان.
+
+قانون حیاتی برای قلاب اول ویدیو (Hook):
+ما دو نوار براش روی ویدیو داریم (نوار طلایی بالا و نوار سرمه‌ای پهن در وسط). باید یک جمله یا عبارت خبری ۱۰۰٪ کامل، مفهومی، کنجکاوبرانگیز و جذاب بدهی که در دو خط (hook_line1 و hook_line2) کامل شود و مخاطب را میخکوب کند.
+هرگز جمله را ناقص رها نکن (مثلاً ننویس «ارادت غلامرضا فرخی!»، بلکه بنویس خط اول: «ارادت ویژه غلامرضا فرخی» و خط دوم: «به ساحت امیرالمؤمنین (ع)!»).
 
 ساختار JSON:
-1. "hook_short": متن کوتاه قلاب اول ویدیو شامل حداکثر ۲ تا ۴ کلمه کلیدی و شوکه‌کننده از خبر (معنادار و کامل که با ! یا ؟ تمام شود).
-2. "caption": کپشن اینستاگرام دقیقاً با این ساختار:
-   - خط اول: یک جمله کوتاه و کوبنده سئو شامل کلمات کلیدی اصلی خبر همراه با ایموجی 🚨 یا ⚡️.
-   - پاراگراف خبر (هرم وارونه): مهم‌ترین بخش خبر در ابتدا بیاید. قانون نگارشی اجباری: بعد از تمام افعال نقلی (اعلام کرد، گفت، افزود، هشدار داد، تاکید کرد) استفاده از «که» اکیداً ممنوع است و حتماً باید از دونقطه (:) استفاده شود.
-   - سوال تعاملی: یک سوال کوتاه و چالش‌برانگیز مرتبط با خبر برای افزایش کامنت.
+1. "hook_line1": خط اول قلاب روی براش طلایی (۲ تا ۵ کلمه، شروع جذاب و معنادار).
+2. "hook_line2": خط دوم قلاب روی براش سرمه‌ای (۲ تا ۵ کلمه، تکمیل‌کننده کوبنده و مفهومی که با ! یا ؟! تمام شود).
+3. "caption": کپشن اینستاگرام.
 
 متن خبر:
 {news_text}"""
@@ -3330,7 +3398,7 @@ def get_ai_viral_hook_and_caption(title, summary):
         headers = {"Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY}
         payload = {
             "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": 0.3, "responseMimeType": "application/json"}
+            "generationConfig": {"temperature": 0.35, "responseMimeType": "application/json"}
         }
         try:
             r = requests.post(url, headers=headers, json=payload, timeout=12)
@@ -3338,35 +3406,34 @@ def get_ai_viral_hook_and_caption(title, summary):
                 raw_out = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
                 m = re.search(r"\{.*\}", raw_out, re.DOTALL)
                 data = json.loads(m.group(0) if m else raw_out)
-                h_short = str(data.get("hook_short", "")).strip().replace("...", "")
+                h1 = str(data.get("hook_line1", "")).strip().replace("...", "")
+                h2 = str(data.get("hook_line2", "")).strip().replace("...", "")
                 cap = str(data.get("caption", "")).strip()
-                w_cnt = len(h_short.split())
-                if 2 <= w_cnt <= 5 and h_short.split()[-1].rstrip("!؟") not in FORBIDDEN_END_WORDS:
-                    if not h_short.endswith(("!", "؟")):
-                        h_short += "!"
-                    res = (h_short, "", cap if len(cap) > 40 else None)
+                if h1 and h2 and is_grammatically_valid_persian_hook(h1, h2):
+                    if not h2.endswith(("!", "؟")):
+                        h2 += "!"
+                    res = (h1, h2, cap if len(cap) > 40 else None)
                     _AI_VIRAL_CACHE[cache_key] = res
                     return res
         except Exception as e:
             print("AI Hook fallback to natural split:", e)
 
-    short_h = build_short_hook_phrase(title)
-    res = (short_h, "", None)
+    l1, l2 = build_syntactic_persian_hook(title, summary)
+    res = (l1, l2, None)
     _AI_VIRAL_CACHE[cache_key] = res
     return res
 
 
 def create_3s_hook_overlay(W, H, title_text, summary_text=""):
     """
-    پیاده‌سازی قالب قلاب اول ویدیو (assets/brand/video_hook_overlay.png):
-    - قرار دادن تصویر شفاف video_hook_overlay.png (1080x1920)
-    - رندر متن کوتاه قلاب (۲ تا ۴ کلمه کلیدی) در مختصات (x=540, y=915)
-      با فونت Vazirmatn-ExtraBold سایز 54، رنگ سفید #F8FAFC و وسط‌چین (anchor="mm")
+    رندر قلاب ۲ خطی کامل و جذاب روی تصویر شفاف assets/brand/video_hook_overlay.png:
+    - خط اول (hook_line1): روی براش طلایی بالا در (x=540, y=785) با رنگ سرمه‌ای تیره #0D1117
+    - خط دوم (hook_line2): روی براش سرمه‌ای میانی در (x=540, y=915) با رنگ سفید #F8FAFC و سایز درشت‌تر
     """
     ensure_persian_font()
-    hook_short, _, _ = get_ai_viral_hook_and_caption(title_text, summary_text)
-    if not hook_short:
-        hook_short = build_short_hook_phrase(title_text)
+    line1, line2, _ = get_ai_viral_hook_and_caption(title_text, summary_text)
+    if not line2:
+        line1, line2 = build_syntactic_persian_hook(title_text, summary_text)
 
     sc = W / 1080.0
     ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
@@ -3381,24 +3448,49 @@ def create_3s_hook_overlay(W, H, title_text, summary_text=""):
             print("Video hook PNG load error:", e)
 
     draw = ImageDraw.Draw(ov)
-    f_hook = _fit_single_line_brand_font(
-        hook_short,
-        base_size=int(54 * sc),
+
+    # ۱. تنظیم فونت خط اول (روی براش طلایی بالا) و خط دوم (روی براش سرمه‌ای وسط)
+    f_line1 = _fit_single_line_brand_font(
+        line1,
+        base_size=int(50 * sc),
+        min_size=int(32 * sc),
+        max_width_px=int(640 * sc),
+        weight="extrabold"
+    )
+    f_line2 = _fit_single_line_brand_font(
+        line2,
+        base_size=int(58 * sc),
         min_size=int(36 * sc),
-        max_width_px=int(820 * sc),
+        max_width_px=int(800 * sc),
         weight="extrabold"
     )
 
-    hook_x = int(540 * sc)
-    hook_y = int(915 * sc)
+    cx = int(540 * sc)
+    y_gold_brush = int(785 * sc)
+    y_navy_brush = int(915 * sc)
 
+    # چاپ خط اول روی براش طلایی بالا (رنگ سرمه‌ای تیره #0D1117 با هاله روشن ظریف برای کنتراست عالی)
     draw.text(
-        (hook_x, hook_y),
-        shape_persian_text(hook_short),
-        font=f_hook,
-        fill=COLOR_CRISP_WHITE,
-        anchor="mm"
+        (cx, y_gold_brush),
+        shape_persian_text(line1),
+        font=f_line1,
+        fill=COLOR_OBSIDIAN_GLASS,
+        anchor="mm",
+        stroke_width=max(1, int(2 * sc)),
+        stroke_fill=(255, 245, 210, 220)
     )
+
+    # چاپ خط دوم روی براش سرمه‌ای میانی (رنگ سفید درخشان #F8FAFC با دورخط مشکی عمیق)
+    draw.text(
+        (cx, y_navy_brush),
+        shape_persian_text(line2),
+        font=f_line2,
+        fill=COLOR_CRISP_WHITE,
+        anchor="mm",
+        stroke_width=max(2, int(4 * sc)),
+        stroke_fill=(5, 8, 14, 245)
+    )
+
     return ov
 
 
@@ -3429,7 +3521,7 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
         ov_reel = create_9_16_video_overlay(1080, 1920, subtitle_text, source_name)
         ov_reel.save('ov_reel_9_16.png', format='PNG')
 
-        # ۲. فیلتر ۹:۱۶ + نمایش قلاب در ۲ ثانیه اول و نمایش قالب اصلی ریلز پس از پایان قلاب اولیه
+        # ۲. فیلتر ۹:۱۶ + هر ۴ لایه اورجینال‌سازی + حفظ کامل واترمارک وسط تصویر
         if is_vertical:
             fg_Filter = (
                 '[v_fg_in]scale=iw*1.03:ih*1.03,crop=iw/1.03:ih/1.03,'
