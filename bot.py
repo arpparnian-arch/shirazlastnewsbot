@@ -2982,61 +2982,177 @@ def create_approved_carousel_slides(raw_img_bytes, title, summary, source_name):
     return slides
 
 # ==========================================
-# ۱۳. پردازشگر ویدیو (FFmpeg) برای تلگرام و ریلز
+# ۱۳. پردازشگر ویدیو (FFmpeg) برای تلگرام و ریلز (هویت بصری گلس‌مورفیسم تیره و طلایی)
 # ==========================================
+try:
+    import arabic_reshaper
+    from bidi.algorithm import get_display
+    HAS_PERSIAN_RESHAPER = True
+except Exception:
+    HAS_PERSIAN_RESHAPER = False
+
+try:
+    from PIL import features as _pil_features
+    HAS_RAQM_ENGINE = bool(_pil_features.check("raqm"))
+except Exception:
+    HAS_RAQM_ENGINE = False
+
+BRAND_FONT_EXTRABOLD = "assets/fonts/Vazirmatn-ExtraBold.ttf"
+BRAND_FONT_MEDIUM = "assets/fonts/Vazirmatn-Medium.ttf"
+VIDEO_HOOK_OVERLAY_PATH = "assets/brand/video_hook_overlay.png"
+REEL_OVERLAY_PATH = "assets/brand/reel_overlay.png"
+
+# پالت رنگی رسمی برند (Glassmorphism Dark & Gold)
+COLOR_OBSIDIAN_GLASS = (13, 17, 23, 255)   # #0D1117
+COLOR_ROYAL_GOLD = (229, 184, 75, 255)     # #E5B84B
+COLOR_LUMINOUS_GOLD = (255, 213, 107, 255) # #FFD56B
+COLOR_CRISP_WHITE = (248, 250, 252, 255)   # #F8FAFC
+
+
+def shape_persian_text(text):
+    """رندر صحیح متن فارسی با arabic_reshaper و python-bidi (همراه با محافظت از دو بار برعکس شدن در صورت فعال بودن libraqm)"""
+    if not text:
+        return ""
+    s = str(text).strip()
+    if HAS_PERSIAN_RESHAPER and not HAS_RAQM_ENGINE:
+        try:
+            return get_display(arabic_reshaper.reshape(s))
+        except Exception:
+            return s
+    return s
+
+
+def load_brand_font(size=44, weight="extrabold"):
+    """بارگذاری فونت‌های رسمی برند از مسیر assets/fonts با پشتیبان خودکار"""
+    ensure_persian_font()
+    preferred = BRAND_FONT_EXTRABOLD if weight == "extrabold" else BRAND_FONT_MEDIUM
+    candidates = [
+        preferred,
+        BRAND_FONT_EXTRABOLD,
+        BRAND_FONT_MEDIUM,
+        FONT_FILE,
+        "/usr/share/fonts/truetype/vazirmatn/Vazirmatn-Bold.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    ]
+    for fp in candidates:
+        if os.path.exists(fp):
+            try:
+                return ImageFont.truetype(fp, size)
+            except Exception:
+                pass
+    return load_font(size)
+
+
+def _fit_single_line_brand_font(text, base_size, min_size, max_width_px, weight="extrabold"):
+    """تنظیم خودکار سایز فونت تا متن دقیقاً در عرض مجاز (مثلاً 860px) جا بگیرد"""
+    dummy_img = Image.new("RGBA", (1080, 200), (0, 0, 0, 0))
+    d = ImageDraw.Draw(dummy_img)
+    shaped = shape_persian_text(text)
+    for sz in range(base_size, min_size - 1, -2):
+        f = load_brand_font(size=sz, weight=weight)
+        bb = d.textbbox((0, 0), shaped, font=f)
+        if (bb[2] - bb[0]) <= max_width_px:
+            return f
+    return load_brand_font(size=min_size, weight=weight)
+
+
+def split_reel_title_two_lines(title_text):
+    """شکستن هوشمند و متوازن تیتر ریلز به دو خط خوانا (خط اول: موضوع اصلی، خط دوم: بخش کلیدی)"""
+    clean_t = clean_agency_prefix(title_text or "").strip()
+    clean_t = re.sub(r"\s+", " ", clean_t).strip()
+    if not clean_t:
+        return "گزارش ویژه خبری", "جزئیات را در ویدیو ببینید"
+
+    if "/" in clean_t:
+        parts = [p.strip() for p in clean_t.split("/") if len(p.strip()) > 3]
+        if len(parts) >= 2:
+            return parts[0], parts[1]
+
+    if "؛" in clean_t:
+        parts = [p.strip() for p in clean_t.split("؛", 1) if len(p.strip()) > 3]
+        if len(parts) == 2:
+            return parts[0], parts[1]
+
+    words = clean_t.split()
+    if len(words) <= 3:
+        return clean_t, "گزارش ویدیویی"
+
+    # اگر تیتر خیلی طولانی است، به ۱۴ کلمه اول محدود شود تا در دو سطر با عرض 860px کاملاً خوانا بماند
+    if len(words) > 14:
+        cut_len = 14
+        while cut_len > 8 and words[cut_len - 1] in FORBIDDEN_END_WORDS:
+            cut_len -= 1
+        words = words[:cut_len]
+
+    mid = len(words) // 2
+    for offset in [0, 1, -1, 2, -2]:
+        idx = mid + offset
+        if 2 <= idx <= len(words) - 2:
+            w1 = words[:idx]
+            w2 = words[idx:]
+            if w1[-1] in FORBIDDEN_END_WORDS:
+                continue
+            broken = any(w1[-1] == p1 and w2[0].startswith(p2) for p1, p2 in UNBREAKABLE_PAIRS)
+            if not broken:
+                return " ".join(w1), " ".join(w2)
+
+    return " ".join(words[:mid]), " ".join(words[mid:])
+
+
 def create_9_16_video_overlay(W, H, subtitle_text='', source_name='رسانه آخرین خبرهای شیراز'):
-    """واترمارک و قالب جدید ریلز ۹:۱۶ با لوگوی بدون بک‌گراند، بج قرمز بالا و ۲ باکس تیره پایین"""
+    """
+    قالب اصلی ریلز (assets/brand/reel_overlay.png):
+    - حذف کامل باکس قرمز قدیمی، کادر مشکی تکراری پایین و نوار منبع پایین
+    - درج لایه شفاف reel_overlay.png با Image.alpha_composite
+    - رندر دو خط تیتر در مرکز افقی x=525 و ارتفاع‌های y=509 (#F8FAFC) و y=593 (#FFD56B)
+    """
     ov = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(ov)
     sc = W / 1080.0
 
-    # ۱. بج قرمز بالا سمت چپ
-    bx1, by1, bx2, by2 = int(80 * sc), int(145 * sc), int(380 * sc), int(242 * sc)
-    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=int(24 * sc), fill=(220, 8, 18, 245))
-    f_top = load_font(int(40 * sc))
-    top_txt = 'خبر فوری'
-    bb_top = draw.textbbox((0, 0), top_txt, font=f_top)
-    draw.text((bx1 + ((bx2 - bx1) - (bb_top[2] - bb_top[0])) / 2, by1 + int(18 * sc)), top_txt, font=f_top, fill=(255, 255, 255, 255))
-
-    # ۲. لوگوی دروازه قرآن در بالا سمت راست (بدون بک‌گراند با وضوح بالا روی ویدیو)
-    draw_quran_gate_logo(
-        ov, x_center=W - int(140 * sc), y_top=int(128 * sc),
-        size=int(128 * sc), line_color=(255, 255, 255, 255), add_glow=True
-    )
-
-    # ۳. باکس تیره اول در پایین (دارای نوار عمودی قرمز در لبه سمت راست برای تیتر ویدیو)
-    b1_x1, b1_y1, b1_x2, b1_y2 = int(60 * sc), int(1280 * sc), W - int(60 * sc), int(1436 * sc)
-    draw.rounded_rectangle([b1_x1, b1_y1, b1_x2, b1_y2], radius=int(22 * sc), fill=(32, 32, 35, 235))
-    draw.rounded_rectangle([b1_x2 - int(22 * sc), b1_y1, b1_x2, b1_y2], radius=int(8 * sc), fill=(220, 8, 18, 255))
+    if os.path.exists(REEL_OVERLAY_PATH):
+        try:
+            reel_png = Image.open(REEL_OVERLAY_PATH).convert('RGBA')
+            if reel_png.size != (W, H):
+                reel_png = reel_png.resize((W, H), Image.Resampling.LANCZOS)
+            ov = Image.alpha_composite(ov, reel_png)
+        except Exception as e:
+            print('Reel overlay PNG load error:', e)
 
     if subtitle_text:
-        sub_lines, f_sub, sz_sub = fit_wrapped_text(
-            subtitle_text, base_font_size=int(34 * sc), min_font_size=int(24 * sc), base_width=32, max_lines=2
+        draw = ImageDraw.Draw(ov)
+        line1, line2 = split_reel_title_two_lines(subtitle_text)
+
+        max_w = int(860 * sc)
+        base_sz = int(44 * sc)
+        min_sz = int(26 * sc)
+
+        f1 = _fit_single_line_brand_font(line1, base_size=base_sz, min_size=min_sz, max_width_px=max_w, weight="extrabold")
+        f2 = _fit_single_line_brand_font(line2, base_size=base_sz, min_size=min_sz, max_width_px=max_w, weight="extrabold")
+
+        text_cx = int(525 * sc)
+        y_line1 = int(509 * sc)
+        y_line2 = int(593 * sc)
+
+        # خط اول تیتر (موضوع اصلی) در y=509 با رنگ سفید #F8FAFC
+        draw.text(
+            (text_cx, y_line1),
+            shape_persian_text(line1),
+            font=f1,
+            fill=COLOR_CRISP_WHITE,
+            anchor="mm"
         )
-        y_s = b1_y1 + (int(48 * sc) if len(sub_lines) == 1 else int(24 * sc))
-        for sl in sub_lines:
-            bb = draw.textbbox((0, 0), sl, font=f_sub)
-            draw.text((b1_x2 - int(44 * sc) - (bb[2] - bb[0]), y_s), sl, font=f_sub, fill=(255, 255, 255, 255))
-            y_s += int(sz_sub * 1.42)
 
-    # ۴. باکس تیره دوم در پایین‌تر (منبع خبر، تاریخ روز خودکار و آیدی پیج)
-    b2_x1, b2_y1, b2_x2, b2_y2 = int(60 * sc), int(1465 * sc), W - int(60 * sc), int(1685 * sc)
-    draw.rounded_rectangle([b2_x1, b2_y1, b2_x2, b2_y2], radius=int(24 * sc), fill=(22, 22, 25, 240))
-
-    f_src = load_font(int(30 * sc))
-    src_line = f'📢 منبع خبر: {source_name} | رسانه آخرین خبرهای شیراز'
-    bb_s = draw.textbbox((0, 0), src_line, font=f_src)
-    draw.text((b2_x2 - int(38 * sc) - (bb_s[2] - bb_s[0]), b2_y1 + int(38 * sc)), src_line, font=f_src, fill=(242, 242, 245, 255))
-
-    draw.line([(b2_x1 + int(38 * sc), b2_y1 + int(118 * sc)), (b2_x2 - int(38 * sc), b2_y1 + int(118 * sc))], fill=(65, 68, 75, 220), width=max(1, int(2 * sc)))
-
-    today_str, _ = get_iran_jalali_date()
-    f_id = load_font(int(28 * sc))
-    footer_meta = f'{today_str}  |  @ShirazLastNews'
-    bb_m = draw.textbbox((0, 0), footer_meta, font=f_id)
-    draw.text(((W - (bb_m[2] - bb_m[0])) / 2, b2_y1 + int(142 * sc)), footer_meta, font=f_id, fill=(220, 18, 28, 255))
+        # خط دوم تیتر (بخش کلیدی/شوکه‌کننده) در y=593 با رنگ طلایی روشن #FFD56B
+        draw.text(
+            (text_cx, y_line2),
+            shape_persian_text(line2),
+            font=f2,
+            fill=COLOR_LUMINOUS_GOLD,
+            anchor="mm"
+        )
 
     return ov
+
 
 def get_video_url(entry, page_url):
     for k_list in ['links', 'enclosures', 'media_content']:
@@ -3053,7 +3169,6 @@ def get_video_url(entry, page_url):
             html_txt = html.unescape(r.text).replace('\\/', '/')
             soup = BeautifulSoup(html_txt, 'html.parser')
 
-            # ۱. بررسی متاتگ‌های استاندارد ویدیو و تگ‌های video/source
             for meta_prop in ['og:video:secure_url', 'og:video:url', 'og:video', 'twitter:player:stream']:
                 m_tag = soup.find('meta', property=meta_prop) or soup.find('meta', attrs={'name': meta_prop})
                 if m_tag and m_tag.get('content') and '.mp4' in m_tag['content'].lower():
@@ -3071,7 +3186,6 @@ def get_video_url(entry, page_url):
                         if val.startswith('http'):
                             return val
 
-            # ۲. جستجوی مستقیم لینک mp4 در سورس صفحه و پلیرها
             matches = re.findall(r'https?://[^"\'\s<>()\\]+\.mp4(?:\?[^"\'\s<>()\\]*)?', html_txt, re.IGNORECASE)
             for m in matches:
                 if not any(bad in m.lower() for bad in ['ad_', '/ads/', 'banner', 'teaser', 'logo']):
@@ -3084,6 +3198,7 @@ def get_video_url(entry, page_url):
         except Exception:
             pass
     return None
+
 
 def get_video_dimensions(vid_path):
     probe_jpg = '_probe_orient.jpg'
@@ -3117,8 +3232,9 @@ def get_video_dimensions(vid_path):
     except Exception:
         return 1080, 1920
 
+
 # ==========================================
-# موتور قلاب ۲ سطری طبیعی + رندر تمیز و واقعی کاغذ سوخته (فقط سوختگی لبه‌ها بدون هیچ لکه وسط متن)
+# موتور قلاب اول ویدیو (assets/brand/video_hook_overlay.png)
 # ==========================================
 import math
 
@@ -3144,76 +3260,53 @@ UNBREAKABLE_PAIRS = [
     ("خلیج", "فارس"), ("امام", "جمعه"), ("لیگ", "برتر"), ("تیم", "ملی")
 ]
 
-def is_grammatically_valid_persian_hook(line1, line2):
-    """بررسی صحت کامل عبارت دو سطری و جلوگیری از هرگونه عبارت مصنوعی یا ناقص"""
-    if "؛ ببینید" in line2 or "را ببینید" in line2 or "در را" in line2:
-        return False
-    l1 = re.sub(r'[.!؟،؛:«»"\']+', '', line1).strip()
-    l2 = re.sub(r'[.!؟،؛:«»"\']+', '', line2).strip()
-    w1, w2 = l1.split(), l2.split()
 
-    if len(w1) < 2 or len(w2) < 2 or len(w1) > 5 or len(w2) > 5:
-        return False
-    if w1[-1] in FORBIDDEN_END_WORDS or w2[-1] in FORBIDDEN_END_WORDS:
-        return False
-    if w2[0] == "را":
-        return False
-    for first_w, second_w in UNBREAKABLE_PAIRS:
-        if w1[-1] == first_w and w2[0].startswith(second_w):
-            return False
-    return True
-
-def build_syntactic_persian_hook(title_text):
-    """
-    تقسیم طبیعی و دست‌نخورده تیتر اصلی خبر به دو سطر متوازن
-    (بدون چسباندن کلمات مصنوعی مثل «ببینید!» به انتهای جمله)
-    """
+def build_short_hook_phrase(title_text):
+    """استخراج ۲ تا ۴ کلمه کلیدی و شوکه‌کننده از تیتر خبر برای مرکز براش قلاب"""
     clean_t = clean_agency_prefix(title_text or "").strip()
     if "/" in clean_t:
-        parts = [p.strip() for p in clean_t.split("/") if len(p.strip().split()) >= 4]
+        parts = [p.strip() for p in clean_t.split("/") if len(p.strip().split()) >= 2]
         if parts:
             clean_t = parts[0]
+    if ":" in clean_t and len(clean_t.split(":", 1)[0].split()) <= 3:
+        clean_t = clean_t.split(":", 1)[1].strip()
 
     clean_t = re.sub(r'[.!؟،؛:«»"\']+', ' ', clean_t)
     clean_t = re.sub(r'\s+', ' ', clean_t).strip()
     words = clean_t.split()
 
-    while words and words[-1] in FORBIDDEN_END_WORDS:
-        words.pop()
+    # حذف کلمات کم‌اهمیت ابتدایی برای رسیدن سریع به کلمات کلیدی
+    lead_fluff = {"برگزاری", "آغاز", "ادامه", "گزارش", "جزئیات", "تشریح", "اعلام", "تصاویر", "فیلم", "ویدیو"}
+    while len(words) > 3 and words[0] in lead_fluff:
+        words.pop(0)
 
-    if len(words) < 4:
-        return (clean_t if clean_t else "خبر فوری شیراز"), "گزارش ویژه تصویری!"
-
-    # اگر تیتر با «در حافظیه»، «دروازه قرآن» و غیره تمام می‌شود ولی کلمه شیراز ندارد، برای کامل شدن سطر دوم «شیراز» اضافه شود
-    if len(words) >= 5 and words[-2] == "در" and words[-1] in ("حافظیه", "سعدیه", "ارگ", "شاهچراغ"):
-        words.append("شیراز")
-
-    # محدود کردن به یک عبارت کامل ۴ تا ۸ کلمه‌ای از ابتدای تیتر
-    if len(words) > 8:
-        cut_len = 7
-        while cut_len > 4 and words[cut_len - 1] in FORBIDDEN_END_WORDS:
+    if len(words) > 4:
+        cut_len = 4
+        while cut_len > 2 and words[cut_len - 1] in FORBIDDEN_END_WORDS:
             cut_len -= 1
         words = words[:cut_len]
+    else:
+        while len(words) > 2 and words[-1] in FORBIDDEN_END_WORDS:
+            words.pop()
 
-    # پیدا کردن بهترین نقطه شکست طبیعی بین سطر اول و سطر دوم
-    mid = len(words) // 2
-    candidates = [mid, mid + 1, mid - 1, 3, 4]
-    for idx in candidates:
-        if 2 <= idx <= len(words) - 2:
-            w1 = words[:idx]
-            w2 = words[idx:]
-            if w1[-1] in FORBIDDEN_END_WORDS:
-                continue
-            broken = any(w1[-1] == p1 and w2[0].startswith(p2) for p1, p2 in UNBREAKABLE_PAIRS)
-            if not broken:
-                l1 = " ".join(w1)
-                l2 = " ".join(w2) + "!"
-                return l1, l2
+    if not words:
+        return "خبر فوری!"
 
-    return " ".join(words[:3]), " ".join(words[3:6]) + "!"
+    # حفظ جفت‌کلمات جدانشدنی در پایان قلاب
+    phrase = " ".join(words)
+    if not phrase.endswith(("!", "؟")):
+        phrase += "!"
+    return phrase
+
+
+def build_syntactic_persian_hook(title_text):
+    short_h = build_short_hook_phrase(title_text)
+    l1, l2 = split_reel_title_two_lines(title_text)
+    return short_h, l2
+
 
 def get_ai_viral_hook_and_caption(title, summary):
-    """دریافت قلاب ۲ سطری طبیعی و کپشن از جمنای یا موتور نحوی داخلی"""
+    """دریافت قلاب کوتاه ۲ تا ۴ کلمه‌ای و کپشن استاندارد از جمنای یا موتور نحوی داخلی"""
     cache_key = (title or "")[:60]
     if cache_key in _AI_VIRAL_CACHE:
         return _AI_VIRAL_CACHE[cache_key]
@@ -3221,13 +3314,14 @@ def get_ai_viral_hook_and_caption(title, summary):
     news_text = f"تیتر: {title}\nمتن خبر: {summary}".strip()
 
     if GEMINI_API_KEY and len(GEMINI_API_KEY) > 15 and len(news_text) >= 15:
-        prompt = f"""تو سردبیر ارشد خبری هستی. متن خبر زیر را بخوان و خروجی را فقط به شکل JSON معتبر برگردان.
-قانون طلایی: عبارت قلاب (ترکیب hook_line1 و hook_line2) باید یک جمله یا عبارت خبری ۱۰۰٪ طبیعی، سالم و معنادار فارسی باشد. هرگز از عبارات مصنوعی مثل «؛ ببینید!» استفاده نکن.
+        prompt = f"""تو سردبیر ارشد خبری پیج @shirazlastnews هستی. متن خبر زیر را بخوان و خروجی را فقط به شکل JSON معتبر برگردان.
 
 ساختار JSON:
-1. "hook_line1": سطر اول قلاب (۲ تا ۴ کلمه، بخش اول تیتر).
-2. "hook_line2": سطر دوم قلاب (۲ تا ۴ کلمه، ادامه طبیعی تیتر که با ! یا ؟! تمام شود).
-3. "caption": کپشن جذاب اینستاگرام (۳ پاراگراف کوتاه با جملات کامل + آیدی @shirazlastnews و ۵ هشتگ شامل #شیراز و #آخرین_خبرهای_شیراز).
+1. "hook_short": متن کوتاه قلاب اول ویدیو شامل حداکثر ۲ تا ۴ کلمه کلیدی و شوکه‌کننده از خبر (معنادار و کامل که با ! یا ؟ تمام شود).
+2. "caption": کپشن اینستاگرام دقیقاً با این ساختار:
+   - خط اول: یک جمله کوتاه و کوبنده سئو شامل کلمات کلیدی اصلی خبر همراه با ایموجی 🚨 یا ⚡️.
+   - پاراگراف خبر (هرم وارونه): مهم‌ترین بخش خبر در ابتدا بیاید. قانون نگارشی اجباری: بعد از تمام افعال نقلی (اعلام کرد، گفت، افزود، هشدار داد، تاکید کرد) استفاده از «که» اکیداً ممنوع است و حتماً باید از دونقطه (:) استفاده شود.
+   - سوال تعاملی: یک سوال کوتاه و چالش‌برانگیز مرتبط با خبر برای افزایش کامنت.
 
 متن خبر:
 {news_text}"""
@@ -3236,7 +3330,7 @@ def get_ai_viral_hook_and_caption(title, summary):
         headers = {"Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY}
         payload = {
             "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": 0.35, "responseMimeType": "application/json"}
+            "generationConfig": {"temperature": 0.3, "responseMimeType": "application/json"}
         }
         try:
             r = requests.post(url, headers=headers, json=payload, timeout=12)
@@ -3244,161 +3338,76 @@ def get_ai_viral_hook_and_caption(title, summary):
                 raw_out = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
                 m = re.search(r"\{.*\}", raw_out, re.DOTALL)
                 data = json.loads(m.group(0) if m else raw_out)
-                h1 = str(data.get("hook_line1", "")).strip().replace("...", "")
-                h2 = str(data.get("hook_line2", "")).strip().replace("...", "")
+                h_short = str(data.get("hook_short", "")).strip().replace("...", "")
                 cap = str(data.get("caption", "")).strip()
-                if h1 and h2 and is_grammatically_valid_persian_hook(h1, h2):
-                    if not h2.endswith(("!", "؟")):
-                        h2 += "!"
-                    res = (h1, h2, cap if len(cap) > 40 else None)
+                w_cnt = len(h_short.split())
+                if 2 <= w_cnt <= 5 and h_short.split()[-1].rstrip("!؟") not in FORBIDDEN_END_WORDS:
+                    if not h_short.endswith(("!", "؟")):
+                        h_short += "!"
+                    res = (h_short, "", cap if len(cap) > 40 else None)
                     _AI_VIRAL_CACHE[cache_key] = res
                     return res
         except Exception as e:
             print("AI Hook fallback to natural split:", e)
 
-    l1, l2 = build_syntactic_persian_hook(title)
-    res = (l1, l2, None)
+    short_h = build_short_hook_phrase(title)
+    res = (short_h, "", None)
     _AI_VIRAL_CACHE[cache_key] = res
     return res
 
-def _make_clean_torn_polygon(x1, y1, x2, y2, seed_val=10):
-    """ساخت لبه‌های بریده‌شده طبیعی و ظریف در اطراف کاغذ"""
-    rng = random.Random(seed_val)
-    pts = []
-    step_x = max(8, int((x2 - x1) / 48))
-    step_y = max(6, int((y2 - y1) / 16))
-
-    for x in range(x1, x2, step_x):
-        pts.append((x, y1 + rng.randint(-4, 4)))
-    for y in range(y1, y2, step_y):
-        pts.append((x2 + rng.randint(-8, 8), y))
-    for x in range(x2, x1, -step_x):
-        pts.append((x, y2 + rng.randint(-4, 4)))
-    for y in range(y2, y1, -step_y):
-        pts.append((x1 + rng.randint(-8, 8), y))
-    return pts
-
-def _render_clean_burned_paper_strip(w, h, center_rgb, warm_edge_rgb, dark_char_rgb, seed_val=1):
-    """
-    طراحی استودیویی کاغذ سوخته (دقیقاً مشابه عکس تاییدشده اول):
-    - مرکز کاغذ ۱۰۰٪ صاف، تمیز و روشن (بدون هیچ لکه یا دایره‌ای روی متن)
-    - لبه‌های کاغذ دارای سایه سوختگی نرم و گرادینت قهوه‌ای/زغالی
-    """
-    strip = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    pad = 26
-    x1, y1, x2, y2 = pad, pad, w - pad, h - pad
-
-    poly_outer = _make_clean_torn_polygon(x1 - 5, y1 - 4, x2 + 5, y2 + 4, seed_val=seed_val)
-    poly_main = _make_clean_torn_polygon(x1, y1, x2, y2, seed_val=seed_val + 5)
-
-    # ۱. سایه سه‌بعدی نرم زیر کل کاغذ روی ویدیو
-    drop_sh = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    ImageDraw.Draw(drop_sh).polygon([(px + 6, py + 12) for px, py in poly_outer], fill=(0, 0, 0, 215))
-    drop_sh = drop_sh.filter(ImageFilter.GaussianBlur(10))
-    strip = Image.alpha_composite(strip, drop_sh)
-
-    # ۲. لبه نازک زغالی بیرونی
-    outer_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    ImageDraw.Draw(outer_layer).polygon(poly_outer, fill=(*dark_char_rgb, 250))
-    strip = Image.alpha_composite(strip, outer_layer)
-
-    # ۳. سطح اصلی کاغذ (کاملاً یکدست و تمیز در مرکز) + گرادینت سوختگی نرم فقط در لبه‌ها
-    paper_base = Image.new("RGBA", (w, h), (*center_rgb, 255))
-
-    edge_vignette = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    ev_draw = ImageDraw.Draw(edge_vignette)
-    ev_draw.polygon(poly_main, outline=(*warm_edge_rgb, 240), width=26)
-    ev_draw.polygon(poly_main, outline=(*dark_char_rgb, 255), width=9)
-    edge_vignette = edge_vignette.filter(ImageFilter.GaussianBlur(11))
-
-    paper_base = Image.alpha_composite(paper_base, edge_vignette)
-
-    # برش تمیز با ماسک کاغذ
-    mask = Image.new("L", (w, h), 0)
-    ImageDraw.Draw(mask).polygon(poly_main, fill=255)
-    strip.paste(paper_base, (0, 0), mask)
-    return strip
 
 def create_3s_hook_overlay(W, H, title_text, summary_text=""):
     """
-    رندر تمیز و باکیفیت بنر دوطبقه کاغذ سوخته برای ۳ ثانیه اول ویدیو
-    (مرکز کاغذ کاملاً صاف و خوانا + لبه‌های سوخته گرادینت + متن درشت با دورخط استاندارد)
+    پیاده‌سازی قالب قلاب اول ویدیو (assets/brand/video_hook_overlay.png):
+    - قرار دادن تصویر شفاف video_hook_overlay.png (1080x1920)
+    - رندر متن کوتاه قلاب (۲ تا ۴ کلمه کلیدی) در مختصات (x=540, y=915)
+      با فونت Vazirmatn-ExtraBold سایز 54، رنگ سفید #F8FAFC و وسط‌چین (anchor="mm")
     """
     ensure_persian_font()
-    line1, line2, _ = get_ai_viral_hook_and_caption(title_text, summary_text)
+    hook_short, _, _ = get_ai_viral_hook_and_caption(title_text, summary_text)
+    if not hook_short:
+        hook_short = build_short_hook_phrase(title_text)
+
     sc = W / 1080.0
     ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
 
-    _, f1, _ = fit_wrapped_text(line1, base_font_size=int(64 * sc), min_font_size=int(42 * sc), base_width=24, max_lines=1)
-    _, f2, _ = fit_wrapped_text(line2, base_font_size=int(70 * sc), min_font_size=int(44 * sc), base_width=24, max_lines=1)
+    if os.path.exists(VIDEO_HOOK_OVERLAY_PATH):
+        try:
+            hook_png = Image.open(VIDEO_HOOK_OVERLAY_PATH).convert("RGBA")
+            if hook_png.size != (W, H):
+                hook_png = hook_png.resize((W, H), Image.Resampling.LANCZOS)
+            ov = Image.alpha_composite(ov, hook_png)
+        except Exception as e:
+            print("Video hook PNG load error:", e)
 
-    tmp_d = ImageDraw.Draw(ov)
-    b1 = tmp_d.textbbox((0, 0), line1, font=f1)
-    b2 = tmp_d.textbbox((0, 0), line2, font=f2)
-    w1, h1 = (b1[2] - b1[0]), (b1[3] - b1[1])
-    w2, h2 = (b2[2] - b2[0]), (b2[3] - b2[1])
-
-    pad_x = int(85 * sc)
-    strip_w1 = min(W - int(60 * sc), max(w1 + pad_x * 2, int(600 * sc)))
-    strip_w2 = min(W - int(50 * sc), max(w2 + pad_x * 2, int(630 * sc)))
-    strip_h1 = int(188 * sc)
-    strip_h2 = int(198 * sc)
-
-    # ۱. نوار اول: کاغذ کرم-روشن تمیز در وسط + لبه سوخته قهوه‌ای در حاشیه + متن مشکی با دورخط روشن
-    top_strip = _render_clean_burned_paper_strip(
-        strip_w1, strip_h1,
-        center_rgb=(248, 234, 202),
-        warm_edge_rgb=(135, 78, 30),
-        dark_char_rgb=(38, 18, 6),
-        seed_val=501
-    )
-    d_top = ImageDraw.Draw(top_strip)
-    tx1 = (strip_w1 - w1) // 2
-    ty1 = (strip_h1 - h1) // 2 - int(10 * sc)
-    d_top.text(
-        (tx1, ty1), line1, font=f1,
-        fill=(15, 10, 8, 255),
-        stroke_width=max(2, int(4 * sc)),
-        stroke_fill=(255, 250, 240, 255)
+    draw = ImageDraw.Draw(ov)
+    f_hook = _fit_single_line_brand_font(
+        hook_short,
+        base_size=int(54 * sc),
+        min_size=int(36 * sc),
+        max_width_px=int(820 * sc),
+        weight="extrabold"
     )
 
-    # ۲. نوار دوم: کاغذ قرمز زرشکی تمیز در وسط + لبه سوخته مشکی در حاشیه + متن زرد طلایی با دورخط مشکی
-    bot_strip = _render_clean_burned_paper_strip(
-        strip_w2, strip_h2,
-        center_rgb=(196, 18, 24),
-        warm_edge_rgb=(95, 10, 12),
-        dark_char_rgb=(22, 4, 4),
-        seed_val=808
+    hook_x = int(540 * sc)
+    hook_y = int(915 * sc)
+
+    draw.text(
+        (hook_x, hook_y),
+        shape_persian_text(hook_short),
+        font=f_hook,
+        fill=COLOR_CRISP_WHITE,
+        anchor="mm"
     )
-    d_bot = ImageDraw.Draw(bot_strip)
-    tx2 = (strip_w2 - w2) // 2
-    ty2 = (strip_h2 - h2) // 2 - int(10 * sc)
-    d_bot.text((tx2 + int(4 * sc), ty2 + int(6 * sc)), line2, font=f2, fill=(0, 0, 0, 230), stroke_width=max(3, int(7 * sc)), stroke_fill=(0, 0, 0, 230))
-    d_bot.text(
-        (tx2, ty2), line2, font=f2,
-        fill=(255, 232, 20, 255),
-        stroke_width=max(3, int(7 * sc)),
-        stroke_fill=(12, 8, 8, 255)
-    )
-
-    # قرارگیری تمیز در بالای مرکز ویدیو
-    cx = W // 2
-    base_y = int(H * 0.25) if H >= W else int(H * 0.18)
-
-    p2_x = cx - bot_strip.width // 2
-    p2_y = base_y + int(124 * sc)
-    p1_x = cx - top_strip.width // 2
-    p1_y = base_y
-
-    ov.alpha_composite(bot_strip, (p2_x, p2_y))
-    ov.alpha_composite(top_strip, (p1_x, p1_y))
     return ov
+
 
 def find_watermark_file():
     for wm_name in ['watermark.mp4', 'Watermark.mp4', 'WATERMARK.MP4', 'watermark.mov']:
         if os.path.exists(wm_name) and os.path.getsize(wm_name) > 1000:
             return wm_name
     return None
+
 
 def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه‌های خبری', out_prefix='vid'):
     try:
@@ -3413,14 +3422,14 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
         is_vertical = (vh >= vw)
         wm_file = find_watermark_file()
 
-        # ۱. ساخت بنر قلاب ۳ ثانیه اول (کاغذ سوخته دوطبقه) و قالب ریلز ۹:۱۶
+        # ۱. ساخت قلاب ۲ ثانیه اول (video_hook_overlay.png) و قالب اصلی ریلز (reel_overlay.png)
         hook_9_16 = create_3s_hook_overlay(1080, 1920, subtitle_text, subtitle_text)
         hook_9_16.save('ov_hook_9_16.png', format='PNG')
 
         ov_reel = create_9_16_video_overlay(1080, 1920, subtitle_text, source_name)
         ov_reel.save('ov_reel_9_16.png', format='PNG')
 
-        # ۲. فیلتر فوق‌سریع ۹:۱۶ + زوم نامحسوس ۳٪ + تغییر Visual Hash + سرعت ۱.۰۳x تصویر
+        # ۲. فیلتر ۹:۱۶ + نمایش قلاب در ۲ ثانیه اول و نمایش قالب اصلی ریلز پس از پایان قلاب اولیه
         if is_vertical:
             fg_Filter = (
                 '[v_fg_in]scale=iw*1.03:ih*1.03,crop=iw/1.03:ih/1.03,'
@@ -3441,8 +3450,8 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
             '[v_bg_in]scale=180:320:force_original_aspect_ratio=increase,crop=180:320,'
             'boxblur=10:2,eq=brightness=-0.24:contrast=1.04,scale=1080:1920,setsar=1[bg];'
             + fg_Filter +
-            '[comp][1:v]overlay=0:0,setsar=1[with_frame];'
-            "[with_frame][2:v]overlay=0:0:enable='between(t,0,3)',setsar=1"
+            "[comp][1:v]overlay=0:0:enable='gte(t,2)',setsar=1[with_frame];"
+            "[with_frame][2:v]overlay=0:0:enable='between(t,0,2)',setsar=1"
         )
 
         done_reel = False
@@ -3452,7 +3461,7 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
                     f'{flt_base_reel},fps=30,setpts=PTS-STARTPTS,format=gbrp,setsar=1[main_rgb];'
                     '[3:v]fps=30,scale=1080:1920:force_original_aspect_ratio=decrease,'
                     'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black,'
-                    'tpad=start_duration=3:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
+                    'tpad=start_duration=2:start_mode=add:color=black:stop=-1:stop_mode=add:color=black,'
                     'setpts=PTS-STARTPTS,format=gbrp,setsar=1[wm_rgb];'
                     '[main_rgb][wm_rgb]blend=all_mode=lighten:all_opacity=0.78:shortest=1,format=yuv420p,setsar=1[outv]'
                 )
@@ -3489,7 +3498,6 @@ def process_local_video_file(raw_vid, subtitle_text='', source_name='رسانه�
             subprocess.run(cmd_reel, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=110, check=True)
 
         if os.path.exists(reel_vid) and os.path.getsize(reel_vid) > 40000:
-            # برگرداندن فایل ریلز ۹:۱۶ هم برای کانال تلگرام و هم برای پیج اینستاگرام
             return reel_vid, reel_vid, 1080, 1920
         return None, None, 1080, 1920
     except Exception as e:
@@ -3627,75 +3635,63 @@ def build_smart_hashtags(full_txt, is_fars_feed):
             seen.append(t)
     return ' '.join(seen[:5])
 
+def _enforce_persian_reporting_colon(text):
+    """
+    قانون نگارشی اجباری: حذف «که» پس از تمام افعال نقلی و تبدیل آن به دونقطه (:)
+    """
+    if not text:
+        return ""
+    s = str(text).strip()
+    reporting_verbs = (
+        r"(اعلام کرد|گفت|افزود|هشدار داد|تاکید کرد|تأکید کرد|"
+        r"بیان کرد|تصریح کرد|خاطرنشان کرد|عنوان کرد|ادامه داد|خبر داد|اظهار کرد|اظهار داشت)"
+    )
+    # تبدیل «گفت که» یا «اعلام کرد: که» به «گفت:» و «اعلام کرد:»
+    s = re.sub(reporting_verbs + r"\s*:?\s+که\b", r"\1:", s)
+    s = re.sub(reporting_verbs + r"\s+که\s*:", r"\1:", s)
+    return s
+
+
 def _build_insta_curiosity_hook(clean_title, full_txt):
-    """ساخت خط اول کنجکاوبرانگیز و ناتمام (بدون لو دادن انتهای ماجرا) برای افزایش Watch Time"""
+    """خط اول (قلاب سئو): جمله کوتاه و کوبنده شامل کلمات کلیدی اصلی خبر همراه با ایموجی 🚨 یا ⚡️"""
     t = re.sub(r'[.!؟…]+$', '', clean_title or '').strip()
     if '/' in t:
         parts = [p.strip() for p in t.split('/') if len(p.strip().split()) >= 3]
         if parts:
             t = parts[0]
-    if ':' in t and len(t.split(':', 1)[0].split()) <= 4:
-        t = t.split(':', 1)[1].strip()
-
-    # حذف افعال و کلمات پایانی که نتیجه خبر را لو می‌دهند
-    spoiler_endings = [
-        r'\s+اعلام شد$', r'\s+مشخص شد$', r'\s+منتشر شد$', r'\s+رونمایی شد$',
-        r'\s+آغاز شد$', r'\s+متوقف شد$', r'\s+کاهش یافت$', r'\s+افزایش یافت$',
-        r'\s+بازداشت شد$', r'\s+دستگیر شد$', r'\s+تعطیل شد$', r'\s+تغییر کرد$',
-        r'\s+خبر داد$', r'\s+توضیح داد$', r'\s+واکنش نشان داد$',
-        r'\s+شد$', r'\s+است$', r'\s+بود$', r'\s+کرد$', r'\s+داد$'
-    ]
-    for pat in spoiler_endings:
-        t = re.sub(pat, '', t).strip()
-
-    words = t.split()
-    if len(words) > 8:
-        cut_idx = 7
-        while cut_idx > 4 and words[cut_idx - 1] in FORBIDDEN_END_WORDS:
-            cut_idx -= 1
-        core_phrase = ' '.join(words[:cut_idx])
-    else:
-        while len(words) > 3 and words[-1] in FORBIDDEN_END_WORDS:
-            words.pop()
-        core_phrase = ' '.join(words)
-
-    core_phrase = core_phrase.rstrip('،؛:- ')
-
-    if any(k in full_txt for k in ['تصادف', 'آتش‌سوزی', 'انفجار', 'اورژانس', 'حادثه', 'واژگونی', 'سقوط']):
-        hook = f'{core_phrase}؛ اما جزئیات تکان‌دهنده ماجرا نشان می‌دهد که'
-    elif any(k in full_txt for k in ['طلا', 'دلار', 'سکه', 'خودرو', 'قیمت', 'یارانه', 'کالابرگ', 'وام', 'حقوق']):
-        hook = f'{core_phrase}؛ تغییری که از همین حالا باعث شده'
-    elif any(k in full_txt for k in ['تعطیل', 'مدارس', 'ادارات', 'ساعت کاری', 'هشدار', 'بارش', 'هواشناسی']):
-        hook = f'{core_phrase}؛ تصمیمی که همه را غافلگیر کرد و قرار است'
-    else:
-        hook = f'{core_phrase}؛ اما واقعیت ماجرا از جایی شروع شد که'
-
-    return f'⭕️ {hook}... (جزئیات در کپشن 👇)'
+    emoji = '🚨' if any(k in full_txt for k in ALERT_KW + ['تصادف', 'حادثه', 'انفجار', 'آتش‌سوزی', 'زلزله', 'پلیس', 'بازداشت']) else '⚡️'
+    return f'{emoji} {t}!'
 
 
 def _build_insta_challenge_question(full_txt, is_local):
-    """تولید سوال دوگزینه‌ای، چالشی یا احساسی مرتبط با موضوع خبر برای افزایش کامنت"""
+    """سوال تعاملی کوتاه و چالش‌برانگیز مرتبط با خبر برای افزایش کامنت"""
     if any(k in full_txt for k in ['تصادف', 'واژگونی', 'ترافیک', 'بزرگراه', 'جاده', 'رانندگی']):
         return '💬 به نظرتون مقصر اصلی این حوادث، بی‌احتیاطی راننده‌هاست یا وضعیت غیراستاندارد جاده و خودروها؟'
     if any(k in full_txt for k in ['طلا', 'دلار', 'سکه', 'بورس', 'تورم', 'گرانی', 'قیمت', 'خودرو', 'مسکن']):
-        return '💬 فکر می‌کنید با این وضعیت، قیمت‌ها در روزهای آینده افزایشی می‌شه یا کاهشی؟ به نظرتون الان وقت خریده یا صبر؟'
+        return '💬 فکر می‌کنید با این وضعیت، قیمت‌ها در روزهای آینده افزایشی می‌شه یا کاهشی؟'
     if any(k in full_txt for k in ['سرقت', 'زورگیری', 'پلیس', 'بازداشت', 'دستگیری', 'کلاهبرداری', 'قضایی']):
-        return '💬 به نظر شما برای ریشه‌کن شدن این اتفاقات، برخوردهای شدیدتر قضایی مؤثرتره یا ریشه‌یابی اقتصادی؟'
+        return '💬 به نظر شما برای پیشگیری از این اتفاقات، برخوردهای شدیدتر قضایی مؤثرتره یا ریشه‌یابی اقتصادی؟'
     if any(k in full_txt for k in ['تعطیل', 'مدارس', 'آلودگی', 'بارش', 'باران', 'برف', 'ساعت کاری', 'برق', 'آب']):
-        return '💬 شما با این نحوه مدیریت و تصمیم‌گیری موافقید یا مخالف؟ وضعیت در محله و منطقه شما الان چطوره؟'
+        return '💬 شما با این نحوه مدیریت و تصمیم‌گیری موافقید یا مخالف؟ وضعیت در محله شما چطوره؟'
     if any(k in full_txt for k in SPORT_KW):
         return '💬 به نظرتون ستاره یا مقصر اصلی این ماجرا چه کسیه؟ نتیجه رو چطور پیش‌بینی می‌کنید؟'
-    if is_local and any(k in full_txt for k in ['شهرداری', 'مترو', 'شیراز', 'شورای شهر', 'پروژه', 'عمرانی']):
-        return '💬 به عنوان یک شهروند شیرازی، فکر می‌کنید اولویت اصلی شهرمون الان این موضوعه یا مشکلات ترافیک و معیشت؟'
     if is_local:
         return '💬 نظر شما همشهریان عزیز درباره این اتفاق چیه؟ شما موافق این روند هستید یا منتقد؟'
-    return '💬 واکنش شما به این خبر چیه؟ به نظرتون مقصر کیه و نتیجه این ماجرا چی می‌شه؟'
+    return '💬 واکنش شما به این خبر چیه؟ نظر خودتون رو در کامنت‌ها بنویسید.'
 
 
-def build_viral_insta_hashtags(full_txt, is_fars_feed):
-    """ساخت ۵ تا ۶ هشتگ کاملاً هدفمند و مرتبط با موضوع خبر (بدون هشتگ‌های اسپم و ثابت)"""
-    tags = []
+def build_viral_insta_hashtags(full_txt, is_fars_feed, clean_title=""):
+    """
+    تولید ۸ تا ۱۰ هشتگ در انتها:
+    - ۳ هشتگ پربازدید موضوعی (#خبر_فوری #اخبار_ایران #اکسپلور)
+    - ۳ هشتگ اختصاصی کلمات کلیدی همان خبر
+    - ۳ هشتگ هویتی پیج (#آخرین_خبرهای_شیراز #شیراز #استان_فارس)
+    """
+    general_tags = ['#خبر_فوری', '#اخبار_ایران', '#اکسپلور']
+    identity_tags = ['#آخرین_خبرهای_شیراز', '#شیراز', '#استان_فارس']
+    keyword_tags = []
 
+    # ۱. استخراج کلمات کلیدی اختصاصی از تیتر و متن خبر
     topic_map = [
         (['طلا', 'سکه'], '#طلا'),
         (['دلار', 'ارز'], '#دلار'),
@@ -3710,89 +3706,84 @@ def build_viral_insta_hashtags(full_txt, is_fars_feed):
         (['پرسپولیس'], '#پرسپولیس'),
         (['استقلال'], '#استقلال'),
         (['تیم ملی', 'فوتبال', 'لیگ برتر', 'ورزش'], '#فوتبال'),
-        (['حافظیه', 'تخت جمشید', 'سعدیه', 'گردشگری', 'میراث'], '#گردشگری'),
+        (['حافظیه', 'تخت جمشید', 'سعدیه', 'گردشگری', 'میراث'], '#شیرازگردی'),
         (['پزشکی', 'سلامت', 'بیمارستان', 'دارو'], '#سلامت'),
         (['دولت', 'مجلس', 'رئیس جمهور', 'وزیر', 'سیاسی'], '#سیاست')
     ]
 
-    if is_fars_feed:
-        # ۱. هشتگ‌های محلی شیراز و فارس
-        tags.append('#شیراز')
-        for c in FARS_37_COUNTIES_UNAMBIGUOUS:
-            if c != 'شیراز' and c in full_txt:
-                tags.append('#' + c.replace(' ', '_').replace('‌', '_'))
+    for c in FARS_37_COUNTIES_UNAMBIGUOUS:
+        if c != 'شیراز' and c in full_txt:
+            keyword_tags.append('#' + c.replace(' ', '_').replace('‌', '_'))
+            break
+
+    for p in IRAN_PLACES:
+        if p in full_txt and len(keyword_tags) < 3:
+            keyword_tags.append('#' + p.replace(' ', '_').replace('‌', '_'))
+            break
+
+    for kw_list, h_tag in topic_map:
+        if any(k in full_txt for k in kw_list) and h_tag not in keyword_tags:
+            keyword_tags.append(h_tag)
+            if len(keyword_tags) >= 3:
                 break
-        tags.append('#استان_فارس')
-        tags.append('#اخبار_شیراز')
 
-        # ۲. افزودن هشتگ‌های موضوعی مرتبط با خبر
-        for kw_list, h_tag in topic_map:
-            if any(k in full_txt for k in kw_list) and h_tag not in tags:
-                tags.append(h_tag)
-        if len(tags) < 5:
-            tags.append('#شیرازگردی' if 'گردشگری' in full_txt else '#خبر_شیراز')
-    else:
-        # ۱. هشتگ‌های موضوعی و مکانی دقیق خبر سراسری
-        for p in IRAN_PLACES:
-            if p in full_txt:
-                tags.append('#' + p.replace(' ', '_').replace('‌', '_'))
+    # استخراج مستقیم کلمات کلیدی از تیتر در صورتی که کمتر از ۳ هشتگ اختصاصی پیدا شده باشد
+    if len(keyword_tags) < 3:
+        title_tokens = [
+            w for w in normalize_title(clean_title or full_txt[:100]).split()
+            if len(w) >= 3 and w not in STOP_WORDS_FA and w not in ('شیراز', 'فارس', 'ایران', 'استان')
+        ]
+        for tok in title_tokens:
+            cand = f'#{tok}'
+            if cand not in keyword_tags and cand not in general_tags and cand not in identity_tags:
+                keyword_tags.append(cand)
+                if len(keyword_tags) >= 3:
+                    break
+
+    while len(keyword_tags) < 3:
+        for fallback_kw in ['#اخبار_روز', '#خبر_شیراز', '#حوادث_واقعی']:
+            if fallback_kw not in keyword_tags:
+                keyword_tags.append(fallback_kw)
                 break
-        for kw_list, h_tag in topic_map:
-            if any(k in full_txt for k in kw_list) and h_tag not in tags:
-                tags.append(h_tag)
 
-        # ۲. افزودن هشتگ‌های خبری استاندارد ایران
-        for base_nat_tag in ['#خبر_فوری', '#اخبار_ایران', '#ایران', '#اخبار_روز']:
-            if len(tags) < 6 and base_nat_tag not in tags:
-                tags.append(base_nat_tag)
-
+    all_tags = general_tags + keyword_tags[:3] + identity_tags
     seen = []
-    for t in tags:
+    for t in all_tags:
         if t not in seen:
             seen.append(t)
-    return ' '.join(seen[:6])
+    return ' '.join(seen[:10])
 
 
 def format_insta_caption(title, summary, is_fars_feed, source_url, is_even_hour=True, is_video=False):
     clean_title = clean_agency_prefix(title)
     raw_lead = extract_complete_lead(summary, clean_title, min_chars=110, max_chars=360)
-    # حذف هرگونه ایموجی کلیشه‌ای ✅ از ابتدای متن خبر
     clean_body = re.sub(r'^[✅⭕️🛑•\-–—\s]+', '', raw_lead).strip()
-    full_txt = clean_title + ' ' + clean_body
+    clean_body = _enforce_persian_reporting_colon(clean_body).rstrip('. ') + '.'
 
-    # ۱. تشخیص هوشمند موضوع (محلی شیراز/فارس یا سراسری ایران)
+    full_txt = clean_title + ' ' + clean_body
     is_local = bool(is_fars_feed or is_strictly_fars_shiraz_news(clean_title, clean_body))
     source_name = 'اختصاصی آخرین خبرهای شیراز' if source_url == 'exclusive' else get_source_name(source_url)
 
-    # ۲. خط اول کنجکاوبرانگیز (قلاب کپشن برای افزایش Watch Time)
+    # ۱. خط اول (قلاب سئو با ایموجی 🚨 یا ⚡️)
     hook_line = _build_insta_curiosity_hook(clean_title, full_txt)
 
-    # ۳. سوال چالشی / دوگزینه‌ای مرتبط با خبر
+    # ۲. پاراگراف خبر (هرم وارونه + قانون دونقطه بعد از افعال نقلی + منبع داخل پرانتز در انتهای پاراگراف)
+    news_paragraph = f'{clean_body} (منبع: {source_name})'
+
+    # ۳. سوال تعاملی (محرک کامنت)
     question_line = _build_insta_challenge_question(full_txt, is_local)
 
-    # ۴. دعوت به فالو (CTA) هوشمند و دوگانه
-    if is_local:
-        cta_block = (
-            '🔔 اگر ساکن شیراز و فارس هستید، برای دریافت فوری خبرهای شهرمان همین الان پیج را فالو کنید:\n'
-            '👉 @shirazlastnews\n'
-            '👉 @shirazlastnews'
-        )
-    else:
-        cta_block = (
-            '🔥 فوری‌ترین ویدیوهای خبری ایران در ریلزها + پوشش لحظه‌ای شیراز در استوری‌ها؛ همین الان فالو کنید:\n'
-            '👉 @shirazlastnews\n'
-            '👉 @shirazlastnews'
-        )
+    # ۴. دعوت ثابت به فالو (CTA)
+    cta_line = '📲 مهم‌ترین ویدیوهای روز ایران در ریلز و رصد لحظه‌ای شیراز و فارس در استوری‌ها؛ همین حالا @shirazlastnews را دنبال کنید.'
 
-    # ۵. منبع کوتاه و ۵ تا ۶ هشتگ هدفمند بدون اسپم
-    targeted_tags = build_viral_insta_hashtags(full_txt, is_local)
+    # ۵. هشتگ‌ها (۹ هشتگ ترکیبی)
+    targeted_tags = build_viral_insta_hashtags(full_txt, is_local, clean_title=clean_title)
 
     return (
         f'{hook_line}\n\n'
-        f'{clean_body}\n\n'
+        f'{news_paragraph}\n\n'
         f'{question_line}\n\n'
-        f'{cta_block}\n\n'
-        f'📌 منبع: {source_name}\n'
+        f'{cta_line}\n\n'
         f'{targeted_tags}'
     )
 
