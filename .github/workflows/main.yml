@@ -33,7 +33,7 @@ jobs:
           sudo mkdir -p /usr/share/fonts/truetype/vazirmatn
           sudo curl -sL https://github.com/rastikerdar/vazirmatn/raw/master/fonts/ttf/Vazirmatn-Bold.ttf -o /usr/share/fonts/truetype/vazirmatn/Vazirmatn-Bold.ttf || true
           pip install --upgrade pip
-          pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts instagrapi "moviepy==1.0.3" "decorator<5.0.0" imageio-ffmpeg
+          pip install pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts instagrapi "moviepy==1.0.3" "decorator<5.0.0" imageio-ffmpeg arabic-reshaper python-bidi
 
       - name: Run bot (Continuous Drip-Feed Mode)
         env:
