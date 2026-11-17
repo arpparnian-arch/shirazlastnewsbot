@@ -2997,6 +2997,8 @@ try:
 except Exception:
     HAS_RAQM_ENGINE = False
 
+BRAND_FONT_HOOK = "assets/fonts/Lalezar-Regular.ttf"
+BRAND_FONT_HOOK_ALT = "assets/fonts/Lalezar.ttf"
 BRAND_FONT_EXTRABOLD = "assets/fonts/Vazirmatn-ExtraBold.ttf"
 BRAND_FONT_MEDIUM = "assets/fonts/Vazirmatn-Medium.ttf"
 VIDEO_HOOK_OVERLAY_PATH = "assets/brand/video_hook_overlay.png"
@@ -3022,9 +3024,42 @@ def shape_persian_text(text):
     return s
 
 
+def ensure_hook_lalezar_font():
+    """اطمینان از وجود فونت لاله‌زار در پوشه assets/fonts"""
+    if os.path.exists(BRAND_FONT_HOOK) or os.path.exists(BRAND_FONT_HOOK_ALT):
+        return
+    try:
+        os.makedirs("assets/fonts", exist_ok=True)
+        r = requests.get(
+            "https://github.com/google/fonts/raw/main/ofl/lalezar/Lalezar-Regular.ttf",
+            timeout=10
+        )
+        if r.status_code == 200 and len(r.content) > 10000:
+            with open(BRAND_FONT_HOOK, "wb") as f:
+                f.write(r.content)
+    except Exception:
+        pass
+
+
 def load_brand_font(size=44, weight="extrabold"):
-    """بارگذاری فونت‌های رسمی برند از مسیر assets/fonts با پشتیبان خودکار"""
+    """بارگذاری فونت لاله‌زار برای قلاب و وزیرمتن برای سایر بخش‌ها"""
     ensure_persian_font()
+    if weight == "hook":
+        ensure_hook_lalezar_font()
+        hook_candidates = [
+            BRAND_FONT_HOOK,
+            BRAND_FONT_HOOK_ALT,
+            "Lalezar-Regular.ttf",
+            BRAND_FONT_EXTRABOLD,
+            FONT_FILE,
+        ]
+        for fp in hook_candidates:
+            if os.path.exists(fp):
+                try:
+                    return ImageFont.truetype(fp, size)
+                except Exception:
+                    pass
+
     preferred = BRAND_FONT_EXTRABOLD if weight == "extrabold" else BRAND_FONT_MEDIUM
     candidates = [
         preferred,
@@ -3426,9 +3461,9 @@ def get_ai_viral_hook_and_caption(title, summary):
 
 def create_3s_hook_overlay(W, H, title_text, summary_text=""):
     """
-    رندر قلاب ۲ خطی کامل و جذاب روی تصویر شفاف assets/brand/video_hook_overlay.png:
-    - خط اول (hook_line1): روی براش طلایی بالا در (x=540, y=785) با رنگ سرمه‌ای تیره #0D1117
-    - خط دوم (hook_line2): روی براش سرمه‌ای میانی در (x=540, y=915) با رنگ سفید #F8FAFC و سایز درشت‌تر
+    رندر قلاب ۲ خطی با فونت ترند لاله‌زار (Lalezar) و سایه سه‌بعدی برجسته (بدون چرخش):
+    - خط اول: روی براش طلایی بالا در (x=540, y=785)
+    - خط دوم: روی براش سرمه‌ای میانی در (x=540, y=915)
     """
     ensure_persian_font()
     line1, line2, _ = get_ai_viral_hook_and_caption(title_text, summary_text)
@@ -3449,46 +3484,67 @@ def create_3s_hook_overlay(W, H, title_text, summary_text=""):
 
     draw = ImageDraw.Draw(ov)
 
-    # ۱. تنظیم فونت خط اول (روی براش طلایی بالا) و خط دوم (روی براش سرمه‌ای وسط)
+    # بارگذاری فونت لاله‌زار (weight="hook") با سایز درشت و تیتراژی
     f_line1 = _fit_single_line_brand_font(
         line1,
-        base_size=int(50 * sc),
-        min_size=int(32 * sc),
-        max_width_px=int(640 * sc),
-        weight="extrabold"
+        base_size=int(58 * sc),
+        min_size=int(36 * sc),
+        max_width_px=int(650 * sc),
+        weight="hook"
     )
     f_line2 = _fit_single_line_brand_font(
         line2,
-        base_size=int(58 * sc),
-        min_size=int(36 * sc),
-        max_width_px=int(800 * sc),
-        weight="extrabold"
+        base_size=int(68 * sc),
+        min_size=int(40 * sc),
+        max_width_px=int(810 * sc),
+        weight="hook"
     )
 
     cx = int(540 * sc)
     y_gold_brush = int(785 * sc)
     y_navy_brush = int(915 * sc)
 
-    # چاپ خط اول روی براش طلایی بالا (رنگ سرمه‌ای تیره #0D1117 با هاله روشن ظریف برای کنتراست عالی)
+    shaped_l1 = shape_persian_text(line1)
+    shaped_l2 = shape_persian_text(line2)
+
+    # ۱. سایه سه‌بعدی و متن خط اول (روی براش طلایی بالا)
+    for depth in range(int(6 * sc), 0, -1):
+        draw.text(
+            (cx + depth, y_gold_brush + depth),
+            shaped_l1,
+            font=f_line1,
+            fill=(255, 248, 220, 230),
+            anchor="mm"
+        )
     draw.text(
         (cx, y_gold_brush),
-        shape_persian_text(line1),
+        shaped_l1,
         font=f_line1,
         fill=COLOR_OBSIDIAN_GLASS,
         anchor="mm",
-        stroke_width=max(1, int(2 * sc)),
-        stroke_fill=(255, 245, 210, 220)
+        stroke_width=max(2, int(3 * sc)),
+        stroke_fill=(255, 250, 235, 255)
     )
 
-    # چاپ خط دوم روی براش سرمه‌ای میانی (رنگ سفید درخشان #F8FAFC با دورخط مشکی عمیق)
+    # ۲. سایه سه‌بعدی عمیق (Extrusion) و متن خط دوم (روی براش سرمه‌ای میانی)
+    for depth in range(int(9 * sc), 0, -1):
+        draw.text(
+            (cx + depth, y_navy_brush + depth),
+            shaped_l2,
+            font=f_line2,
+            fill=(4, 6, 10, 255),
+            anchor="mm",
+            stroke_width=max(2, int(4 * sc)),
+            stroke_fill=(4, 6, 10, 255)
+        )
     draw.text(
         (cx, y_navy_brush),
-        shape_persian_text(line2),
+        shaped_l2,
         font=f_line2,
         fill=COLOR_CRISP_WHITE,
         anchor="mm",
         stroke_width=max(2, int(4 * sc)),
-        stroke_fill=(5, 8, 14, 245)
+        stroke_fill=(8, 12, 18, 255)
     )
 
     return ov
