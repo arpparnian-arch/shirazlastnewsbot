@@ -28,15 +28,17 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install FFmpeg, Fonts and Libraries (Fail-Safe Mode)
+      - name: Install Dependencies (Lightning Fast)
         run: |
-          if ! command -v ffmpeg >/dev/null 2>&1; then
-            sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout="10" update || true
-            sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout="10" install -y ffmpeg || true
-          fi
           sudo mkdir -p /usr/share/fonts/truetype/vazirmatn
           sudo curl -sL https://github.com/rastikerdar/vazirmatn/raw/master/fonts/ttf/Vazirmatn-Bold.ttf -o /usr/share/fonts/truetype/vazirmatn/Vazirmatn-Bold.ttf || true
           pip install -q pyTelegramBotAPI requests feedparser beautifulsoup4 urllib3 Pillow edge-tts instagrapi "moviepy==1.0.3" "decorator<5.0.0" imageio-ffmpeg
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            FFMPEG_BIN=$(python -c "import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())")
+            sudo ln -sf "$FFMPEG_BIN" /usr/local/bin/ffmpeg
+          fi
+          ffmpeg -version | head -n 1
+          python -c "from PIL import features; print('Raqm Persian Engine:', features.check('raqm'))"
 
       - name: Run bot (Continuous Drip-Feed Mode)
         env:
