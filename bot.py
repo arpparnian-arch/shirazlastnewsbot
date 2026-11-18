@@ -3159,11 +3159,63 @@ def _detect_navy_box_y(ov_img, sc=1.0):
     return int(1385 * sc), int(1475 * sc)
 
 
+def _prepare_transparent_reel_overlay(reel_png):
+    """
+    حذف خودکار پس‌زمینه سفید از فایل reel_overlay.png و تبدیل هاله خاکستری بالا و پایین
+    به سایه مشکی شیشه‌ای (Transparent)، با حفظ کامل کادر سورمه‌ای، لوگو و بج بالا
+    """
+    W, H = reel_png.size
+    px = reel_png.load()
+
+    # اگر تصویر از قبل پس‌زمینه شیشه‌ای دارد، تغییری نده
+    r_c, g_c, b_c, a_c = px[W // 2, H // 2]
+    if a_c < 50:
+        return reel_png
+
+    sc_x = W / 1080.0
+    sc_y = H / 1920.0
+
+    # محدوده داخلی ۳ المان اصلی (بج بالا چپ، لوگوی بالا راست، و کادر سورمه‌ای پایین)
+    pill_x1, pill_y1, pill_x2, pill_y2 = int(75 * sc_x), int(180 * sc_y), int(420 * sc_x), int(240 * sc_y)
+    box_x1, box_y1, box_x2, box_y2 = int(70 * sc_x), int(1302 * sc_y), int(1010 * sc_x), int(1654 * sc_y)
+    logo_cx, logo_cy, logo_r_sq = int(942 * sc_x), int(218 * sc_y), int((70 * sc_x) ** 2)
+
+    for y in range(H):
+        in_pill_y = (pill_y1 <= y <= pill_y2)
+        in_box_y = (box_y1 <= y <= box_y2)
+        dy_logo = y - logo_cy
+        in_logo_y = abs(dy_logo) <= int(72 * sc_y)
+
+        for x in range(W):
+            # ۱. حفظ کامل پیکسل‌های داخلی بج، لوگو و کادر سورمه‌ای (شامل نوشته‌های سفید داخل آن‌ها)
+            if (in_box_y and box_x1 <= x <= box_x2) or (in_pill_y and pill_x1 <= x <= pill_x2):
+                continue
+            if in_logo_y and ((x - logo_cx) ** 2 + dy_logo ** 2) <= logo_r_sq:
+                continue
+
+            r, g, b, a = px[x, y]
+            lum = (r + g + b) // 3
+            chroma = max(r, g, b) - min(r, g, b)
+
+            # ۲. حفظ خطوط طلایی دور کادرها و لبه‌های سرمه‌ای تیره
+            if chroma > 38 or (r - b) > 35 or lum < 75:
+                continue
+
+            # ۳. تبدیل سفیدی وسط به شیشه‌ای کامل و گرادینت بالا/پایین به سایه مشکی نیمه‌شفاف
+            if lum >= 246:
+                px[x, y] = (0, 0, 0, 0)
+            else:
+                new_alpha = min(255, int((255 - lum) * 1.15))
+                px[x, y] = (0, 0, 0, new_alpha)
+
+    return reel_png
+
+
 def create_9_16_video_overlay(W, H, subtitle_text='', source_name='رسانه آخرین خبرهای شیراز'):
     """
     قالب اصلی ریلز (assets/brand/reel_overlay.png):
-    - قرار دادن لایه شفاف reel_overlay.png
-    - رندر دو خط تیتر دقیقاً در مرکز مستطیل سورمه‌ای پایین (سمت چپ نوار طلایی)
+    - شفاف‌سازی خودکار پس‌زمینه سفید در صورت نیاز
+    - رندر دو خط تیتر دقیقاً در مرکز مستطیل سورمه‌ای پایین
     """
     ov = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     sc = W / 1080.0
@@ -3173,6 +3225,7 @@ def create_9_16_video_overlay(W, H, subtitle_text='', source_name='رسانه آ
             reel_png = Image.open(REEL_OVERLAY_PATH).convert('RGBA')
             if reel_png.size != (W, H):
                 reel_png = reel_png.resize((W, H), Image.Resampling.LANCZOS)
+            reel_png = _prepare_transparent_reel_overlay(reel_png)
             ov = Image.alpha_composite(ov, reel_png)
         except Exception as e:
             print('Reel overlay PNG load error:', e)
@@ -3191,7 +3244,7 @@ def create_9_16_video_overlay(W, H, subtitle_text='', source_name='رسانه آ
         text_cx = int(515 * sc)
         y_line1, y_line2 = _detect_navy_box_y(ov, sc=sc)
 
-        # خط اول تیتر (موضوع اصلی) با رنگ سفید #F8FAFC و سایه نرم برای خوانایی حداکثری
+        # خط اول تیتر (موضوع اصلی) با رنگ سفید #F8FAFC
         draw.text(
             (text_cx, y_line1),
             shape_persian_text(line1),
@@ -3202,7 +3255,7 @@ def create_9_16_video_overlay(W, H, subtitle_text='', source_name='رسانه آ
             stroke_fill=(0, 0, 0, 200)
         )
 
-        # خط دوم تیتر (بخش کلیدی/شوکه‌کننده) با رنگ طلایی روشن #FFD56B
+        # خط دوم تیتر (بخش کلیدی) با رنگ طلایی روشن #FFD56B
         draw.text(
             (text_cx, y_line2),
             shape_persian_text(line2),
