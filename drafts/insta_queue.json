@@ -768,6 +768,16 @@
     "vip": false
   },
   {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_65b1c1f624.jpg"
+    ],
+    "caption": "",
+    "time": 1794990235.2323353,
+    "vip": false,
+    "sig": "story_photo:65b1c1f6244122877c4409e9c1460313"
+  },
+  {
     "type": "story_video",
     "files": [
       "drafts/ready_story_video_fc6b4b9b78.mp4"
