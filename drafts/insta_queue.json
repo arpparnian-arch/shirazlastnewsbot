@@ -800,6 +800,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_e25e3777b7.jpg"
+    ],
+    "caption": "",
+    "time": 1795008111.8736236,
+    "vip": false,
+    "sig": "story_photo:e25e3777b7495c6d2d93dc59f15553c3"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_3e5de9e10f.jpg"
     ],
     "caption": "",
