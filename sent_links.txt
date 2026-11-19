@@ -1,7 +1,3 @@
-varzesh3.ir/news/2444788/پیام-برناردو-سیلوا-بعد-از-ترک-تیم-ملی
-id:1853171
-id:1853209
-mashreghnews.ir/photo/1853204/%d8%b9%da%a9%d8%b3-%d8%a2%d8%a8%da%af%d8%b1%d9%81%d8%aa%da%af%db%8c-%d9%88-%d8%b7%d8%ba%db%8c%d8%a7%d9%86-%d8%b1%d9%88%d8%af%d8%ae%d8%a7%d9%86%d9%87-%d9%87%d8%a7%db%8c-%d8%ba%d8%b1%d8%a8-%d9%85%d8%a7%d8%b2%d9%86%d8%af%d8%b1%d8%a7%d9%86
 mashreghnews.ir/photo/1853166/%d8%b9%da%a9%d8%b3-%d8%af%d8%b1%d9%86%da%af-%d8%af%d8%b1-%d8%b4%d9%85%d8%a7%d9%84-%d8%aa%d9%86%da%af%d9%87-%d9%87%d8%b1%d9%85%d8%b2-%d8%aa%d9%82%d8%a7%d8%a8%d9%84-%d8%b3%da%a9%d9%88%d9%86-%d9%88-%d8%ad%d8%b1%da%a9%d8%aa
 id:1853204
 id:1853200
@@ -1198,3 +1194,7 @@ isna.ir/news/1405082920000/%d8%ae%d8%b1%db%8c%d8%af%d9%87%d8%a7%db%8c-%d8%af%d8%
 hamshahrionline.ir/news/1087724/%d8%ad%d9%85%d9%84%d9%87-%d8%aa%d9%86%d8%af-%d8%ae%d8%af%d8%a7%d8%af%d8%a7%d8%af-%d8%a8%d9%87-%d8%a8%d8%a7%d8%b2%db%8c%da%a9%d9%86-%d8%aa%db%8c%d9%85-%d9%85%d9%84%db%8c-%d8%a7%d8%b2-%d8%ac%d8%a7%d9%86-%d9%81%d9%88%d8%aa%d8%a8%d8%a7%d9%84-%d9%85%d8%a7-%da%86%d9%87-%d9%85%db%8c-%d8%ae%d9%88%d8%a7%d9%87%db%8c
 id:140508292000
 id:1087724
+mehrnews.com/news/7016881/%d8%a7%d8%b3%d8%aa%d8%a7%d9%86-%d8%ae%d9%88%d8%b2%d8%b3%d8%aa%d8%a7%d9%86-%d8%af%d8%b1-%d8%ad%d8%a7%d8%af%d8%ab%d9%87-%d9%88%d8%a7%da%98%da%af%d9%88%d9%86%db%8c-%d8%a7%d8%aa%d9%88%d8%a8%d9%88%d8%b3-%da%a9%d9%86%d8%a7%d8%b1-%d9%85%d8%b1%d8%af%d9%85-%d8%a7%db%8c%d9%84%d8%a7%d9%85-%d8%a8%d9%88%d8%af
+id:7016881
+id:86327137
+irna.ir/news/86327137/%d8%a7%d8%b3%d8%aa%d9%82%d8%a8%d8%a7%d9%84-%d8%b3%d8%a7%d8%b2%d9%85%d8%a7%d9%86-%d9%85%d9%84%d9%84-%d8%a7%d8%b2-%d8%ad%da%a9%d9%85-%d8%af%db%8c%d9%88%d8%a7%d9%86-%d8%a8%db%8c%d9%86-%d8%a7%d9%84%d9%85%d9%84%d9%84%db%8c-%d8%af%d8%a7%d8%af%da%af%d8%b3%d8%aa%d8%b1%db%8c-%d8%b9%d9%84%db%8c%d9%87-%d9%85%db%8c%d8%a7%d9%86%d9%85%d8%a7%d8%b1
