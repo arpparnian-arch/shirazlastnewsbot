@@ -1,5 +1,3 @@
-irib-news.ir/fa/news/5969392/پیش-بینی-برداشت-4-هزار-تن-پنبه-در-جویم-فارس
-id:5969382
 irib-news.ir/fa/news/5969382/اعزام-دانش-آموزان-بختگان-فارس-به-مناطق-عملیاتی-دفاع-مقدس
 id:5969576
 irib-news.ir/fa/news/5969576/دستگیری-سارقان-در-ممسنی-فارس
@@ -1198,3 +1196,5 @@ hamshahrionline.ir/news/1087850/%d8%aa%d8%b5%d8%a7%d9%88%db%8c%d8%b1-%d8%af%d8%b
 id:1087850
 irna.ir/news/86327583/%d8%b3%d8%b1%d9%85%d8%b1%d8%a8%db%8c-%da%86%d8%a7%d8%af%d8%b1%d9%85%d9%84%d9%88-%d8%a8%d8%a7%d8%b2%da%af%d8%b4%d8%aa-%d8%a8%d9%87-%d8%a8%d8%a7%d8%b2%db%8c-%d9%85%d9%82%d8%a7%d8%a8%d9%84-%d9%81%d8%ac%d8%b1-%da%a9%d8%a7%d8%b1-%d8%a2%d8%b3%d8%a7%d9%86%db%8c-%d9%86%d8%a8%d9%88%d8%af
 id:86327583
+mehrnews.com/news/7017442/%d8%b1%d8%ac%d8%a8-%d8%b2%d8%a7%d8%af%d9%87-%d8%ad%d8%b3%d8%b1%d8%aa-%d8%a7%db%8c%d9%86-%d8%af%d9%88-%d8%a7%d9%85%d8%aa%db%8c%d8%a7%d8%b2-%d8%aa%d8%a7-%d9%be%d8%a7%db%8c%d8%a7%d9%86-%d9%81%d8%b5%d9%84-%d8%a8%d8%a7-%d9%85%d8%a7-%d9%85%db%8c-%d9%85%d8%a7%d9%86%d8%af
+id:7017442
