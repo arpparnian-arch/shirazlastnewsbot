@@ -1088,6 +1088,16 @@
     "vip": false
   },
   {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_f1f65ef52c.jpg"
+    ],
+    "caption": "",
+    "time": 1795259369.8988183,
+    "vip": false,
+    "sig": "story_photo:f1f65ef52cce6c4057ad2a013340fdd0"
+  },
+  {
     "type": "story_video",
     "files": [
       "drafts/ready_story_video_222dfbfb92.mp4"
