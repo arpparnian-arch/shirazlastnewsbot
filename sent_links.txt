@@ -1,5 +1,3 @@
-id:7015614
-mehrnews.com/news/7015614/%d9%87%d9%85%d8%a7%db%8c%d8%b4-%d8%ae%d8%a7%d9%86%d9%88%d8%a7%d8%af%d9%87-%d8%a7%db%8c%d8%ab%d8%a7%d8%b1%da%af%d8%b1%d8%a7%d9%86-%d8%a8%d8%ae%d8%b4-%da%a9%d8%b4%d8%a7%d9%88%d8%b1%d8%b2%db%8c-%d8%af%d8%b1-%d9%85%d8%b4%d9%87%d8%af
 mashreghnews.ir/news/1853750/%d9%81%db%8c%d9%84%d9%85-%d8%af%d8%b3%d8%aa%da%af%db%8c%d8%b1%db%8c-%d8%a8%d8%a7%d9%86%d8%af-%da%af%d8%b1%d9%88%da%af%d8%a7%d9%86-%da%af%db%8c%d8%b1%db%8c-%d8%a7%d8%aa%d8%a8%d8%a7%d8%b9-%d8%ae%d8%a7%d8%b1%d8%ac%db%8c-%d9%88-%d8%a2%d8%b2%d8%a7%d8%af%db%8c-%db%b2-%da%af%d8%b1%d9%88%da%af%d8%a7%d9%86
 id:1853667
 id:1853720
@@ -1198,3 +1196,5 @@ mehrnews.com/news/7018528/%d8%b3%d8%a7%d8%b1%d9%82-%d8%b2%d9%86%d8%ac%db%8c%d8%b
 id:7018528
 id:5972876
 irib-news.ir/fa/news/5972876/بسیج-مکتب-خودجوش-مردمی
+irib-news.ir/fa/news/5972980/تمدید-مهلت-ارسال-مقاله-به-همایش-بین-المللی-امین-ولایت-در-شیراز
+id:5972980
