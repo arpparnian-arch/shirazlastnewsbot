@@ -1240,6 +1240,16 @@
   {
     "type": "story_video",
     "files": [
+      "drafts/ready_story_video_19c4eec766.mp4"
+    ],
+    "caption": "",
+    "time": 1795372990.8675983,
+    "vip": false,
+    "sig": "story_video:19c4eec766cc8656cd30905501c0a454"
+  },
+  {
+    "type": "story_video",
+    "files": [
       "drafts/ready_story_video_764c021f3b.mp4"
     ],
     "caption": "",
