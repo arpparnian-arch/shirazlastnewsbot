@@ -1268,6 +1268,16 @@
     "vip": false
   },
   {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_852ad5690c.jpg"
+    ],
+    "caption": "",
+    "time": 1795423199.1662514,
+    "vip": false,
+    "sig": "story_photo:852ad5690c57937b260b7a2e2a4dc356"
+  },
+  {
     "type": "story_video",
     "files": [
       "drafts/ready_story_video_36a76f7d6f.mp4"
