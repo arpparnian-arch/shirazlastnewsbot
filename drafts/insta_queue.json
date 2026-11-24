@@ -1370,6 +1370,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_d05350263a.jpg"
+    ],
+    "caption": "",
+    "time": 1795509834.5266988,
+    "vip": false,
+    "sig": "story_photo:d05350263a600bef28853041b0a63977"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_b02af6a1f9.jpg"
     ],
     "caption": "",
