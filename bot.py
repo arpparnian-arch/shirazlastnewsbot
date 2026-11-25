@@ -348,11 +348,8 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
         if os.path.exists(p_str):
             ext = os.path.splitext(p_str)[1] or ".jpg"
             # استفاده از هش فایل برای جلوگیری از کپی تکراری ویدیوهای حجیم در پوشه drafts
-            if media_hash:
-             short_h = f"{media_hash[:10]}_{i}" if len(paths) > 1 else media_hash[:10]
-         else:
-             short_h = f"{int(time.time())}_{i}"
-         dest = f"drafts/ready_{task_type}_{short_h}{ext}"
+            short_h = (f"{media_hash[:10]}_{i}" if len(paths) > 1 else media_hash[:10]) if media_hash else f"{int(time.time())}_{i}"
+            dest = f"drafts/ready_{task_type}_{short_h}{ext}"
             if not os.path.exists(dest):
                 shutil.copy(p_str, dest)
             saved_paths.append(dest)
