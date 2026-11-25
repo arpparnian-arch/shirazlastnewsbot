@@ -221,6 +221,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_e0a311f5c3.jpg"
+    ],
+    "caption": "",
+    "time": 1795633744.9275577,
+    "vip": false,
+    "sig": "story_photo:e0a311f5c3ce6e26f9613274b13274bc"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_4f50c946a0.jpg"
     ],
     "caption": "",
@@ -1317,16 +1327,6 @@
     "time": 1795504266.6684039,
     "vip": false,
     "sig": "story_photo:dffaa2b29175953cee6f917e1ee90b6f"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_a71512499b.jpg"
-    ],
-    "caption": "",
-    "time": 1795503893.434998,
-    "vip": false,
-    "sig": "story_photo:a71512499b977a8dee78c32e7721345e"
   },
   {
     "type": "album",
