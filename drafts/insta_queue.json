@@ -219,6 +219,16 @@
     "sig": "reel:32480a75a12fae3698476a521f28a68a"
   },
   {
+    "type": "story_photo",
+    "files": [
+      "drafts/ready_story_photo_4f50c946a0.jpg"
+    ],
+    "caption": "",
+    "time": 1795633368.0868516,
+    "vip": false,
+    "sig": "story_photo:4f50c946a0de6026c6cb7b1eae464b65"
+  },
+  {
     "type": "story_video",
     "files": [
       "drafts/ready_story_video_9596c4b1a5.mp4"
@@ -1319,26 +1329,6 @@
     "sig": "story_photo:a71512499b977a8dee78c32e7721345e"
   },
   {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_b15ee0f43e.jpg"
-    ],
-    "caption": "",
-    "time": 1795503519.505675,
-    "vip": false,
-    "sig": "story_photo:b15ee0f43e34c6c99667d26b5e82ce9e"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_5e386037a3.jpg"
-    ],
-    "caption": "",
-    "time": 1795503146.6390758,
-    "vip": false,
-    "sig": "story_photo:5e386037a395f493f9de206c648de1b6"
-  },
-  {
     "type": "album",
     "files": [
       "drafts/ready_album_b1ee6dca1e.jpg",
@@ -1737,16 +1727,5 @@
     "time": 1795506888.9881094,
     "vip": false,
     "sig": "photo:6405cb2caab9cd03acf7729f6cbbbde7"
-  },
-  {
-    "type": "album",
-    "files": [
-      "drafts/ready_album_235d1c509b.jpg",
-      "drafts/ready_album_235d1c509b.jpg"
-    ],
-    "caption": "⭕️ فارس و کسب دو مقام نخست کشور؛ اما واقعیت ماجرا از جایی شروع شد که... (جزئیات در کپشن 👇)\n\nشیراز- رئیس سازمان بسیج رسانه فارس از کسب دو مقام نخست کشور توسط این استان در بخش‌های عکس و ایده‌پردازی رویداد ملی «جام رسانه امید» خبر داد.\n\n💬 به عنوان یک شهروند شیرازی، فکر می‌کنید اولویت اصلی شهرمون الان این موضوعه یا مشکلات ترافیک و معیشت؟\n\n🔔 اگر ساکن شیراز و فارس هستید، برای دریافت فوری خبرهای شهرمان همین الان پیج را فالو کنید:\n👉 @shirazlastnews\n👉 @shirazlastnews\n\n📌 منبع: خبرگزاری مهر\n#شیراز #استان_فارس #اخبار_شیراز #خبر_شیراز",
-    "time": 1795503525.4416037,
-    "vip": false,
-    "sig": "album:235d1c509b0d38f24643c545d0d8d4de"
   }
 ]
