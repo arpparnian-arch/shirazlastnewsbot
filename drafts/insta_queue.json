@@ -211,6 +211,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_42bba1b121.jpg"
+    ],
+    "caption": "",
+    "time": 1795638787.0535793,
+    "vip": false,
+    "sig": "story_photo:42bba1b12142fac41c04a29690475555"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_0e16cdae03.jpg"
     ],
     "caption": "",
@@ -1309,36 +1319,6 @@
     "sig": "story_photo:b02af6a1f902736820ea7f08daac6f2e"
   },
   {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_b2ebe932be.jpg"
-    ],
-    "caption": "",
-    "time": 1795509100.5097957,
-    "vip": false,
-    "sig": "story_photo:b2ebe932be1cb29b74aa9b32bf43bb5d"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_f8970d2910.jpg"
-    ],
-    "caption": "",
-    "time": 1795508731.4060774,
-    "vip": false,
-    "sig": "story_photo:f8970d291038041842d2051f16e51e27"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_aa1dbad4eb.jpg"
-    ],
-    "caption": "",
-    "time": 1795508362.6164284,
-    "vip": false,
-    "sig": "story_photo:aa1dbad4eb87d22d2976c5e0e85ee4cf"
-  },
-  {
     "type": "photo",
     "files": [
       "drafts/ready_photo_e72dae852a.jpg"
@@ -1748,15 +1728,5 @@
     "time": 1795510846.769041,
     "vip": false,
     "sig": "album:af972151e2b66198050c28bfc3e2abe4"
-  },
-  {
-    "type": "photo",
-    "files": [
-      "drafts/ready_photo_6c739305d5.jpg"
-    ],
-    "caption": "⭕️ شهید «حمید ذکری»؛ روایت مردی که دغدغه‌اش؛ اما واقعیت ماجرا از جایی شروع شد که... (جزئیات در کپشن 👇)\n\nشیراز- شهید «حمید ذکری» مردی بود که پیش از شهادت، با مهربانی گره از کار مردم می‌گشود، دل خانواده را به دست می‌آورد و بی‌هیاهو برای آرامش دیگران زندگی می‌کرد؛ تا آنکه آسمانی شد.\n\n💬 به عنوان یک شهروند شیرازی، فکر می‌کنید اولویت اصلی شهرمون الان این موضوعه یا مشکلات ترافیک و معیشت؟\n\n🔔 اگر ساکن شیراز و فارس هستید، برای دریافت فوری خبرهای شهرمان همین الان پیج را فالو کنید:\n👉 @shirazlastnews\n👉 @shirazlastnews\n\n📌 منبع: خبرگزاری مهر\n#شیراز #استان_فارس #اخبار_شیراز #خبر_شیراز",
-    "time": 1795508736.2139776,
-    "vip": false,
-    "sig": "photo:6c739305d595e23eb0b277a58d7930b7"
   }
 ]
