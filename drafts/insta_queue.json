@@ -221,6 +221,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_0e16cdae03.jpg"
+    ],
+    "caption": "",
+    "time": 1795636713.7302532,
+    "vip": false,
+    "sig": "story_photo:0e16cdae03e7dcac1e6fe2d855532942"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_da4f41b9d6.jpg"
     ],
     "caption": "",
@@ -1329,16 +1339,6 @@
     "sig": "story_video:32480a75a12fae3698476a521f28a68a"
   },
   {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_e9e304b023.jpg"
-    ],
-    "caption": "",
-    "time": 1795506883.8093944,
-    "vip": false,
-    "sig": "story_photo:e9e304b0237477a15348cda47bf73a7c"
-  },
-  {
     "type": "photo",
     "files": [
       "drafts/ready_photo_bac36409d1.jpg"
@@ -1748,15 +1748,5 @@
     "time": 1795508736.2139776,
     "vip": false,
     "sig": "photo:6c739305d595e23eb0b277a58d7930b7"
-  },
-  {
-    "type": "photo",
-    "files": [
-      "drafts/ready_photo_6405cb2caa.jpg"
-    ],
-    "caption": "⭕️ بزرگترین زنجیره انسانی مردم شیراز چهارشنبه‌شب برگزار می‌شود؛ اما واقعیت ماجرا از جایی شروع شد که... (جزئیات در کپشن 👇)\n\nرئیس شورای هماهنگی تبلیغات اسلامی فارس از برگزاری بزرگترین زنجیره انسانی مردم شیراز در چهارشنبه‌شب، چهارم آذرماه، خبر داد و گفت: این مراسم از ساعت ۲۰ تا ۲۲ در دو مسیر شهر شیراز و با حضور گروه‌های مختلف مردمی برگزار خواهد شد.\n\n💬 به عنوان یک شهروند شیرازی، فکر می‌کنید اولویت اصلی شهرمون الان این موضوعه یا مشکلات ترافیک و معیشت؟\n\n🔔 اگر ساکن شیراز و فارس هستید، برای دریافت فوری خبرهای شهرمان همین الان پیج را فالو کنید:\n👉 @shirazlastnews\n👉 @shirazlastnews\n\n📌 منبع: خبرگزاری ایسنا\n#شیراز #استان_فارس #اخبار_شیراز #خبر_شیراز",
-    "time": 1795506888.9881094,
-    "vip": false,
-    "sig": "photo:6405cb2caab9cd03acf7729f6cbbbde7"
   }
 ]
