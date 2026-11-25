@@ -348,8 +348,11 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
         if os.path.exists(p_str):
             ext = os.path.splitext(p_str)[1] or ".jpg"
             # استفاده از هش فایل برای جلوگیری از کپی تکراری ویدیوهای حجیم در پوشه drafts
-            short_h = media_hash[:10] if media_hash else f"{int(time.time())}_{i}"
-            dest = f"drafts/ready_{task_type}_{short_h}{ext}"
+            if media_hash:
+             short_h = f"{media_hash[:10]}_{i}" if len(paths) > 1 else media_hash[:10]
+         else:
+             short_h = f"{int(time.time())}_{i}"
+         dest = f"drafts/ready_{task_type}_{short_h}{ext}"
             if not os.path.exists(dest):
                 shutil.copy(p_str, dest)
             saved_paths.append(dest)
@@ -381,7 +384,32 @@ def _master_queue_saver(task_type, paths, caption="", is_vip=False):
         return (p_rank, -float(item.get("time", 0)))
 
     q.sort(key=_queue_priority_key)
-
+# پاکسازی خودکار و ایمن فایل‌های قدیمی‌تر از ۳۶ ساعت در drafts (حداکثر ۱۲۰ فایل در هر نوبت)
+    try:
+        _now_clean = time.time()
+        _cutoff_clean = _now_clean - (36 * 3600)
+        q = [
+            it for it in q
+            if it.get("vip") or float(it.get("time") or 0) <= 0 or float(it.get("time") or 0) >= _cutoff_clean
+        ]
+        _active_draft_files = {"insta_queue.json"}
+        for it in q:
+            for fp in (it.get("files") or []):
+                _active_draft_files.add(os.path.basename(str(fp)))
+        _del_cnt = 0
+        for _fn in os.listdir("drafts"):
+            if _del_cnt >= 120:
+                break
+            if _fn in _active_draft_files:
+                continue
+            if _fn.lower().endswith((".jpg", ".jpeg", ".png", ".mp4", ".webp")):
+                _full_fp = os.path.join("drafts", _fn)
+                if os.path.isfile(_full_fp):
+                    os.remove(_full_fp)
+                    _del_cnt += 1
+    except Exception as _e_cln:
+        print("Drafts safe cleanup notice:", _e_cln)
+        
     with open(queue_file, "w", encoding="utf-8") as f:
         json.dump(q, f, ensure_ascii=False, indent=2)
 
@@ -744,6 +772,7 @@ def save_memory_state(push_git=False):
                 'git config --global user.name "Bot"',
                 'git config --global user.email "bot@noreply.github.com"',
                 'git add -f *.txt *.json *.jpg drafts/insta_queue.json drafts/ready_* || true',
+                'git add -u drafts/ || true',
                 'git diff --staged --quiet || git commit -m "Sync memory and queue"',
                 'git pull --rebase --autostash -X theirs || true',
                 'git push || true'
