@@ -1470,6 +1470,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_1f8f9d69ac.jpg"
+    ],
+    "caption": "",
+    "time": 1795597798.8429391,
+    "vip": false,
+    "sig": "story_photo:1f8f9d69ac32bc5a390eea68acd98ac7"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_80b0c4e6ae.jpg"
     ],
     "caption": "",
