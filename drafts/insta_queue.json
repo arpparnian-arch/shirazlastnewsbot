@@ -161,6 +161,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_e2d539a8ab.jpg"
+    ],
+    "caption": "",
+    "time": 1795679542.4116738,
+    "vip": false,
+    "sig": "story_photo:e2d539a8abdd5dcbb471ba1564576a31"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_373e093390.jpg"
     ],
     "caption": "",
@@ -849,16 +859,6 @@
     "sig": "story_photo:9e7cc2dd843888747aa5f33c5927ce00"
   },
   {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_1d6a99e6b0.jpg"
-    ],
-    "caption": "",
-    "time": 1795547621.5175076,
-    "vip": false,
-    "sig": "story_photo:1d6a99e6b04e666f32c2aacd6aa6b6b6"
-  },
-  {
     "type": "album",
     "files": [
       "drafts/ready_album_14d7c9077c_0.jpg",
@@ -1120,16 +1120,5 @@
     "time": 1795554025.4370008,
     "vip": false,
     "sig": "album:2c6c76ac9d9d6164c2544094661ba810"
-  },
-  {
-    "type": "album",
-    "files": [
-      "drafts/ready_album_4f57ba31e4.jpg",
-      "drafts/ready_album_4f57ba31e4.jpg"
-    ],
-    "caption": "⭕️ حل آسیب‌های اجتماعی نیازمند راهکار عملی؛ اما واقعیت ماجرا از جایی شروع شد که... (جزئیات در کپشن 👇)\n\nنماینده ولی فقیه در فارس و امام جمعه شیراز با تاکید بر ضرورت ارائه راهکارهای عملیاتی برای مقابله با آسیب‌های اجتماعی گفت: در مواجهه با چالش‌های حوزه حکمرانی، هیچ‌یک از دستگاه‌ها نباید مسئولیت را از خود سلب کنند، بلکه باید با هم‌افزایی، تبادل صمیمانه نظرات و همکاری میان مجموعه‌های اندیشه‌ورز و اجرایی، به راهکارهای موثر دست یابند.\n\n💬 به عنوان یک شهروند شیرازی، فکر می‌کنید اولویت اصلی شهرمون الان این موضوعه یا مشکلات ترافیک و معیشت؟\n\n🔔 اگر ساکن شیراز و فارس هستید، برای دریافت فوری خبرهای شهرمان همین الان پیج را فالو کنید:\n👉 @shirazlastnews\n👉 @shirazlastnews\n\n📌 منبع: خبرگزاری ایرنا\n#شیراز #استان_فارس #اخبار_شیراز #خبر_شیراز",
-    "time": 1795547625.9809935,
-    "vip": false,
-    "sig": "album:4f57ba31e498aa2c2afa5e9cdfc7a215"
   }
 ]
