@@ -1,5 +1,5 @@
-story_photo:803ab01b243037cfccf3c7052e59c25a
 story_photo:b2ebe932be1cb29b74aa9b32bf43bb5d
+story_video:d7bb611a6b1c25fc16392524df83c0ce
 story_photo:d329dda2117528375f4c75c73c73a030
 album:b889f939b146e3d508eef77746521128
 story_photo:534ed0e50ca70c9ea048ea4d3a7c05a7
