@@ -171,6 +171,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_d199e0ed33.jpg"
+    ],
+    "caption": "",
+    "time": 1795684360.424958,
+    "vip": false,
+    "sig": "story_photo:d199e0ed332eb357aade1c5c7a51379d"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_1502f0c55a.jpg"
     ],
     "caption": "",
@@ -919,16 +929,6 @@
     "sig": "story_photo:acae6565b636c65fe443b6643c3e8716"
   },
   {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_9e7cc2dd84.jpg"
-    ],
-    "caption": "",
-    "time": 1795554020.8371997,
-    "vip": false,
-    "sig": "story_photo:9e7cc2dd843888747aa5f33c5927ce00"
-  },
-  {
     "type": "photo",
     "files": [
       "drafts/ready_photo_a8d56110b4.jpg"
@@ -1199,16 +1199,5 @@
     "time": 1795581111.8757496,
     "vip": false,
     "sig": "album:abe9bb5b70112047793a0d32fbf8ee00"
-  },
-  {
-    "type": "album",
-    "files": [
-      "drafts/ready_album_2c6c76ac9d.jpg",
-      "drafts/ready_album_2c6c76ac9d.jpg"
-    ],
-    "caption": "⭕️ خطر محرومیت رونالدو بخاطر تمسخر کمک داور؛ اما واقعیت ماجرا از جایی شروع شد که... (جزئیات در کپشن 👇)\n\nکریستیانو رونالدو در اعتراض به اعلام آفساید، با یک دست چشم‌هایش را پوشاند و با دست دیگر، حرکت پرچم زدن کمک‌داور را تقلید کرد.\n\n💬 نظر شما همشهریان عزیز درباره این اتفاق چیه؟ شما موافق این روند هستید یا منتقد؟\n\n🔔 اگر ساکن شیراز و فارس هستید، برای دریافت فوری خبرهای شهرمان همین الان پیج را فالو کنید:\n👉 @shirazlastnews\n👉 @shirazlastnews\n\n📌 منبع: ورزش سه\n#شیراز #فسا #استان_فارس #اخبار_شیراز #خبر_شیراز",
-    "time": 1795554025.4370008,
-    "vip": false,
-    "sig": "album:2c6c76ac9d9d6164c2544094661ba810"
   }
 ]
