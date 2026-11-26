@@ -159,6 +159,16 @@
     "sig": "reel:507a9c74b330315055a1dd5764a2ef94"
   },
   {
+    "type": "story_video",
+    "files": [
+      "drafts/ready_story_video_b127d5593c.mp4"
+    ],
+    "caption": "",
+    "time": 1795670001.2391632,
+    "vip": false,
+    "sig": "story_video:b127d5593c27722a082248e912b98178"
+  },
+  {
     "type": "story_photo",
     "files": [
       "drafts/ready_story_photo_adc3f65687.jpg"
