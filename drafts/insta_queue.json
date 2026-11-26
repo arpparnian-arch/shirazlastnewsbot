@@ -231,6 +231,16 @@
   {
     "type": "story_video",
     "files": [
+      "drafts/ready_story_video_e2be81def0.mp4"
+    ],
+    "caption": "",
+    "time": 1795717946.1240366,
+    "vip": false,
+    "sig": "story_video:e2be81def0285c5cc2b8f37a1f7085c0"
+  },
+  {
+    "type": "story_video",
+    "files": [
       "drafts/ready_story_video_b7b2489716.mp4"
     ],
     "caption": "",
