@@ -159,14 +159,14 @@
     "sig": "reel:2b8147911dfdf801872da95742ec2f1a"
   },
   {
-    "type": "reel",
+    "type": "story_photo",
     "files": [
-      "drafts/ready_reel_507a9c74b3.mp4"
+      "drafts/ready_story_photo_3ca7af438f.jpg"
     ],
-    "caption": "⭕️ کاخ سفید پودر خواهد؛ اما واقعیت ماجرا از جایی شروع شد که... (جزئیات در کپشن 👇)\n\n🔸برشی از گفتگوی SNNTV با عباس مقتدایی نایب رئیس کمیسیون امنیت ملی و سیاست خارجی مجلس‌ شورای اسلامی 🔸برای دریافت فیلم کامل گفتگو به سایت و یا کانال آپارات و ی.\n\n💬 واکنش شما به این خبر چیه؟ به نظرتون مقصر کیه و نتیجه این ماجرا چی می‌شه؟\n\n🔥 فوری‌ترین ویدیوهای خبری ایران در ریلزها + پوشش لحظه‌ای شیراز در استوری‌ها؛ همین الان فالو کنید:\n👉 @shirazlastnews\n👉 @shirazlastnews\n\n📌 منبع: خبرگزاری دانشجو\n#سیاست #خبر_فوری #اخبار_ایران #ایران #اخبار_روز",
-    "time": 1795545646.9040456,
+    "caption": "",
+    "time": 1795675491.4914594,
     "vip": false,
-    "sig": "reel:507a9c74b330315055a1dd5764a2ef94"
+    "sig": "story_photo:3ca7af438f636897258d779f3f686d69"
   },
   {
     "type": "story_video",
@@ -837,16 +837,6 @@
     "time": 1795547621.5175076,
     "vip": false,
     "sig": "story_photo:1d6a99e6b04e666f32c2aacd6aa6b6b6"
-  },
-  {
-    "type": "story_video",
-    "files": [
-      "drafts/ready_story_video_507a9c74b3.mp4"
-    ],
-    "caption": "",
-    "time": 1795545652.8045263,
-    "vip": false,
-    "sig": "story_video:507a9c74b330315055a1dd5764a2ef94"
   },
   {
     "type": "photo",
