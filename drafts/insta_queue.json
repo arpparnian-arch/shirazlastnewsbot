@@ -171,6 +171,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_fff41b29bf.jpg"
+    ],
+    "caption": "",
+    "time": 1795767429.9168594,
+    "vip": false,
+    "sig": "story_photo:fff41b29bf20470c09290388c1aeb4a4"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_c96cd6bd7f.jpg"
     ],
     "caption": "",
@@ -819,16 +829,6 @@
     "sig": "story_photo:42bba1b12142fac41c04a29690475555"
   },
   {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_0e16cdae03.jpg"
-    ],
-    "caption": "",
-    "time": 1795637688.7333684,
-    "vip": false,
-    "sig": "story_photo:0e16cdae03e7dcac1e6fe2d855532942"
-  },
-  {
     "type": "photo",
     "files": [
       "drafts/ready_photo_42f18833f7.jpg"
@@ -1048,15 +1048,5 @@
     "time": 1795665436.022255,
     "vip": false,
     "sig": "photo:90bce1403fb7f1571e48e7eb0448f9ac"
-  },
-  {
-    "type": "photo",
-    "files": [
-      "drafts/ready_photo_e72dae852a.jpg"
-    ],
-    "caption": "⭕️ وزیر فرهنگ درگذشت علی‌اصغر محدث را تسلیت گفت؛ اما واقعیت ماجرا از جایی شروع شد که... (جزئیات در کپشن 👇)\n\nوزیر فرهنگ و ارشاد اسلامی در پیامی درگذشت علی‌اصغر (شهرام) محدث فعال رسانه و مدیر روابط عمومی اداره‌کل فرهنگ و ارشاد اسلامی استان فارس را تسلیت گفت.\n\n💬 نظر شما همشهریان عزیز درباره این اتفاق چیه؟ شما موافق این روند هستید یا منتقد؟\n\n🔔 اگر ساکن شیراز و فارس هستید، برای دریافت فوری خبرهای شهرمان همین الان پیج را فالو کنید:\n👉 @shirazlastnews\n👉 @shirazlastnews\n\n📌 منبع: خبرگزاری ایرنا\n#شیراز #استان_فارس #اخبار_شیراز #سیاست #خبر_شیراز",
-    "time": 1795637693.9720798,
-    "vip": false,
-    "sig": "photo:e72dae852ae5b2817130724190192fa8"
   }
 ]
