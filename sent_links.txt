@@ -1,5 +1,3 @@
-id:86327811
-irna.ir/news/86327811/%d8%b1%d9%88%d8%a7%db%8c%d8%aa-%d8%b2%d9%86%d8%af%da%af%db%8c-%d8%a8%d8%a7-%d9%85%d8%b1%d8%af%db%8c-%da%a9%d9%87-%d9%86%d9%85%d8%a7%d8%af-%d9%88%d9%81%d8%a7%d8%af%d8%a7%d8%b1%db%8c-%d8%a8%d9%88%d8%af
 id:7020807
 mehrnews.com/news/7020807/%d9%86%d8%ac%d8%a7%d8%aa-%d8%a7%d9%86%da%af%d8%b4%d8%aa%d8%a7%d9%86-%da%a9%d9%88%d8%af%da%a9-%db%b4-%d8%b3%d8%a7%d9%84%d9%87-%d8%a7%d8%b2-%d8%af%d9%84-%da%86%d8%b1%d8%ae-%da%af%d9%88%d8%b4%d8%aa-%d8%af%d8%b1-%d8%b4%db%8c%d8%b1%d8%a7%d8%b2
 mehrnews.com/news/7020538/%d8%a8%d8%a7%d9%86%d8%af-%d8%b3%d8%a7%d8%b1%d9%82%d8%a7%d9%86-%d9%82%d9%85%d8%a7%d8%b1%d8%a8%d8%a7%d8%b2-%d8%af%d8%b1-%d8%b4%db%8c%d8%b1%d8%a7%d8%b2-%d8%a8%d8%a7-%db%b3%db%b5-%d8%b3%d8%b1%d9%82%d8%aa-%d8%af%d8%b3%d8%aa%da%af%db%8c%d8%b1-%d8%b4%d8%af%d9%86%d8%af
@@ -1198,3 +1196,5 @@ irib-news.ir/fa/news/5978215/قطع-جریان-گاز-در-سه-خیابان-ا�
 id:5978215
 id:5978142
 irib-news.ir/fa/news/5978142/حضور-منسجم-و-همدل-مردم-فارس-در-دویست-و-هفتاد-و-دومین-شب-تجمعات-شبانه
+id:5977976
+irib-news.ir/fa/news/5977976/اجرای-طرح-آبرسانی-به-مسکن-ملی-شهر-صغاد-در-شهرستان-آباده
