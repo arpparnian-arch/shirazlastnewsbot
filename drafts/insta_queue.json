@@ -171,6 +171,16 @@
   {
     "type": "story_photo",
     "files": [
+      "drafts/ready_story_photo_b4595cd6e0.jpg"
+    ],
+    "caption": "",
+    "time": 1795768538.4266794,
+    "vip": false,
+    "sig": "story_photo:b4595cd6e0da25c796778ca33b6a4ec4"
+  },
+  {
+    "type": "story_photo",
+    "files": [
       "drafts/ready_story_photo_c8f686e36f.jpg"
     ],
     "caption": "",
@@ -837,16 +847,6 @@
     "time": 1795665432.911089,
     "vip": false,
     "sig": "story_photo:adc3f656877ba47d1c429a037318c04e"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_42bba1b121.jpg"
-    ],
-    "caption": "",
-    "time": 1795638787.0535793,
-    "vip": false,
-    "sig": "story_photo:42bba1b12142fac41c04a29690475555"
   },
   {
     "type": "photo",
