@@ -1,5 +1,3 @@
-mehrnews.com/news/7020538/%d8%a8%d8%a7%d9%86%d8%af-%d8%b3%d8%a7%d8%b1%d9%82%d8%a7%d9%86-%d9%82%d9%85%d8%a7%d8%b1%d8%a8%d8%a7%d8%b2-%d8%af%d8%b1-%d8%b4%db%8c%d8%b1%d8%a7%d8%b2-%d8%a8%d8%a7-%db%b3%db%b5-%d8%b3%d8%b1%d9%82%d8%aa-%d8%af%d8%b3%d8%aa%da%af%db%8c%d8%b1-%d8%b4%d8%af%d9%86%d8%af
-id:7020538
 id:7020521
 mehrnews.com/news/7020521/%d9%88%db%8c%d8%b2%db%8c%d8%aa-%d8%b1%d8%a7%db%8c%da%af%d8%a7%d9%86-%d8%a8%d8%b3%d8%aa%d8%b1%db%8c-%d8%a8%d8%af%d9%88%d9%86-%d9%87%d8%b2%db%8c%d9%86%d9%87-%d8%a7%d9%85%d8%aa%db%8c%d8%a7%d8%b2%d9%87%d8%a7%db%8c-%d8%aa%d8%a7%d8%b2%d9%87-%d9%be%d8%b2%d8%b4%da%a9-%d8%ae%d8%a7%d9%86%d9%88%d8%a7%d8%af%d9%87-%d8%af%d8%b1
 id:7020484
@@ -1198,3 +1196,5 @@ id:5977976
 irib-news.ir/fa/news/5977976/اجرای-طرح-آبرسانی-به-مسکن-ملی-شهر-صغاد-در-شهرستان-آباده
 id:2447375
 varzesh3.ir/news/2447375/تیم-رویایی-والیبال-ایران-شماره-شش-عکس
+varzesh3.ir/news/2447378/یک-دقیقه-سکوت-به-یاد-میلاد-فراهانی
+id:2447378
