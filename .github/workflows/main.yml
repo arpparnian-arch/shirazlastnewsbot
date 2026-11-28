@@ -1,9 +1,6 @@
 name: Run News Bot
 
 on:
-  schedule:
-    # اجرا در هر ۲۰ دقیقه در ساعات بیداری ایران
-    - cron: '*/20 3-20 * * *'
   workflow_dispatch:
 
 concurrency:
