@@ -181,42 +181,12 @@
   {
     "type": "story_photo",
     "files": [
-      "drafts/ready_story_photo_5d4eb6d4aa.jpg"
+      "drafts/ready_story_photo_838245223a.jpg"
     ],
     "caption": "",
-    "time": 1795859759.6674001,
+    "time": 1795859881.4246185,
     "vip": false,
-    "sig": "story_photo:5d4eb6d4aa6dfa4b23b6e14f8c9657eb"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_f8fd9250b5.jpg"
-    ],
-    "caption": "",
-    "time": 1795859396.0731015,
-    "vip": false,
-    "sig": "story_photo:f8fd9250b5bf1b73259af3995f880eeb"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_4032fa707f.jpg"
-    ],
-    "caption": "",
-    "time": 1795859031.4848406,
-    "vip": false,
-    "sig": "story_photo:4032fa707f9128921be3697fe7677ce7"
-  },
-  {
-    "type": "story_photo",
-    "files": [
-      "drafts/ready_story_photo_ab21abe951.jpg"
-    ],
-    "caption": "",
-    "time": 1795858666.65842,
-    "vip": false,
-    "sig": "story_photo:ab21abe9519a2bc79fad5aa5ad435dba"
+    "sig": "story_photo:838245223a808aff04be83983093ced1"
   },
   {
     "type": "story_video",
